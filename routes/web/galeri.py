@@ -112,28 +112,32 @@ dagang yang terbuka terhadap pertemuan lintas budaya.""",
 
 @galeri_bp.route('/data-batik')
 def index():
-    # 1. Tentukan mau berapa data per halaman
-    per_page = 7
-
-    # 2. Ambil halaman berapa yang diminta user (Default halaman 1)
+    # 1. Config Pagination
+    per_page = 5 
     page = request.args.get('page', 1, type=int)
-
-    # 3. Hitung total halaman (Total Data / Per Page, dibulatkan ke atas)
     total_items = len(data_batik)
     total_pages = math.ceil(total_items / per_page)
 
-    # 4. Tentukan index awal dan akhir untuk slicing list
+    # 2. Slicing Data
     start = (page - 1) * per_page
     end = start + per_page
-
-    # 5. Potong list data (Slicing)
     data_tampil = data_batik[start:end]
 
-    # 6. Kirim data yang sudah dipotong & info halaman ke HTML
+    # 3. Hitung Info "Showing X to Y"
+    # Kalau datanya kosong, start_index 0. Kalau ada, start dari (start + 1)
+    start_index = start + 1 if total_items > 0 else 0
+    
+    # End index gak boleh lebih dari total items
+    end_index = min(end, total_items)
+
+    # 4. Kirim semua variabel ke HTML
     return render_template('galeri/index.html', 
                            batiks=data_tampil, 
                            page=page, 
-                           total_pages=total_pages)
+                           total_pages=total_pages,
+                           total_items=total_items,  # <-- Kirim Total
+                           start_index=start_index,  # <-- Kirim Angka Awal
+                           end_index=end_index)      # <-- Kirim Angka Akhir
 
 # --- ROUTE BARU BUAT TAMBAH DATA ---
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])

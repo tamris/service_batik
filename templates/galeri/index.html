@@ -186,29 +186,34 @@
 							</tbody>
                     </table> 
                     <div class="pagination-wrapper">
-                        
-                        {% if page > 1 %}
-                        <a href="{{ url_for('galeri.index', page=page-1) }}" class="pagi-btn prev">
-                            <i class='bx bx-chevron-left'></i> Prev
-                        </a>
-                        {% endif %}
+						<span class="pagi-info">
+							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
+						</span>
 
-                        <div class="pagi-numbers">
-                            {% for p in range(1, total_pages + 1) %}
-                            <a href="{{ url_for('galeri.index', page=p) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
-                                {{ p }}
-                            </a>
-                            {% endfor %}
-                        </div>
+						<div class="pagi-buttons">
+							
+							{% if page > 1 %}
+							<a href="{{ url_for('galeri.index', page=page-1) }}" class="pagi-btn prev">
+								<i class='bx bx-chevron-left'></i> Prev
+							</a>
+							{% endif %}
 
-                        {% if page < total_pages %}
-                        <a href="{{ url_for('galeri.index', page=page+1) }}" class="pagi-btn next">
-                            Next <i class='bx bx-chevron-right'></i>
-                        </a>
-                        {% endif %}
+							<div class="pagi-numbers">
+								{% for p in range(1, total_pages + 1) %}
+								<a href="{{ url_for('galeri.index', page=p) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
+									{{ p }}
+								</a>
+								{% endfor %}
+							</div>
 
-                    </div>
-                    </div> </div>
+							{% if page < total_pages %}
+							<a href="{{ url_for('galeri.index', page=page+1) }}" class="pagi-btn next">
+								Next <i class='bx bx-chevron-right'></i>
+							</a>
+							{% endif %}
+
+						</div>
+					</div>
         </main>
 		</section>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>    
