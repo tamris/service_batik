@@ -14,7 +14,13 @@
 	<title>AdminHub</title>
 </head>
 <body>
-
+	<script>
+        // Cek LocalStorage SEBELUM render konten
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.body.classList.add('dark');
+        }
+    </script>
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
@@ -138,26 +144,52 @@
 				</a>
 			</div>
 
+			<!-- Row 1 -->
 			<ul class="box-info">
 				<li>
-					<i class='bx bxs-calendar-check' ></i>
+					<i class='bx bxs-user'></i>
 					<span class="text">
-						<h3>1020</h3>
-						<p>New Order</p>
+						<h3>{{ users_count|default(0) }}</h3>
+						<p>Users</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-group' ></i>
+					<i class='bx bxs-collection'></i>
 					<span class="text">
-						<h3>2834</h3>
-						<p>Visitors</p>
+						<h3>{{ batik_count|default(0) }}</h3>
+						<p>Batik</p>
 					</span>
 				</li>
 				<li>
-					<i class='bx bxs-dollar-circle' ></i>
+					<i class='bx bxs-news'></i>
 					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
+						<h3>{{ artikel_count|default(0) }}</h3>
+						<p>Artikel</p>
+					</span>
+				</li>
+			</ul>
+
+			<!-- Row 2 -->
+			<ul class="box-info">
+				<li>
+					<i class='bx bxs-calendar'></i>
+					<span class="text">
+						<h3>{{ event_count|default(0) }}</h3>
+						<p>Event</p>
+					</span>
+				</li>
+				<li>
+					<i class='bx bxs-video'></i>
+					<span class="text">
+						<h3>{{ video_count|default(0) }}</h3>
+						<p>Video</p>
+					</span>
+				</li>
+				<li>
+					<i class='bx bxs-map'></i>
+					<span class="text">
+						<h3>{{ mapping_count|default(0) }}</h3>
+						<p>Mapping</p>
 					</span>
 				</li>
 			</ul>

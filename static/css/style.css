@@ -615,3 +615,8 @@ body {
 
 
 
+/* Mencegah animasi transisi pas lagi loading halaman */
+body.preload {
+    transition: none !important;
+}
+

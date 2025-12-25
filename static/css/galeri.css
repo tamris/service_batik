@@ -96,6 +96,63 @@ body.dark .pagi-btn.number.active {
 
 /* --- MODERN TABLE STYLE (DARK MODE SUPPORT) --- */
 
+/* Style Form Search di Tabel */
+.search-box .form-input {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 10px; /* Rounded */
+    overflow: hidden;
+    width: 250px; /* Lebar search bar */
+    transition: all 0.3s ease;
+}
+
+.search-box .form-input:focus-within {
+    border-color: #3C91E6; /* Biru pas diklik */
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.1);
+    background: #fff;
+}
+
+.search-box input {
+    flex-grow: 1;
+    padding: 0 16px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.search-box .search-btn {
+    width: 36px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.2s;
+}
+
+.search-box .search-btn:hover {
+    background: #2b7bc0;
+}
+
+/* Fix Dark Mode */
+body.dark .search-box .form-input {
+    background: var(--grey);
+    border-color: #333;
+}
+body.dark .search-box input {
+    color: var(--light);
+}
+
 /* 1. Container Tabel */
 #content main .table-data .order {
     border-radius: 20px;

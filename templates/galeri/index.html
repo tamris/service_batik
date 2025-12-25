@@ -13,7 +13,13 @@
 	<title>AdminHub</title>
 </head>
 <body>
-
+	<script>
+        // Cek LocalStorage SEBELUM render konten
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.body.classList.add('dark');
+        }
+    </script>
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
@@ -96,10 +102,11 @@
 		<nav>
 			<i class='bx bx-menu' ></i>
 			<a href="#" class="nav-link">Data Batik</a>
-			<form action="#">
+			<form action="#" class="search-box" onsubmit="return false;">
 				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+					<input type="search" placeholder="Cari batik..." autocomplete="off">
+					
+					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 				</div>
 			</form>
 			<input type="checkbox" id="switch-mode" hidden>
@@ -133,22 +140,26 @@
 
                 <div class="table-data">
                     <div class="order">
-                        <div class="head">
-                            <h3>List Motif Batik</h3>
-                            <i class='bx bx-search'></i>
-                            <i class='bx bx-filter'></i>
-                        </div>
+                       <div class="head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+							<h3>List Motif Batik</h3>
+							
+							<form class="search-box" onsubmit="return false;"> <div class="form-input" style="position: relative;">
+									<input type="search" id="searchInput" placeholder="Cari batik..." autocomplete="off">
+									<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+								</div>
+							</form>
+						</div>
                         <table>
 							<thead>
 								<tr>
 									<th width="10%">Gambar</th>      
 									<th width="10%">Nama Motif</th>  
 									<th width="15%">Harga</th>
-									<th width="60%">Makna/Filosofi</th> 
+									<th width="59%">Makna/Filosofi</th> 
 									<th width="10%">Aksi</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tableBody">
 								{% for batik in batiks %}
 								<tr>
 									<td>
@@ -185,7 +196,7 @@
 								{% endfor %}
 							</tbody>
                     </table> 
-                    <div class="pagination-wrapper">
+                    <div class="pagination-wrapper" id="paginationContainer">
 						<span class="pagi-info">
 							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
 						</span>
@@ -200,7 +211,7 @@
 
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('galeri.index', page=p) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
+								<a href="{{ url_for('galeri.index', page=p, q=search_query) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
 								{% endfor %}
@@ -216,6 +227,50 @@
 					</div>
         </main>
 		</section>
-	<script src="{{ url_for('static', filename='js/script.js') }}"></script>    
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>	
+	<script>
+    // ELEMENT SELECTOR
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
+    const paginationContainer = document.getElementById('paginationContainer');
+    let timeout = null;
+
+    // EVENT LISTENER (LIVE SEARCH)
+    // 'input' mendeteksi setiap ketikan DAN klik tombol silang (clear)
+    searchInput.addEventListener('input', function() {
+        const query = this.value;
+        
+        // Debounce: Tunggu user selesai ngetik 300ms baru cari (biar gak berat)
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetchData(query);
+        }, 300);
+    });
+
+    // FUNGSI AJAX FETCH
+    function fetchData(query) {
+        // Panggil backend tanpa reload browser
+        // query kosong = ambil semua data
+        fetch(`{{ url_for('galeri.index') }}?q=${query}`)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Update Tabel
+                const newTableBody = doc.getElementById('tableBody');
+                if (newTableBody && tableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
+
+                // Update Pagination
+                const newPagination = doc.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                }
+            })
+            .catch(err => console.error('Error fetching data:', err));
+    }
+	</script>
 </body>
 </html>

@@ -112,32 +112,42 @@ dagang yang terbuka terhadap pertemuan lintas budaya.""",
 
 @galeri_bp.route('/data-batik')
 def index():
-    # 1. Config Pagination
-    per_page = 10
+    # 1. Ambil Parameter
     page = request.args.get('page', 1, type=int)
-    total_items = len(data_batik)
-    total_pages = math.ceil(total_items / per_page)
+    search_query = request.args.get('q', '') # Ambil kata kunci pencarian (kalau ada)
+    per_page = 10 
+    
+    # 2. Logika FILTER (Pencarian)
+    if search_query:
+        # Cari batik yang NAMA atau MAKNA-nya mengandung kata kunci (case insensitive)
+        filtered_data = [
+            b for b in data_batik 
+            if search_query.lower() in b['nama'].lower() or search_query.lower() in b['makna'].lower()
+        ]
+    else:
+        filtered_data = data_batik # Kalau gak cari, pake semua data
 
-    # 2. Slicing Data
+    # 3. Hitung Pagination (Berdasarkan data yang sudah difilter)
+    total_items = len(filtered_data)
+    total_pages = math.ceil(total_items / per_page)
+    
+    # 4. Slicing Data (Potong sesuai halaman)
     start = (page - 1) * per_page
     end = start + per_page
-    data_tampil = data_batik[start:end]
-
-    # 3. Hitung Info "Showing X to Y"
-    # Kalau datanya kosong, start_index 0. Kalau ada, start dari (start + 1)
-    start_index = start + 1 if total_items > 0 else 0
+    data_tampil = filtered_data[start:end]
     
-    # End index gak boleh lebih dari total items
+    # 5. Hitung Info "Showing X to Y"
+    start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
-    # 4. Kirim semua variabel ke HTML
     return render_template('galeri/index.html', 
                            batiks=data_tampil, 
                            page=page, 
                            total_pages=total_pages,
-                           total_items=total_items,  # <-- Kirim Total
-                           start_index=start_index,  # <-- Kirim Angka Awal
-                           end_index=end_index)      # <-- Kirim Angka Akhir
+                           total_items=total_items,
+                           start_index=start_index,
+                           end_index=end_index,
+                           search_query=search_query) # <-- Kirim kata kunci ke HTML biar inputnya gak ilang
 
 # --- ROUTE BARU BUAT TAMBAH DATA ---
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])

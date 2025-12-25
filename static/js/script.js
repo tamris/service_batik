@@ -22,12 +22,6 @@ menuBar.addEventListener('click', function () {
 	sidebar.classList.toggle('hide');
 })
 
-
-
-
-
-
-
 const searchButton = document.querySelector('#content nav form .form-input button');
 const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
 const searchForm = document.querySelector('#content nav form');
@@ -43,9 +37,6 @@ searchButton.addEventListener('click', function (e) {
 		}
 	}
 })
-
-
-
 
 
 if(window.innerWidth < 768) {
@@ -67,10 +58,22 @@ window.addEventListener('resize', function () {
 
 const switchMode = document.getElementById('switch-mode');
 
+// 1. LOGIKA SAAT HALAMAN DILOAD (Cek Memori)
+// Kita cek: "Eh, user ini sebelumnya pilih dark mode gak ya di localStorage?"
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark'); // Kalau iya, langsung gelapin
+    switchMode.checked = true; // Jangan lupa tombolnya dicentang juga
+}
+
+// 2. LOGIKA SAAT TOMBOL DIKLIK
 switchMode.addEventListener('change', function () {
-	if(this.checked) {
-		document.body.classList.add('dark');
-	} else {
-		document.body.classList.remove('dark');
-	}
-})
+    if(this.checked) {
+        // Kalau dicentang: Aktifin Dark Mode & Simpan kata 'dark' ke memori
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        // Kalau dimatiin: Hapus Dark Mode & Simpan kata 'light' ke memori
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+});

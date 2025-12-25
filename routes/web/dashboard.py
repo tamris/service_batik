@@ -5,6 +5,14 @@ web_bp = Blueprint('web_dashboard', __name__)
 
 @web_bp.route('/')
 def index():
-    # Ini return HTML buat dilihat di Browser Laptop
-    return render_template('dashboard.html')
+    # Dummy counts (gampang diganti nanti dari database)
+    counts = {
+        'users_count': 120,
+        'batik_count': 64,
+        'artikel_count': 85,
+        'event_count': 12,
+        'video_count': 38,
+        'mapping_count': 5,
+    }
+    return render_template('dashboard.html', **counts)
 
