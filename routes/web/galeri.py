@@ -113,7 +113,7 @@ dagang yang terbuka terhadap pertemuan lintas budaya.""",
 @galeri_bp.route('/data-batik')
 def index():
     # 1. Config Pagination
-    per_page = 5 
+    per_page = 10
     page = request.args.get('page', 1, type=int)
     total_items = len(data_batik)
     total_pages = math.ceil(total_items / per_page)

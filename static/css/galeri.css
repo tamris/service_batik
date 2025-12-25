@@ -124,17 +124,34 @@ body.dark .pagi-btn.number.active {
 }
 
 /* 4. Membatasi Teks Makna */
+/* Update Class ini sepenuhnya */
 .limit-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.6em;
-    max-height: 4.8em;
-    color: var(--dark); /* Teks ikut tema */
+    /* 1. Kembalikan ke display block biasa (Hapus -webkit-box) */
+    display: block; 
+    
+    /* 2. Atur tinggi baris */
+    line-height: 1.6em; 
+    
+    /* 3. Batasi tinggi kotak (Rumus: 1.6em x 3 baris = 4.8em) */
+    max-height: 4.8em; 
+    
+    /* 4. Sembunyikan teks yang lewat batas */
+    overflow: hidden; 
+    
+    /* 5. Styling Teks */
+    color: var(--dark);
     font-size: 14px;
-    opacity: 0.8; /* Biar agak beda dikit sama judul */
+    opacity: 0.8;
+    
+    /* Tambahan biar rapi */
+    margin-right: 40px; /* Jarak ke tombol aksi */
+    text-align: justify; /* Biar rata kiri-kanan, jadi potongannya kotak rapi */
+}
+
+/* Tambahin ini biar kolom aksi punya harga diri (gak mau dikecilin) */
+#content main .table-data table td:last-child {
+    white-space: nowrap; /* Tombol Edit & Hapus dilarang turun baris */
+    width: 1%; /* Trik biar kolom ini ambil lebar secukupnya aja */
 }
 
 /* 5. Gambar Batik */
