@@ -242,6 +242,7 @@ body.dark .btn-edit { color: #6ab0ff; } /* Biru lebih terang dikit */
 body.dark .btn-delete { color: #ff8782; } /* Merah lebih terang dikit */
 
 
+/* --- FORM STYLE UNTUK TAMBAH & EDIT DATA BATIK --- */
 /* Style Grid & Layout sama kayak sebelumnya */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
@@ -278,3 +279,48 @@ body.dark .btn-delete { color: #ff8782; } /* Merah lebih terang dikit */
     .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
     .btn-save { background: #3C91E6; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display:flex; align-items:center; gap:8px;}
     .btn-cancel { padding: 12px 24px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #666; font-weight: 600; }
+
+    /* --- DARK MODE: Form & Upload --- */
+    body.dark .form-group label { color: #ddd; }
+    body.dark input[type="text"], body.dark textarea {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: #333;
+        color: #eee;
+    }
+    body.dark input::placeholder, body.dark textarea::placeholder { color: #999; }
+    body.dark input:focus, body.dark textarea:focus {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: #3C91E6;
+        box-shadow: 0 0 0 3px rgba(60,145,230,0.15);
+        outline: none;
+    }
+
+    body.dark .currency-symbol { color: #aaa; }
+
+    body.dark .file-upload-box {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #333;
+    }
+    body.dark .file-upload-box:hover {
+        background: #333;
+        border-color: #3C91E6;
+    }
+
+    body.dark .form-actions { border-top-color: #333; }
+
+    body.dark .btn-save {
+        background: var(--blue);
+        color: var(--light);
+    }
+    body.dark .btn-save:hover { filter: brightness(1.05); }
+
+    body.dark .btn-cancel {
+        border-color: #333;
+        color: #ccc;
+        background: transparent;
+    }
+    body.dark .btn-cancel:hover {
+        background: #333;
+        color: var(--light);
+        border-color: #555;
+    }
