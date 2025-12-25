@@ -181,6 +181,36 @@ def create():
     # Kalau metodenya GET (buka halaman), tampilkan form
     return render_template('galeri/create.html')
 
+# ... import lainnya ...
 
+@galeri_bp.route('/data-batik/edit/<int:batik_id>', methods=['GET', 'POST'])
+def edit(batik_id):
+    # 1. Cari data batik berdasarkan ID di dalam List Dummy
+    # (Teknik "next" ini cara nyari item di list dictionary python)
+    batik_terpilih = next((item for item in data_batik if item["id"] == batik_id), None)
+
+    if not batik_terpilih:
+        return "Data tidak ditemukan", 404
+
+    # 2. Logika Simpan Perubahan (POST)
+    if request.method == 'POST':
+        # Update data teks
+        batik_terpilih['nama'] = request.form['nama_motif']
+        batik_terpilih['harga'] = request.form['harga']
+        batik_terpilih['makna'] = request.form['makna']
+        
+        # Cek apakah user upload gambar baru?
+        gambar_file = request.files['gambar']
+        if gambar_file:
+            # Kalau ada file baru, ganti nama gambarnya
+            # (Di real app, kamu harus save file aslinya ke folder static juga)
+            batik_terpilih['gambar'] = gambar_file.filename
+        
+        # Kalau kosong, biarkan pakai gambar lama (gak usah diapa-apain)
+
+        return redirect(url_for('galeri.index'))
+
+    # 3. Tampilkan Form Edit dengan Data Lama (GET)
+    return render_template('galeri/edit.html', batik=batik_terpilih)
 
 
