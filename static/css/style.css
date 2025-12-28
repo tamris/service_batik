@@ -620,3 +620,18 @@ body.preload {
     transition: none !important;
 }
 
+/* --- FIX DOUBLE SCROLLBAR --- */
+
+/* Kita reset aturan bawaan template yang maksa scroll di dalam main */
+#content main {
+    max-height: unset !important; /* Hapus batasan tinggi layar */
+    overflow-y: visible !important; /* Matikan scroll internal */
+    height: auto !important; /* Biarkan tinggi menyesuaikan isi konten */
+}
+
+/* Opsional: Biar navbar tetap nempel di atas pas discroll */
+#content nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}

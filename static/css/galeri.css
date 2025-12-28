@@ -150,7 +150,7 @@ body.dark .search-box .form-input {
     border-color: #333;
 }
 body.dark .search-box input {
-    color: var(--light);
+    color: var(--dark);
 }
 
 /* 1. Container Tabel */
