@@ -1,3 +1,4 @@
+import secrets
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 from flask import current_app
@@ -11,10 +12,13 @@ def register():
     
     if find_user_by_email(data.get('email')):
         return jsonify({"msg": "Email sudah terdaftar"}), 409
+
+    api_key = secrets.token_hex(16)
+    data['api_key'] = api_key
     
     try:
         # Menambahkan field default yang dibutuhkan model jika belum ada
-        data.setdefault('api_key', 'some-random-api-key') 
+        data.setdefault('api_key', api_key) 
         create_user(data)
         return jsonify({"msg": "User berhasil dibuat"}), 201
     except Exception as e:
