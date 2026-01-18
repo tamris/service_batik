@@ -1,7 +1,6 @@
-# app.py
 from flask import Flask
 from config import Config
-from extensions import mongo , jwt, bcrypt# Ambil dari extensions
+from extensions import mongo , jwt, bcrypt, mail
 from routes.web.dashboard import web_bp
 from routes.web.galeri import galeri_bp
 from routes.api.galeri_api import api_bp
@@ -14,9 +13,11 @@ app.config.from_object(Config)
 mongo.init_app(app)
 jwt.init_app(app)
 bcrypt.init_app(app)
+mail.init_app(app)
 
 app.mongo = mongo
 app.bcrypt = bcrypt
+app.mail = mail
 
 # 2. Register Blueprint
 app.register_blueprint(web_bp)

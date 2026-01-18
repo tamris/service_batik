@@ -12,3 +12,10 @@ class Config:
     # Validasi: pastikan keys tidak kosong
     if not SECRET_KEY or not JWT_SECRET_KEY:
         raise ValueError("SECRET_KEY dan JWT_SECRET_KEY harus di-set di file .env!")
+    
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_USERNAME')

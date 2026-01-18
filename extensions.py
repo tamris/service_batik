@@ -1,8 +1,9 @@
 from flask_pymongo import PyMongo
 from flask_jwt_extended import JWTManager
-from flask_bcrypt import Bcrypt # Import library baru
+from flask_bcrypt import Bcrypt
+from flask_mail import Mail # Tambahkan ini
 
-# Inisialisasi tanpa 'app' dulu
 mongo = PyMongo()
 jwt = JWTManager()
-bcrypt = Bcrypt() # Tambahkan ini
+bcrypt = Bcrypt()
+mail = Mail() # Tambahkan ini
