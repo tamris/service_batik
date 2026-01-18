@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+
+	<title>AdminHub</title>
+</head>
+<body>
+	<script>
+        // Cek LocalStorage SEBELUM render konten
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+            document.body.classList.add('dark');
+        }
+    </script>
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<i class='bx bxs-smile'></i>
+			<span class="text">AdminHub</span>
+		</a>
+		<ul class="side-menu top">
+			<li>
+				<a href="{{ url_for('web_dashboard.index') }}">
+					<i class='bx bxs-dashboard' ></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="{{ url_for('galeri.index') }}">
+					<i class='bx bxs-collection' ></i>
+					<span class="text">Data Batik</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-info-circle' ></i>
+					<span class="text">Informasi</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-calendar' ></i>
+					<span class="text">Event</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-video' ></i>
+					<span class="text">Video</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-map' ></i>
+					<span class="text">Mapping</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-user' ></i>
+					<span class="text">Users Manager</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-message-dots' ></i>
+					<span class="text">Dataset Chatbot</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog' ></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle' ></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Data Batik</a>
+			<form action="#" class="search-box" onsubmit="return false;">
+				<div class="form-input">
+					<input type="search" placeholder="Cari batik..." autocomplete="off">
+					
+					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell' ></i>
+				<span class="num">8</span>
+			</a>
+			<a href="#" class="profile">
+				<img src="img/people.png">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+                <div class="head-title">
+                    <div class="left">
+                        <h1>Data Batik</h1>
+                        <ul class="breadcrumb">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><i class='bx bx-chevron-right'></i></li>
+                            <li><a class="active" href="#">Data Batik</a></li>
+                        </ul>
+                    </div>
+                    <a href="{{ url_for('galeri.create') }}" class="btn-download">
+						<i class='bx bxs-plus-circle'></i>
+						<span class="text">Tambah Batik</span>
+					</a>
+                </div>
+
+                <div class="table-data">
+                    <div class="order">
+                       <div class="head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+							<h3>List Motif Batik</h3>
+							
+							<form class="search-box" onsubmit="return false;"> <div class="form-input" style="position: relative;">
+									<input type="search" id="searchInput" placeholder="Cari batik..." autocomplete="off">
+									<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+								</div>
+							</form>
+						</div>
+                        <table>
+							<thead>
+								<tr>
+									<th>Gambar</th>      
+									<th >Nama Motif</th>  
+									<!-- <th width="15%">Harga</th> -->
+									<th>Makna/Filosofi</th> 
+									<th>Aksi</th>
+								</tr>
+							</thead>
+							<tbody id="tableBody">
+								{% for batik in batiks %}
+								<tr>
+									<td>
+										<div class="img-box">
+											<img src="{{ url_for('static', filename='img/batik1.jpg') }}" alt="Batik">
+										</div>
+									</td>
+
+									<td>
+										<span style="font-weight: 600; font-size: 15px;">{{ batik.nama }}</span>
+									</td>
+
+									<!-- <td>
+										<span class="price-tag">{{ batik.harga }}</span>
+									</td> -->
+
+									<td>
+										<div class="limit-text" title="{{ batik.makna }}">
+											{{ batik.makna }}
+										</div>
+									</td>
+
+									<td>
+										<div class="action-btn">
+											<a href="{{ url_for('galeri.edit', batik_id=batik._id) }}" class="btn-icon btn-edit" title="Edit">
+												<i class='bx bxs-edit'></i>
+											</a>
+											<a href="#" onclick="deleteConfirmation(event, '{{ url_for('galeri.delete', batik_id=batik._id) }}')" class="btn-icon btn-delete" title="Hapus">
+												<i class='bx bxs-trash'></i>
+											</a>
+										</div>
+									</td>
+								</tr>	
+								{% endfor %}
+							</tbody>
+                    </table> 
+                    <div class="pagination-wrapper" id="paginationContainer">
+						<span class="pagi-info">
+							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
+						</span>
+
+						<div class="pagi-buttons">
+							
+							{% if page > 1 %}
+							<a href="{{ url_for('galeri.index', page=page-1) }}" class="pagi-btn prev">
+								<i class='bx bx-chevron-left'></i> Prev
+							</a>
+							{% endif %}
+
+							<div class="pagi-numbers">
+								{% for p in range(1, total_pages + 1) %}
+								<a href="{{ url_for('galeri.index', page=p, q=search_query) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
+									{{ p }}
+								</a>
+								{% endfor %}
+							</div>
+
+							{% if page < total_pages %}
+							<a href="{{ url_for('galeri.index', page=page+1) }}" class="pagi-btn next">
+								Next <i class='bx bx-chevron-right'></i>
+							</a>
+							{% endif %}
+
+						</div>
+					</div>
+        </main>
+		</section>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>	
+	<script>
+    // ELEMENT SELECTOR
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
+    const paginationContainer = document.getElementById('paginationContainer');
+    let timeout = null;
+
+    // EVENT LISTENER (LIVE SEARCH)
+    // 'input' mendeteksi setiap ketikan DAN klik tombol silang (clear)
+    searchInput.addEventListener('input', function() {
+        const query = this.value;
+        
+        // Debounce: Tunggu user selesai ngetik 300ms baru cari (biar gak berat)
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetchData(query);
+        }, 300);
+    });
+
+    // FUNGSI AJAX FETCH
+    function fetchData(query) {
+        // Panggil backend tanpa reload browser
+        // query kosong = ambil semua data
+        fetch(`{{ url_for('galeri.index') }}?q=${query}`)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Update Tabel
+                const newTableBody = doc.getElementById('tableBody');
+                if (newTableBody && tableBody) {
+                    tableBody.innerHTML = newTableBody.innerHTML;
+                }
+
+                // Update Pagination
+                const newPagination = doc.getElementById('paginationContainer');
+                if (newPagination && paginationContainer) {
+                    paginationContainer.innerHTML = newPagination.innerHTML;
+                }
+            })
+            .catch(err => console.error('Error fetching data:', err));
+    }
+
+	function deleteConfirmation(event, urlRedirect) {
+        event.preventDefault(); // 1. Cegah link biar gak langsung jalan
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: true
+        });
+
+        Swal.fire({
+            title: 'Yakin mau hapus?',
+            text: "Data yang dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3C91E6', // Warna Biru AdminHub
+            cancelButtonColor: '#DB504A', // Warna Merah AdminHub
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff', // Auto Dark Mode
+            color: document.body.classList.contains('dark') ? '#fff' : '#000' // Auto Text Color
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 2. Kalau user klik "Ya", baru kita arahkan ke URL Hapus
+                window.location.href = urlRedirect;
+            }
+        });
+    }
+	</script>
+	{% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for m in messages %}
+                {% if m is iterable and m is not string and m|length == 2 %}
+                    {% set category = m[0] %}
+                    {% set text = m[1] %}
+                {% else %}
+                    {% set category = 'success' %}
+                    {% set text = m %}
+                {% endif %}
+
+				<script>
+					const msgCategory = {{ category | tojson }};
+					const rawText = {{ text | tojson }};
+					const displayText = typeof rawText === 'string'
+						? rawText
+						: (rawText && (rawText.message || rawText.text)) || JSON.stringify(rawText);
+					Swal.fire({
+						title: msgCategory === 'success' ? 'Berhasil!' : 'Info',
+						text: displayText,
+						icon: msgCategory,
+						confirmButtonColor: '#3C91E6',
+						confirmButtonText: 'Oke Siap'
+					});
+				</script>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
