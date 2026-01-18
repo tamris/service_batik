@@ -15,6 +15,9 @@ mongo.init_app(app)
 jwt.init_app(app)
 bcrypt.init_app(app)
 
+app.mongo = mongo
+app.bcrypt = bcrypt
+
 # 2. Register Blueprint
 app.register_blueprint(web_bp)
 app.register_blueprint(galeri_bp)
