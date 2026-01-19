@@ -4,7 +4,6 @@ from flask import current_app
 
 class ChatbotModel:
     def __init__(self, vector_db=None):
-        # Setting temperature rendah (0.1 - 0.2) agar jawaban fokus pada data, bukan kreativitas
         self.generation_config = {
             "temperature": 0.1,
             "top_p": 0.95,
@@ -20,7 +19,6 @@ class ChatbotModel:
     def ask_ai(self, question):
         context = ""
         if self.vector_db:
-            # Ambil lebih banyak potongan teks (k=7) untuk akurasi data
             retriever = self.vector_db.as_retriever(search_kwargs={"k":7})
             docs = retriever.invoke(question)
             context = "\n".join([d.page_content for d in docs])
