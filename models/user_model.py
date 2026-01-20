@@ -38,3 +38,14 @@ def update_user_otp(email, otp, otp_expiry):
         {"email": email},
         {"$set": {"otp": otp, "otp_expiry": otp_expiry}}
     )
+
+def update_user_password(email, new_password):
+    """Menyimpan password baru yang sudah di-hash"""
+    bcrypt = current_app.bcrypt
+    hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+    
+    # Update password dan hapus OTP agar tidak bisa dipakai lagi
+    return current_app.mongo.db.users.update_one(
+        {"email": email},
+        {"$set": {"password": hashed_password}, "$unset": {"otp": "", "otp_expiry": ""}}
+    )

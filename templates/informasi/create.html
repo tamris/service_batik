@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Tambah Informasi</title>
+</head>
+<body>
+    <script>
+        // Script untuk menjaga konsistensi tema saat page load
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+		<ul class="side-menu top">
+			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
+			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
+			<li class="active"><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle' ></i><span class="text">Informasi</span></a></li>
+			<li><a href="#"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
+			<li><a href="#"><i class='bx bxs-video' ></i><span class="text">Video</span></a></li>
+			<li><a href="#"><i class='bx bxs-map' ></i><span class="text">Mapping</span></a></li>
+			<li><a href="#"><i class='bx bxs-user' ></i><span class="text">Users Manager</span></a></li>
+			<li><a href="#"><i class='bx bxs-message-dots' ></i><span class="text">Dataset Chatbot</span></a></li>
+		</ul>
+		<ul class="side-menu">
+			<li><a href="#"><i class='bx bxs-cog' ></i><span class="text">Settings</span></a></li>
+			<li><a href="#" class="logout"><i class='bx bxs-log-out-circle' ></i><span class="text">Logout</span></a></li>
+		</ul>
+	</section>
+
+    <section id="content">
+        <nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Data Informasi</a>
+			<form action="{{ url_for('informasi.index') }}" method="GET" class="search-box">
+				<div class="form-input">
+					<input type="search" name="q" placeholder="Cari informasi..." autocomplete="off">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification"><i class='bx bxs-bell' ></i><span class="num">8</span></a>
+			<a href="#" class="profile"><img src="{{ url_for('static', filename='img/people.png') }}"></a>
+		</nav>
+
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Tambah Informasi Baru</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="{{ url_for('informasi.index') }}">Informasi</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="#">Tambah</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Form Input Konten</h3>
+                    </div>
+                    
+                    <form action="{{ url_for('informasi.create') }}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Judul Konten</label>
+                                <input type="text" name="judul" placeholder="Masukkan judul informasi..." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <select name="kategori" required>
+                                    <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="Berita Terkini">Berita Terkini</option>
+                                    <option value="Event">Event</option>
+                                    <option value="Sosok & Inspirasi">Sosok & Inspirasi</option>
+                                    <option value="Wawasan & Edukasi">Wawasan & Edukasi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Thumbnail Informasi</label>
+                            <div class="file-upload-box">
+                                <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)">
+                                <p id="uploadText">Klik untuk memilih gambar thumbnail</p>
+                            </div>
+                            
+                            <div class="preview-container" id="previewWrapper" style="display: none; margin-top: 15px;">
+                                <span style="font-size:12px; color:var(--dark-grey); margin-bottom:5px; display:block;">Preview Gambar:</span>
+                                <img id="imagePreview" src="#" alt="Preview" style="max-width: 200px; border-radius: 10px; border: 1px solid var(--grey); padding: 5px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Isi Deskripsi / Artikel</label>
+                            <textarea name="deskripsi" rows="8" placeholder="Tulis detail informasi di sini..." required></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="{{ url_for('informasi.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save">
+                                <i class='bx bx-save'></i> Simpan Konten
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('imagePreview');
+                var wrapper = document.getElementById('previewWrapper');
+                output.src = reader.result;
+                wrapper.style.display = 'block'; // Tampilkan saat gambar terpilih
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+    <style>
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid var(--grey);
+            border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .form-group select:focus {
+            border-color: #3C91E6;
+            outline: none;
+        }
+    </style>
+</body>
+</html>

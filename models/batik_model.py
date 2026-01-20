@@ -29,6 +29,9 @@ class BatikModel:
 
     def delete(self, batik_id):
         return self.collection.delete_one({"_id": ObjectId(batik_id)})
+    
+    def get_by_nama(self, nama):
+        return self.collection.find_one({"nama": nama})
 
     @staticmethod
     def serialize(batik):
