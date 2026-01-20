@@ -2,8 +2,8 @@ import secrets
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import create_access_token
-from models.user_model import create_user, find_user_by_email, update_user_otp, update_verification_status
-from utils.email_utils import generate_otp, send_email_otp
+from models.user_model import create_user, find_user_by_email, update_user_otp, update_user_password, update_verification_status
+from utils.email_utils import generate_otp, send_email_otp, send_reset_password_email
 
 auth_bp = Blueprint('auth_api', __name__)
 
@@ -111,3 +111,60 @@ def login():
         }), 200
     
     return jsonify({"msg": "Email atau password salah"}), 401
+
+@auth_bp.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    email = data.get('email')
+    
+    user = find_user_by_email(email)
+    if not user:
+        return jsonify({"msg": "Email tidak ditemukan"}), 404
+
+    otp = generate_otp()
+    otp_expiry = datetime.utcnow() + timedelta(minutes=5)
+    
+    try:
+        update_user_otp(email, otp, otp_expiry) # Simpan OTP ke DB
+        send_reset_password_email(email, otp)    # Kirim via Utils
+        return jsonify({"msg": "Kode OTP telah dikirim ke email Anda"}), 200
+    except Exception as e:
+        return jsonify({"msg": "Gagal mengirim email", "error": str(e)}), 500
+
+@auth_bp.route('/verify-reset-otp', methods=['POST'])
+def verify_reset_otp():
+    data = request.get_json()
+    email = data.get('email')
+    otp_input = data.get('otp')
+
+    user = find_user_by_email(email)
+    if not user:
+        return jsonify({"msg": "User tidak ditemukan"}), 404
+
+    # Cek kecocokan OTP dan waktu kadaluarsa
+    if user.get('otp') == otp_input:
+        if datetime.utcnow() < user.get('otp_expiry'):
+            return jsonify({"msg": "OTP Valid, silakan masukkan kata sandi baru"}), 200
+        else:
+            return jsonify({"msg": "Kode OTP sudah kadaluarsa"}), 400
+    
+    return jsonify({"msg": "Kode OTP salah"}), 400
+
+@auth_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    email = data.get('email')
+    otp_input = data.get('otp') # Kita kirim ulang OTP untuk verifikasi terakhir di sisi server
+    new_password = data.get('new_password')
+
+    user = find_user_by_email(email)
+    
+    # Keamanan tambahan: Pastikan OTP masih valid saat proses ganti sandi
+    if user.get('otp') == otp_input and datetime.utcnow() < user.get('otp_expiry'):
+        try:
+            update_user_password(email, new_password)
+            return jsonify({"msg": "Kata sandi berhasil diubah"}), 200
+        except Exception as e:
+            return jsonify({"msg": "Gagal mengubah kata sandi", "error": str(e)}), 500
+    
+    return jsonify({"msg": "Permintaan tidak valid atau sudah kadaluarsa"}), 400
