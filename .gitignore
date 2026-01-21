@@ -2,3 +2,4 @@
 __pycache__
 dataset
 batik_model.h5
+db_chroma

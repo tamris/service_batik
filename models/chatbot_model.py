@@ -1,18 +1,18 @@
-# models/chatbot_model.py
-import google.generativeai as genai
-from flask import current_app
+import os
+from google import genai
+from google.genai import types # Untuk konfigurasi generasi
 
 class ChatbotModel:
     def __init__(self, vector_db=None):
-        self.generation_config = {
-            "temperature": 0.1,
-            "top_p": 0.95,
-            "top_k": 40,
-            "max_output_tokens": 512,
-        }
-        self.model = genai.GenerativeModel(
-            model_name='gemini-2.5-flash',
-            generation_config=self.generation_config
+        # Inisialisasi Client baru
+        self.client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+        
+        # Konfigurasi generasi versi SDK baru
+        self.config = types.GenerateContentConfig(
+            temperature=0.1,
+            top_p=0.95,
+            top_k=40,
+            max_output_tokens=512,
         )
         self.vector_db = vector_db
 
@@ -23,7 +23,6 @@ class ChatbotModel:
             docs = retriever.invoke(question)
             context = "\n".join([d.page_content for d in docs])
 
-        # Prompt dengan instruksi "Data-First"
         prompt = f"""
         Kamu adalah TikAI, asisten Sistem Informasi Batik Tegalan.
         
@@ -39,5 +38,9 @@ class ChatbotModel:
         PERTANYAAN USER: {question}
         """
         
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model='gemini-2.5-flash', 
+            contents=prompt,
+            config=self.config
+        )
         return response.text

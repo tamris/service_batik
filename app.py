@@ -14,14 +14,14 @@ from utils.rag_utils import initialize_rag
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.vector_db = initialize_rag("dataset")
 
-if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
-    print("1. Memulai Inisialisasi RAG...")
-    app.vector_db = initialize_rag("dataset")
-    print("2. RAG Selesai, Menyiapkan Flask...")
-else:
-    # Proses reloader tidak perlu load RAG yang berat
-    app.vector_db = None
+# if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+#     print("--- Inisialisasi RAG (Hanya Sekali) ---")
+#     app.vector_db = initialize_rag("dataset")
+# else:
+#     # Pada proses watchdog, kita set None agar tidak loading berat
+#     app.vector_db = None
 
 # 1. Inisialisasi Database
 mongo.init_app(app)
@@ -45,10 +45,5 @@ app.register_blueprint(chatbot_bp, url_prefix='/api/chatbot')
 app.register_blueprint(deteksi_bp, url_prefix='/api/deteksi')
 app.register_blueprint(google_oauth_bp, url_prefix='/api/oauth')
 
-# print("1. Memulai Inisialisasi RAG...")
-# app.vector_db = initialize_rag("dataset")
-# print("2. RAG Selesai, Menyiapkan Flask...")
-
 if __name__ == '__main__':
-    # print("3. Server Berjalan di http://127.0.0.1:5000")
     app.run(host='0.0.0.0', port=5000, debug=True)
