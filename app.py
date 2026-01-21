@@ -7,6 +7,7 @@ from routes.web.galeri import galeri_bp
 from routes.web.infromasi import informasi_bp
 from routes.api.galeri_api import api_bp
 from routes.api.auth_api import auth_bp
+from routes.api.google_oauth import google_oauth_bp
 from routes.api.deteksi import deteksi_bp
 from routes.api.chatbot_api import chatbot_bp
 from utils.rag_utils import initialize_rag
@@ -42,6 +43,7 @@ app.register_blueprint(api_bp, url_prefix='/api')
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(chatbot_bp, url_prefix='/api/chatbot')
 app.register_blueprint(deteksi_bp, url_prefix='/api/deteksi')
+app.register_blueprint(google_oauth_bp, url_prefix='/api/oauth')
 
 # print("1. Memulai Inisialisasi RAG...")
 # app.vector_db = initialize_rag("dataset")
