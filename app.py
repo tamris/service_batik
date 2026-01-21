@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from config import Config
 from extensions import mongo , jwt, bcrypt, mail
@@ -15,13 +14,6 @@ from utils.rag_utils import initialize_rag
 app = Flask(__name__)
 app.config.from_object(Config)
 app.vector_db = initialize_rag("dataset")
-
-# if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
-#     print("--- Inisialisasi RAG (Hanya Sekali) ---")
-#     app.vector_db = initialize_rag("dataset")
-# else:
-#     # Pada proses watchdog, kita set None agar tidak loading berat
-#     app.vector_db = None
 
 # 1. Inisialisasi Database
 mongo.init_app(app)
