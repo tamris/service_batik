@@ -1,5 +1,8 @@
 import os
 import numpy as np
+# 1. Tambahkan ini di paling atas untuk membungkam log TensorFlow yang tidak perlu
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+
 import tensorflow as tf
 from flask import Blueprint, request, jsonify
 from tensorflow.keras.preprocessing import image
@@ -8,11 +11,12 @@ from models.batik_model import BatikModel
 deteksi_bp = Blueprint('deteksi_api', __name__)
 batik_db = BatikModel()
 
-# Load model (Pastikan batik_model.h5 ada di root folder)
+# Path model sesuai struktur folder kamu
 MODEL_PATH = 'batik_model.h5'
-model = tf.keras.models.load_model(MODEL_PATH)
+model = None
 
-# Urutan Label Sesuai Screenshot Colab Kamu (image_23f480.png)
+model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+
 CATEGORIES = [
     'Beras Mawur', 'Bukan Batik Tegalan', 'Cempaka Mulya', 'Cempaka Putih', 
     'Ciprat', 'Cungkilan', 'Galaran', 'Grandil', 'Gribigan', 'Irengan', 
@@ -24,16 +28,18 @@ CATEGORIES = [
 
 @deteksi_bp.route('/predict', methods=['POST'])
 def predict():
-    # Perbaikan pengecekan file agar lebih akurat
+    # Pastikan model sudah terisi
+    if model is None:
+        return jsonify({"msg": "Model belum siap atau gagal dimuat"}), 500
+
     if 'image' not in request.files:
         return jsonify({
             "msg": "Gambar tidak ditemukan", 
-            "debug_info": list(request.files.keys()) # Membantu cek key apa yang masuk
+            "debug_info": list(request.files.keys())
         }), 400
 
     file = request.files['image']
     
-    # Pastikan folder static/img sudah ada
     if not os.path.exists('static/img'):
         os.makedirs('static/img')
 
@@ -41,7 +47,7 @@ def predict():
     file.save(temp_path)
 
     try:
-        # Preprocessing (Sesuaikan target_size dengan model kamu)
+        # Preprocessing: Pastikan target_size sesuai dengan input model kamu (biasanya 224 atau 128)
         img = image.load_img(temp_path, target_size=(128, 128)) 
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
@@ -53,9 +59,8 @@ def predict():
         hasil_label = CATEGORIES[class_idx]
         confidence = float(np.max(preds[0]) * 100)
 
-        os.remove(temp_path) # Hapus temp file
+        os.remove(temp_path)
 
-        # 1. Kasus Bukan Batik Tegalan
         if hasil_label == "Bukan Batik Tegalan":
             return jsonify({
                 "nama": hasil_label,
@@ -64,7 +69,7 @@ def predict():
                 "is_batik_tegalan": False
             }), 200
 
-        # 2. Kasus Motif Valid (Cari Makna di DB)
+        # Cari Makna di DB Batik Tegalan
         detail = batik_db.get_by_nama(hasil_label)
         
         return jsonify({
