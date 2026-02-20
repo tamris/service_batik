@@ -1,7 +1,7 @@
 import os
 import numpy as np
 # 1. Tambahkan ini di paling atas untuk membungkam log TensorFlow yang tidak perlu
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 
 import tensorflow as tf
 from flask import Blueprint, request, jsonify
@@ -12,10 +12,10 @@ deteksi_bp = Blueprint('deteksi_api', __name__)
 batik_db = BatikModel()
 
 # Path model sesuai struktur folder kamu
-MODEL_PATH = 'batik_model.h5'
+# MODEL_PATH = 'batik_model.h5'
 model = None
 
-model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+model = tf.keras.models.load_model('batik_model.h5', compile=False)
 
 CATEGORIES = [
     'Beras Mawur', 'Bukan Batik Tegalan', 'Cempaka Mulya', 'Cempaka Putih', 
