@@ -17,7 +17,7 @@ class InformasiModel:
                     {"deskripsi": {"$regex": search_query, "$options": "i"}}
                 ]
             }
-        return list(self.collection.find(query))
+        return list(self.collection.find(query).sort("created_at", -1))
 
     def get_by_id(self, info_id):
         return self.collection.find_one({"_id": ObjectId(info_id)})

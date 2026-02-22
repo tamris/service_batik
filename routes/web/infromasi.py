@@ -1,3 +1,4 @@
+from datetime import datetime
 import math
 import os
 from flask import Blueprint, render_template, request, redirect, url_for, flash
@@ -12,30 +13,27 @@ UPLOAD_FOLDER = 'static/img/informasi'
 
 @informasi_bp.route('/data-informasi')
 def index():
-    # 1. Ambil Parameter dari URL
     page = request.args.get('page', 1, type=int)
-    search_query = request.args.get('q', '') # Ambil kata kunci pencarian
-    per_page = 7 # Sesuai permintaanmu
+    search_query = request.args.get('q', '')
+    per_page = 7 
 
-    # 2. Ambil data dari MongoDB berdasarkan pencarian
-    # Model informasi_model.py sudah mendukung parameter search_query
     all_data = info_model.get_all(search_query)
 
-    # 3. Hitung total data dan jumlah halaman
+    # TIPS: Agar data yang baru dibuat muncul paling atas, 
+    # pastikan di Model kamu melakukan sorting berdasarkan 'created_at': -1
+    
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
     
-    # 4. Slicing Data (Potong data untuk ditampilkan per halaman)
     start = (page - 1) * per_page
     end = start + per_page
     data_tampil = all_data[start:end]
     
-    # 5. Hitung info index "Showing X to Y"
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
     return render_template('informasi/index.html', 
-                           informasi=data_tampil, # Pastikan di HTML pakai variabel 'informasi'
+                           informasi=data_tampil, 
                            page=page, 
                            total_pages=total_pages,
                            total_items=total_items,
@@ -56,12 +54,15 @@ def create():
         else:
             gambar_url = 'default_info.png'
 
+        # 2. MASUKKAN created_at DI SINI
         data_baru = {
             "judul": request.form['judul'],
             "deskripsi": request.form['deskripsi'],
             "kategori": request.form['kategori'],
-            "gambar_url": gambar_url # Sesuai struktur diagram kamu
+            "gambar_url": gambar_url,
+            "created_at": datetime.now() # Ini akan mencatat waktu saat tombol simpan diklik
         }
+        
         info_model.create(data_baru)
         flash('Informasi berhasil ditambahkan!', 'success')
         return redirect(url_for('informasi.index'))
