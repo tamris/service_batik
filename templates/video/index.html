@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+	<title>AdminHub - Data Video</title>
+</head>
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+	<section id="sidebar">
+		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+		<ul class="side-menu top">
+			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
+			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
+			<li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle' ></i><span class="text">Informasi</span></a></li>
+			<li><a href="#"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
+			<li class="active"><a href="{{ url_for('video.index') }}"><i class='bx bxs-video' ></i><span class="text">Video</span></a></li>
+			<li><a href="#"><i class='bx bxs-map' ></i><span class="text">Mapping</span></a></li>
+			<li><a href="#"><i class='bx bxs-user' ></i><span class="text">Users Manager</span></a></li>
+			<li><a href="#"><i class='bx bxs-message-dots' ></i><span class="text">Dataset Chatbot</span></a></li>
+		</ul>
+		<ul class="side-menu">
+			<li><a href="#"><i class='bx bxs-cog' ></i><span class="text">Settings</span></a></li>
+			<li><a href="#" class="logout"><i class='bx bxs-log-out-circle' ></i><span class="text">Logout</span></a></li>
+		</ul>
+	</section>
+
+	<section id="content">
+		<nav>
+			<i class='bx bx-menu' ></i>
+			<a href="#" class="nav-link">Data Informasi</a>
+			<form action="#" class="search-box" onsubmit="return false;">
+				<div class="form-input">
+					<input type="search" placeholder="Cari informasi..." autocomplete="off">
+					
+					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification"><i class='bx bxs-bell' ></i><span class="num">8</span></a>
+			<a href="#" class="profile"><img src="{{ url_for('static', filename='img/people.png') }}"></a>
+		</nav>
+
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Data Video</h1>
+					<ul class="breadcrumb">
+						<li><a href="#">Dashboard</a></li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li><a class="active" href="#">Video</a></li>
+					</ul>
+				</div>
+				<a href="{{ url_for('video.create') }}" class="btn-download">
+					<i class='bx bxs-plus-circle'></i><span class="text">Tambah Video</span>
+				</a>
+			</div>
+
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3>List Konten Video</h3>
+						<div class="search-box"> 
+							<div class="form-input" style="position: relative;">
+								<input type="search" id="searchInput" placeholder="Cari Judul Video..." autocomplete="off">
+								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+							</div>
+						</div>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th width="15%">Thumbnail</th>      
+								<th width="35%">Judul & Tanggal</th>  
+								<th width="15%">Kategori</th> 
+								<th width="20%">Link YouTube</th>
+								<th width="15%">Aksi</th>
+							</tr>
+						</thead>
+						<tbody id="tableBody">
+							{% for item in videos %}
+							<tr>
+								<td>
+									<div class="img-box" style="width: 100px; height: 60px; border-radius: 8px; overflow: hidden; background: #222;">
+										{% if 'v=' in item.youtube_url %}
+											{# Mengambil ID setelah 'v=' dan sebelum '&' jika ada #}
+											{% set video_id = item.youtube_url.split('v=')[1].split('&')[0] %}
+											<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg" 
+												alt="Thumbnail" 
+												style="width:100%; height:100%; object-fit:cover;">
+										{% elif 'youtu.be/' in item.youtube_url %}
+											{# Menangani format link pendek youtu.be/IDVIDEO #}
+											{% set video_id = item.youtube_url.split('youtu.be/')[1].split('?')[0] %}
+											<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg" 
+												alt="Thumbnail" 
+												style="width:100%; height:100%; object-fit:cover;">
+										{% else %}
+											<img src="{{ url_for('static', filename='img/default_video.png') }}" style="width:100%; height:100%; object-fit:cover;">
+										{% endif %}
+									</div>
+								</td>
+								<td>
+									<span style="font-weight: 600; font-size: 14px; display: block;">{{ item.judul }}</span>
+									<small style="color: #888;">{{ item.created_at.strftime('%d %b %Y') if item.created_at else '-' }}</small>
+								</td>
+								<td><span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{ item.kategori }}</span></td>
+								<td><a href="{{ item.youtube_url }}" target="_blank" style="color: #3C91E6; font-size: 12px;">Buka di YouTube <i class='bx bx-link-external'></i></a></td>
+								<td>
+									<div class="action-btn">
+										<a href="{{ url_for('video.edit', video_id=item._id) }}" class="btn-icon btn-edit" title="Edit"><i class='bx bxs-edit'></i></a>
+										<a href="#" onclick="deleteConfirmation(event, '{{ url_for('video.delete', video_id=item._id) }}')" class="btn-icon btn-delete" title="Hapus"><i class='bx bxs-trash'></i></a>
+									</div>
+								</td>
+							</tr>	
+							{% endfor %}
+						</tbody>
+					</table>
+					
+					<div class="pagination-wrapper" id="paginationContainer">
+						<span class="pagi-info">Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results</span>
+						<div class="pagi-buttons">
+							{% if page > 1 %}<a href="{{ url_for('video.index', page=page-1, q=search_query) }}" class="pagi-btn prev"><i class='bx bx-chevron-left'></i> Prev</a>{% endif %}
+							{% if page < total_pages %}<a href="{{ url_for('video.index', page=page+1, q=search_query) }}" class="pagi-btn next">Next <i class='bx bx-chevron-right'></i></a>{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</section>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+	<script>
+		const searchInput = document.getElementById('searchInput');
+		const tableBody = document.getElementById('tableBody');
+		const paginationContainer = document.getElementById('paginationContainer');
+
+		function fetchData(query) {
+			fetch(`{{ url_for('video.index') }}?q=${query}`)
+				.then(response => response.text())
+				.then(html => {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(html, 'text/html');
+					tableBody.innerHTML = doc.getElementById('tableBody').innerHTML;
+					paginationContainer.innerHTML = doc.getElementById('paginationContainer').innerHTML;
+				});
+		}
+
+		searchInput.addEventListener('input', function() { fetchData(this.value); });
+
+		function deleteConfirmation(event, urlRedirect) {
+			event.preventDefault();
+			Swal.fire({
+				title: 'Hapus Video?',
+				text: "Data akan dihapus permanen!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3C91E6',
+				cancelButtonColor: '#DB504A',
+				confirmButtonText: 'Ya, Hapus!'
+			}).then((result) => { if (result.isConfirmed) { window.location.href = urlRedirect; } });
+		}
+	</script>
+</body>
+</html>

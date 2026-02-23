@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Tambah Video</title>
+</head>
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+    <section id="content">
+        <main>
+            <div class="head-title">
+                <div class="left"><h1>Tambah Video Baru</h1></div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <form action="{{ url_for('video.create') }}" method="POST">
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="display:block; margin-bottom:8px; font-weight:600;">Judul Video</label>
+                                <input type="text" name="judul" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">
+                            </div>
+                            <div class="form-group">
+                                <label style="display:block; margin-bottom:8px; font-weight:600;">Kategori</label>
+                                <select name="kategori" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">
+                                    <option value="Berita Terkini">Sejarah</option>
+                                    <option value="Event">Event</option>
+                                    <option value="Motif & Makna">Motif & Makna</option>
+                                    <option value="Edukasi">Edukasi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="display:block; margin-bottom:8px; font-weight:600;">URL YouTube</label>
+                            <input type="url" name="youtube_url" placeholder="https://www.youtube.com/watch?v=..." required 
+                                   style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">
+                        </div>
+                        <div class="form-group">
+                            <label style="display:block; margin-bottom:8px; font-weight:600;">Deskripsi Video</label>
+                            <textarea name="deskripsi" rows="5" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);"></textarea>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                            <a href="{{ url_for('video.index') }}" style="padding:10px 20px; text-decoration:none; color:var(--dark); border:1px solid var(--grey); border-radius:8px;">Batal</a>
+                            <button type="submit" style="background:#3C91E6; color:white; border:none; padding:10px 25px; border-radius:8px; font-weight:600; cursor:pointer;">Simpan Video</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+</body>
+</html>
