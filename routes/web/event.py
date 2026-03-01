@@ -1,0 +1,78 @@
+import math
+import os
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+from models.event_model import EventModel
+from datetime import datetime
+
+event_bp = Blueprint('event', __name__)
+event_model = EventModel()
+
+UPLOAD_FOLDER = 'static/img/events'
+
+@event_bp.route('/data-events')
+def index():
+    page = request.args.get('page', 1, type=int)
+    search_query = request.args.get('q', '')
+    per_page = 7
+
+    all_data = event_model.get_all(search_query)
+
+    total_items = len(all_data)
+    total_pages = math.ceil(total_items / per_page)
+    
+    start = (page - 1) * per_page
+    end = start + per_page
+    data_tampil = all_data[start:end]
+    
+    start_index = start + 1 if total_items > 0 else 0
+    end_index = min(end, total_items)
+
+    return render_template('events/index.html', 
+                           events=data_tampil, 
+                           page=page, 
+                           total_pages=total_pages,
+                           total_items=total_items,
+                           start_index=start_index,
+                           end_index=end_index,
+                           search_query=search_query)
+
+@event_bp.route('/data-events/tambah', methods=['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        # Handle Upload Banner
+        file = request.files.get('banner')
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            banner_url = filename
+        else:
+            banner_url = 'default_event.png'
+
+        data_baru = {
+            "title": request.form.get("title"),
+            "kategori": request.form.get("kategori"),
+            "description": request.form.get("description"),
+            "banner_image_url": banner_url,
+            "event_date": request.form.get("event_date"),
+            "latitude": request.form.get("latitude"),
+            "longitude": request.form.get("longitude"),
+            "address": {"full": request.form.get("address")},
+            "is_free": request.form.get("is_free") == "on",
+            "price": request.form.get("price") if request.form.get("is_free") != "on" else "0",
+            "created_at": datetime.now()
+        }
+
+        event_model.create(data_baru)
+        flash('Event baru berhasil ditambahkan!', 'success')
+        return redirect(url_for('event.index'))
+
+    return render_template('events/create.html')
+
+@event_bp.route('/data-events/hapus/<string:event_id>')
+def delete(event_id):
+    event_model.delete(event_id)
+    flash('Event berhasil dihapus!', 'success')
+    return redirect(url_for('event.index'))

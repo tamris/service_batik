@@ -5,6 +5,7 @@ from routes.web.dashboard import web_bp
 from routes.web.galeri import galeri_bp
 from routes.web.infromasi import informasi_bp
 from routes.web.video import video_bp
+from routes.web.event import event_bp
 from routes.api.galeri_api import api_bp
 from routes.api.informasi_api import informasi_api_bp
 from routes.api.auth_api import auth_bp
@@ -12,6 +13,7 @@ from routes.api.google_oauth import google_oauth_bp
 from routes.api.deteksi import deteksi_bp
 from routes.api.chatbot_api import chatbot_bp
 from routes.api.video_api import video_api_bp
+from routes.api.event_api import event_api_bp
 from utils.rag_utils import initialize_rag
 
 app = Flask(__name__)
@@ -20,6 +22,9 @@ app.vector_db = initialize_rag("dataset")
 
 # 1. Inisialisasi Database
 mongo.init_app(app)
+with app.app_context():
+    mongo.db.events.create_index([("location", "2dsphere")])
+    mongo.db.events.create_index("schedule.start_datetime")
 jwt.init_app(app)
 bcrypt.init_app(app)
 mail.init_app(app)
@@ -33,6 +38,7 @@ app.register_blueprint(web_bp)
 app.register_blueprint(galeri_bp)
 app.register_blueprint(informasi_bp)
 app.register_blueprint(video_bp)
+app.register_blueprint(event_bp)
 
 # 3. Register API Blueprint
 app.register_blueprint(api_bp, url_prefix='/api')
@@ -42,6 +48,7 @@ app.register_blueprint(deteksi_bp, url_prefix='/api/deteksi')
 app.register_blueprint(google_oauth_bp, url_prefix='/api/oauth')
 app.register_blueprint(informasi_api_bp, url_prefix='/api')
 app.register_blueprint(video_api_bp, url_prefix='/api')
+app.register_blueprint(event_api_bp, url_prefix='/api')
 
 
 if __name__ == '__main__':

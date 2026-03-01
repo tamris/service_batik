@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Tambah Event - AdminHub</title>
+    <style>
+        #map { height: 350px; width: 100%; border-radius: 12px; border: 2px solid var(--grey); margin-bottom: 20px; z-index: 1; }
+        .dark #map { border-color: #444; }
+
+        /* Biaya Masuk Styling */
+        .price-card {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border: 1px solid var(--grey);
+            border-radius: 10px;
+            padding: 0 15px;
+            height: 50px;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        .price-card:focus-within { border-color: #3C91E6; }
+        .free-option {
+            display: flex; align-items: center; gap: 8px; min-width: 90px;
+            cursor: pointer; color: var(--dark); font-weight: 600; user-select: none;
+        }
+        .free-option input { width: 18px; height: 18px; cursor: pointer; }
+        .price-input-group { display: flex; align-items: center; flex: 1; gap: 8px; }
+        .price-input-group input {
+            border: none !important; background: transparent !important; width: 100%;
+            outline: none; color: var(--dark); font-size: 14px;
+        }
+        .price-card.is-disabled { background: var(--grey); opacity: 0.6; }
+        .loading-text { font-size: 12px; color: #3C91E6; display: none; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+		<ul class="side-menu top">
+			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
+			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
+			<li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle' ></i><span class="text">Informasi</span></a></li>
+			<li class="active"><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video' ></i><span class="text">Video</span></a></li>
+		</ul>
+	</section>
+
+    <section id="content">
+        <nav><i class='bx bx-menu' ></i><a href="#" class="nav-link">Event</a><input type="checkbox" id="switch-mode" hidden><label for="switch-mode" class="switch-mode"></label></nav>
+
+        <main>
+            <div class="head-title"><div class="left"><h1>Tambah Event Baru</h1></div></div>
+
+            <div class="table-data">
+                <div class="order">
+                    <form action="{{ url_for('event.create') }}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="font-weight:600;">Nama Event</label>
+                                <input type="text" name="title" placeholder="Masukkan nama agenda..." required>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Kategori</label>
+                                <select name="kategori" required>
+                                    <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="Workshop">Workshop</option>
+                                    <option value="Festival">Festival</option>
+                                    <option value="Webinar">Webinar</option>
+                                    <option value="Pameran">Pameran</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group"><label style="font-weight:600;">Pilih Lokasi</label><div id="map"></div></div>
+
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group"><label style="font-weight:600;">Latitude</label><input type="text" name="latitude" id="latInput" readonly required placeholder="Otomatis..."></div>
+                            <div class="form-group"><label style="font-weight:600;">Longitude</label><input type="text" name="longitude" id="lngInput" readonly required placeholder="Otomatis..."></div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="font-weight:600; display: flex; align-items: center;">Alamat Lengkap <span id="loadingAddr" class="loading-text">Menarik alamat...</span></label>
+                            <textarea name="address" id="addressInput" rows="2" placeholder="Detail alamat..." required></textarea>
+                        </div>
+
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="font-weight:600;">Tanggal & Waktu Event</label>
+                                <input type="datetime-local" name="event_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Banner Event</label>
+                                <input type="file" name="banner" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600;">Biaya Masuk</label>
+                            <div class="price-card" id="priceCard">
+                                <label class="free-option">
+                                    <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()">
+                                    <span>Gratis?</span>
+                                </label>
+                                <div style="width: 1px; height: 24px; background: var(--grey);"></div>
+                                <div class="price-input-group">
+                                    <span style="font-weight:700; color:var(--dark-grey);">Rp</span>
+                                    <input type="number" name="price" id="priceInput" placeholder="Masukkan harga tiket...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label style="font-weight:600;">Deskripsi Detail</label>
+                            <textarea name="description" rows="5" placeholder="Tuliskan detail acara..." required></textarea>
+                        </div>
+
+                        <div class="form-actions" style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                            <a href="{{ url_for('event.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save" style="background:#3C91E6; color:white; border:none; padding:10px 25px; border-radius:8px; cursor:pointer; font-weight: 600;">Simpan Data Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([-6.867, 109.137], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        var marker = L.marker([-6.867, 109.137]).addTo(map);
+
+        async function updateAddress(lat, lng) {
+            const addr = document.getElementById('addressInput');
+            const loader = document.getElementById('loadingAddr');
+            loader.style.display = "inline";
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                const data = await res.json();
+                addr.value = data.display_name || "";
+            } catch (e) { addr.value = "Gagal mengambil alamat otomatis."; }
+            finally { loader.style.display = "none"; }
+        }
+
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
+            document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
+            updateAddress(e.latlng.lat, e.latlng.lng);
+        });
+
+        function togglePrice() {
+            const isFree = document.getElementById('isFree').checked;
+            const input = document.getElementById('priceInput');
+            const card = document.getElementById('priceCard');
+            if (isFree) {
+                input.value = "0"; input.disabled = true; card.classList.add('is-disabled');
+            } else {
+                input.value = ""; input.disabled = false; card.classList.remove('is-disabled'); input.focus();
+            }
+        }
+    </script>
+</body>
+</html>
