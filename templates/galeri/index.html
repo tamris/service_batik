@@ -162,11 +162,13 @@
 							<tbody id="tableBody">
 								{% for batik in batiks %}
 								<tr>
-									<td>
-										<div class="img-box">
-											<img src="{{ url_for('static', filename='img/batik1.jpg') }}" alt="Batik">
-										</div>
-									</td>
+										<td>
+											<div class="img-box">
+												<img src="{{ url_for('static', filename='img/galeri/' + batik.gambar) }}" 
+											alt="{{ batik.nama }}"
+											style="max-width: 120px; border-radius: 10px;">
+											</div>
+										</td>
 
 									<td>
 										<span style="font-weight: 600; font-size: 15px;">{{ batik.nama }}</span>

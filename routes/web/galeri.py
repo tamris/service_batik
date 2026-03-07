@@ -1,9 +1,14 @@
+from datetime import datetime
 import math
+import os
+from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.batik_model import BatikModel
 
 galeri_bp = Blueprint('galeri', __name__)
 batik_model = BatikModel()
+
+UPLOAD_FOLDER = 'static/img/galeri'
 
 @galeri_bp.route('/data-batik')
 def index():
@@ -36,18 +41,25 @@ def index():
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        gambar_file = request.files.get('gambar')
-        nama_gambar = gambar_file.filename if gambar_file and gambar_file.filename != '' else 'default.png'
+        file = request.files.get('gambar')
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            gambar = filename
+        else:
+            gambar = 'default_batik.png'
 
         data_baru = {
             "nama": request.form['nama_motif'],
-            "harga": request.form['harga'],
             "makna": request.form['makna'],
-            "gambar": nama_gambar
+            "gambar": gambar, 
+            "created_at": datetime.now()
         }
 
         batik_model.create(data_baru)
-        flash('Data batik berhasil ditambahkan ke database!', 'success')
+        flash('Data batik berhasil ditambahkan!', 'success')
         return redirect(url_for('galeri.index'))
 
     return render_template('galeri/create.html')
@@ -70,7 +82,11 @@ def edit(batik_id):
         
         gambar_file = request.files.get('gambar')
         if gambar_file and gambar_file.filename != '':
-            data_update['gambar'] = gambar_file.filename
+            filename = secure_filename(gambar_file.filename)
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+            gambar_file.save(os.path.join(UPLOAD_FOLDER, filename))
+            data_update['gambar'] = filename
         
         batik_model.update(batik_id, data_update)
         flash('Data batik berhasil diperbarui!', 'success')

@@ -18,48 +18,39 @@
     <div class="table-data">
         <div class="order">
             <div class="head">
-                <h3>Form Input Data</h3>
+                <h3>Form Input Data Batik</h3>
             </div>
             
             <form action="{{ url_for('galeri.create') }}" method="POST" enctype="multipart/form-data">
                 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nama Motif</label>
-                        <input type="text" name="nama_motif" placeholder="Contoh: Parang Rusak" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Kisaran Harga</label>
-                        <div class="input-icon-wrapper">
-                            <span class="currency-symbol">Rp</span>
-                            <input type="text" name="harga" placeholder="Contoh: 150.000 - 300.000" required style="padding-left: 35px;">
-                        </div>
-                    </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Nama Motif Batik</label>
+                    <input type="text" name="nama_motif" placeholder="Contoh: Batik Mega Mendung" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); background: var(--light); color: var(--dark);">
                 </div>
 
-                <div class="form-group">
-                    <label>Gambar Batik</label>
-                    <div class="file-upload-box">
-                        <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)">
-                        <p id="uploadText">Klik untuk upload gambar batik</p>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Gambar Batik</label>
+                    <div class="file-upload-wrapper" style="border: 2px dashed var(--grey); padding: 20px; border-radius: 10px; text-align: center; position: relative; background: var(--light);">
+                        <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)" style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;">
+                        <i class='bx bxs-cloud-upload' style="font-size: 40px; color: #3C91E6;"></i>
+                        <p style="margin-top: 10px; color: var(--dark);">Klik atau seret gambar batik ke sini</p>
                     </div>
                     
-                    <div class="preview-container" style="display: none; margin-top: 15px;">
-                        <span style="font-size:12px; color:#666; margin-bottom:5px; display:block;">Preview:</span>
-                        <img id="imagePreview" src="#" alt="Preview Gambar" style="max-width: 200px; border-radius: 10px; border: 1px solid #ddd; padding: 5px;">
+                    <div id="previewContainer" style="display: none; margin-top: 15px; text-align: center;">
+                        <span style="font-size: 12px; color: var(--dark-grey); display: block; margin-bottom: 5px;">Preview Gambar:</span>
+                        <img id="imagePreview" src="#" style="max-width: 250px; border-radius: 10px; border: 2px solid #3C91E6; padding: 5px;">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Makna & Filosofi</label>
-                    <textarea name="makna" rows="6" placeholder="Ceritakan filosofi batik ini..." required></textarea>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Makna & Filosofi</label>
+                    <textarea name="makna" rows="6" placeholder="Tuliskan cerita di balik motif batik ini..." required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); background: var(--light); color: var(--dark);"></textarea>
                 </div>
 
-                <div class="form-actions">
-                    <a href="{{ url_for('galeri.index') }}" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-save">
-                        <i class='bx bx-save'></i> Simpan Data
+                <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px;">
+                    <a href="{{ url_for('galeri.index') }}" style="padding: 10px 20px; border-radius: 8px; border: 1px solid var(--grey); text-decoration: none; color: var(--dark);">Batal</a>
+                    <button type="submit" style="background: #3C91E6; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <i class='bx bx-save'></i> Simpan Batik
                     </button>
                 </div>
 
@@ -73,14 +64,11 @@
         var reader = new FileReader();
         reader.onload = function(){
             var output = document.getElementById('imagePreview');
-            var container = document.querySelector('.preview-container');
-            
+            var container = document.getElementById('previewContainer');
             output.src = reader.result;
-            container.style.display = 'block'; // Munculin container preview
+            container.style.display = 'block';
         };
         reader.readAsDataURL(event.target.files[0]);
     }
 </script>
-
-
 {% endblock %}
