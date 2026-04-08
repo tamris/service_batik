@@ -4,6 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.batik_model import BatikModel
+from flask import session
 
 galeri_bp = Blueprint('galeri', __name__)
 batik_model = BatikModel()
@@ -29,6 +30,8 @@ def index():
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
+    print("SESSION FLASH:", session.get('_flashes'))
+
     return render_template('galeri/index.html', 
                            batiks=data_tampil, 
                            page=page, 
@@ -37,6 +40,8 @@ def index():
                            start_index=start_index,
                            end_index=end_index,
                            search_query=search_query)
+
+
 
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
 def create():

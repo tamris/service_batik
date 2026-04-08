@@ -1,51 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<title>AdminHub - Data Informasi</title>
 </head>
+
 <body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+	<script>
+		const theme = localStorage.getItem('theme');
+		if (theme === 'dark') { document.body.classList.add('dark'); }
+	</script>
 
 	<section id="sidebar">
 		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
 		<ul class="side-menu top">
-			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
-			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
-			<li class="active"><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle' ></i><span class="text">Informasi</span></a></li>
-			<li><a href="#"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
-			<li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video' ></i><span class="text">Video</span></a></li>
-			<li><a href="#"><i class='bx bxs-map' ></i><span class="text">Mapping</span></a></li>
-			<li><a href="#"><i class='bx bxs-user' ></i><span class="text">Users Manager</span></a></li>
-			<li><a href="#"><i class='bx bxs-message-dots' ></i><span class="text">Dataset Chatbot</span></a></li>
+			<li>
+				<a href="{{ url_for('web_dashboard.index') }}">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for('galeri.index') }}">
+					<i class='bx bxs-collection'></i>
+					<span class="text">Data Batik</span>
+				</a>
+			</li>
+			<li class="active">
+				<a href="{{ url_for('informasi.index') }}">
+					<i class='bx bxs-info-circle'></i>
+					<span class="text">Informasi</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for('event.index') }}">
+					<i class='bx bxs-calendar'></i>
+					<span class="text">Event</span>
+				</a>
+			</li>
+			<li>
+				<a href="{{ url_for('video.index') }}">
+					<i class='bx bxs-video'></i>
+					<span class="text">Video</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-map'></i>
+					<span class="text">Mapping</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-user'></i>
+					<span class="text">Users Manager</span>
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Dataset Chatbot</span>
+				</a>
+			</li>
 		</ul>
 		<ul class="side-menu">
-			<li><a href="#"><i class='bx bxs-cog' ></i><span class="text">Settings</span></a></li>
-			<li><a href="#" class="logout"><i class='bx bxs-log-out-circle' ></i><span class="text">Logout</span></a></li>
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
 		</ul>
 	</section>
 
 	<section id="content">
 		<nav>
-			<i class='bx bx-menu' ></i>
+			<i class='bx bx-menu'></i>
 			<a href="#" class="nav-link">Data Informasi</a>
 			<form action="#" class="search-box" onsubmit="return false;">
 				<div class="form-input">
 					<input type="search" placeholder="Cari informasi..." autocomplete="off">
-					
+
 					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 				</div>
 			</form>
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification"><i class='bx bxs-bell' ></i><span class="num">8</span></a>
+			<a href="#" class="notification"><i class='bx bxs-bell'></i><span class="num">8</span></a>
 			<a href="#" class="profile"><img src="{{ url_for('static', filename='img/people.png') }}"></a>
 		</nav>
 
@@ -68,18 +121,20 @@
 				<div class="order">
 					<div class="head">
 						<h3>List Konten Informasi</h3>
-						<form class="search-box" onsubmit="return false;"> <div class="form-input" style="position: relative;">
-									<input type="search" id="searchInput" placeholder="Cari informasi..." autocomplete="off">
-									<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
-								</div>
-							</form>
+						<form class="search-box" onsubmit="return false;">
+							<div class="form-input" style="position: relative;">
+								<input type="search" id="searchInput" placeholder="Cari informasi..."
+									autocomplete="off">
+								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+							</div>
+						</form>
 					</div>
 					<table>
 						<thead>
 							<tr>
-								<th width="10%">Gambar</th>      
-								<th width="30%">Judul & Kategori</th>  
-								<th width="45%">Cuplikan Isi</th> 
+								<th width="10%">Gambar</th>
+								<th width="30%">Judul & Kategori</th>
+								<th width="45%">Cuplikan Isi</th>
 								<th width="15%">Aksi</th>
 							</tr>
 						</thead>
@@ -87,37 +142,44 @@
 							{% for item in informasi %}
 							<tr>
 								<td>
-									<div class="img-box" style="width: 80px; height: 60px; border-radius: 8px; overflow: hidden;">
-										<img src="{{ url_for('static', filename='img/informasi/' + item.gambar_url) }}" 
-                                             onerror="this.src='/static/img/batik3.jpg';" style="width:100%; height:100%; object-fit:cover;">
+									<div class="img-box"
+										style="width: 80px; height: 60px; border-radius: 8px; overflow: hidden;">
+										<img src="{{ url_for('static', filename='img/informasi/' + item.gambar_url) }}"
+											onerror="this.src='/static/img/batik3.jpg';"
+											style="width:100%; height:100%; object-fit:cover;">
 									</div>
 								</td>
 								<td>
-									<span style="font-weight: 600; font-size: 14px; display: block;">{{ item.judul }}</span>
-									<span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{ item.kategori }}</span>
+									<span style="font-weight: 600; font-size: 14px; display: block;">{{ item.judul
+										}}</span>
+									<span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
+										item.kategori }}</span>
 								</td>
 								<td>
-									<div class="limit-text"  title="{{ item.deskripsi }}">
+									<div class="limit-text" title="{{ item.deskripsi }}">
 										{{ item.deskripsi }}
 									</div>
 								</td>
 								<td>
 									<div class="action-btn">
-										<a href="{{ url_for('informasi.edit', info_id=item._id) }}" class="btn-icon btn-edit" title="Edit"><i class='bx bxs-edit'></i></a>
-										<a href="#" onclick="deleteConfirmation(event, '{{ url_for('informasi.delete', info_id=item._id) }}')" class="btn-icon btn-delete" title="Hapus"><i class='bx bxs-trash'></i></a>
+										<a href="{{ url_for('informasi.edit', info_id=item._id) }}"
+											class="btn-icon btn-edit" title="Edit"><i class='bx bxs-edit'></i></a>
+										<a href="#" onclick="confirmDelete('{{ item._id|string }}')"
+											class="btn-icon btn-delete" title="Hapus"><i class='bx bxs-trash'></i></a>
 									</div>
 								</td>
-							</tr>	
+							</tr>
 							{% endfor %}
 						</tbody>
 					</table>
 					<div class="pagination-wrapper" id="paginationContainer">
 						<span class="pagi-info">
-							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
+							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
+							results
 						</span>
 
 						<div class="pagi-buttons">
-							
+
 							{% if page > 1 %}
 							<a href="{{ url_for('informasi.index', page=page-1) }}" class="pagi-btn prev">
 								<i class='bx bx-chevron-left'></i> Prev
@@ -126,17 +188,18 @@
 
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('informasi.index', page=p, q=search_query) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
+								<a href="{{ url_for('informasi.index', page=p, q=search_query) }}"
+									class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
 								{% endfor %}
 							</div>
 
-							{% if page < total_pages %}
-							<a href="{{ url_for('informasi.index', page=page+1) }}" class="pagi-btn next">
+							{% if page < total_pages %} <a href="{{ url_for('informasi.index', page=page+1) }}"
+								class="pagi-btn next">
 								Next <i class='bx bx-chevron-right'></i>
-							</a>
-							{% endif %}
+								</a>
+								{% endif %}
 
 						</div>
 					</div>
@@ -144,8 +207,6 @@
 			</div>
 		</main>
 	</section>
-
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script>
 		const searchInput = document.getElementById('searchInput');
@@ -153,9 +214,9 @@
 		const paginationContainer = document.getElementById('paginationContainer');
 		let timeout = null;
 
-		searchInput.addEventListener('input', function() {
+		searchInput.addEventListener('input', function () {
 			const query = this.value;
-			
+
 			clearTimeout(timeout);
 			timeout = setTimeout(() => {
 				fetchData(query);
@@ -163,43 +224,93 @@
 		});
 
 
-	function fetchData(query) {
-        // Panggil backend tanpa reload browser
-        // query kosong = ambil semua data
-        fetch(`{{ url_for('informasi.index') }}?q=${query}`)
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+		function fetchData(query) {
+			// Panggil backend tanpa reload browser
+			// query kosong = ambil semua data
+			fetch(`{{ url_for('informasi.index') }}?q=${query}`)
+				.then(response => response.text())
+				.then(html => {
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(html, 'text/html');
 
-                // Update Tabel
-                const newTableBody = doc.getElementById('tableBody');
-                if (newTableBody && tableBody) {
-                    tableBody.innerHTML = newTableBody.innerHTML;
-                }
+					// Update Tabel
+					const newTableBody = doc.getElementById('tableBody');
+					if (newTableBody && tableBody) {
+						tableBody.innerHTML = newTableBody.innerHTML;
+					}
 
-                // Update Pagination
-                const newPagination = doc.getElementById('paginationContainer');
-                if (newPagination && paginationContainer) {
-                    paginationContainer.innerHTML = newPagination.innerHTML;
-                }
-            })
-            .catch(err => console.error('Error fetching data:', err));
-    	}
+					// Update Pagination
+					const newPagination = doc.getElementById('paginationContainer');
+					if (newPagination && paginationContainer) {
+						paginationContainer.innerHTML = newPagination.innerHTML;
+					}
+				})
+				.catch(err => console.error('Error fetching data:', err));
+		}
 
-		// --- LOGIKA HAPUS (DELETE) ---
-		function deleteConfirmation(event, urlRedirect) {
-			event.preventDefault();
+		function confirmDelete(id) {
 			Swal.fire({
-				title: 'Hapus Informasi?',
-				text: "Data akan dihapus permanen!",
+				title: 'Hapus Data?',
+				text: "Data informasi akan dihapus permanen!",
 				icon: 'warning',
 				showCancelButton: true,
-				confirmButtonColor: '#3C91E6',
-				cancelButtonColor: '#DB504A',
-				confirmButtonText: 'Ya, Hapus!'
-			}).then((result) => { if (result.isConfirmed) { window.location.href = urlRedirect; } });
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#3085d6',
+				confirmButtonText: 'Ya, Hapus!',
+				cancelButtonText: 'Batal',
+				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
+				color: document.body.classList.contains('dark') ? '#fff' : '#000'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					window.location.href = "/data-informasi/hapus/" + id;
+				}
+			})
 		}
 	</script>
+
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	<script>
+		// 1. Ubah data dari Flask menjadi JSON agar aman dibaca JavaScript
+		const flashMessages = {{ messages | tojson | safe }};
+
+		// 2. Gunakan JavaScript murni untuk proses looping dan logika
+		flashMessages.forEach(msgItem => {
+			let category = 'info';
+			let message = '';
+
+			// Logika pengecekan format data
+			if (Array.isArray(msgItem) && msgItem.length === 2) {
+				category = msgItem[0];
+				message = msgItem[1];
+			} else {
+				message = msgItem;
+			}
+
+			// Handle jika message berbentuk object {' t': [cat, msg]}
+			if (typeof message === 'object' && message !== null) {
+				const data = message[' t'] || message['t'];
+				if (data && Array.isArray(data)) {
+					category = data[0];
+					message = data[1];
+				}
+			}
+
+			// 3. Eksekusi SweetAlert
+			const validIcons = ['success', 'error', 'warning', 'info'];
+			Swal.fire({
+				title: 'Berhasil!',
+				text: message,
+				icon: validIcons.includes(category) ? category : 'info',
+				timer: 2500,
+				showConfirmButton: false,
+				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
+				color: document.body.classList.contains('dark') ? '#fff' : '#000'
+			});
+		});
+	</script>
+	{% endif %}
+	{% endwith %}
 </body>
+
 </html>
