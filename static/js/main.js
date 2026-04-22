@@ -58,6 +58,7 @@ function galeriDelete(id) {
             window.location.href = "/data-batik/hapus/" + id;
         }
     })
+    
 }
 
 function artikelDelete(id) {

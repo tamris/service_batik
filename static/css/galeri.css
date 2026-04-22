@@ -1,457 +1,369 @@
-/* Pagination styles for Data Batik page */
-.pagination-wrapper {
-    display: flex;
-    justify-content: space-between; /* KUNCI: Kiri Teks, Kanan Tombol */
-    align-items: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    flex-wrap: wrap; /* Jaga-jaga kalau layar hp sempit */
-    gap: 15px;
-}
+/* =========================================
+   MODERN STYLING FOR KATALOG BATIK (INDEX)
+========================================= */
 
-/* Bagian Teks "Showing..." */
-.pagi-info {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-}
-
-.pagi-info b {
-    color: #333; /* Angkanya dibikin lebih gelap */
-    font-weight: 700;
-}
-
-/* Bagian Kanan (Wadah Tombol) */
-.pagi-buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* --- Style Tombol (Sama kayak sebelumnya) --- */
-.pagi-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #555;
-    background: #fff;
-    border: 1px solid #eee;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    gap: 5px;
-}
-
-.pagi-btn:hover {
-    background: #f0f9ff;
-    color: #3C91E6;
-    border-color: #3C91E6;
-}
-
-.pagi-numbers { display: flex; gap: 5px; }
-
-.pagi-btn.number {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-}
-
-.pagi-btn.number.active {
-    background: #3C91E6;
-    color: white;
-    border-color: #3C91E6;
-    box-shadow: 0 4px 10px rgba(60, 145, 230, 0.3);
-}
-
-/* --- SUPPORT DARK MODE --- */
-/* Pastikan body.dark kedetect dari parent */
-body.dark .pagination-wrapper {
-    border-top-color: #333;
-}
-
-body.dark .pagi-info {
-    color: #aaa;
-}
-body.dark .pagi-info b {
-    color: #fff;
-}
-
-body.dark .pagi-btn {
-    background: rgba(255,255,255,0.05);
-    color: #aaa;
-    border-color: #333;
-}
-body.dark .pagi-btn:hover {
-    background: #333;
-    color: white;
-}
-body.dark .pagi-btn.number.active {
-    background: #3C91E6;
-    color: white;
-}
-
-
-/* --- MODERN TABLE STYLE (DARK MODE SUPPORT) --- */
-
-/* Style Form Search di Tabel */
+/* Search Box Customization */
 .search-box .form-input {
     display: flex;
     align-items: center;
-    height: 36px;
-    background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 10px; /* Rounded */
+    background: #f1f1f1;
+    border-radius: 36px;
     overflow: hidden;
-    width: 250px; /* Lebar search bar */
+    border: 1px solid transparent;
     transition: all 0.3s ease;
 }
 
 .search-box .form-input:focus-within {
-    border-color: #3C91E6; /* Biru pas diklik */
-    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.1);
+    border-color: #3C91E6;
     background: #fff;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
 }
 
-.search-box input {
-    flex-grow: 1;
-    padding: 0 16px;
-    height: 100%;
+.search-box .form-input input {
+    padding: 10px 16px;
     border: none;
     background: transparent;
     outline: none;
-    color: #333;
+    width: 250px;
+    font-family: inherit;
     font-size: 14px;
+    color: var(--dark);
 }
 
-.search-box .search-btn {
-    width: 36px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.search-box .form-input button {
+    padding: 10px 16px;
     background: #3C91E6;
     color: #fff;
     border: none;
     cursor: pointer;
-    font-size: 18px;
-    transition: background 0.2s;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
-.search-box .search-btn:hover {
-    background: #2b7bc0;
+.search-box .form-input button:hover {
+    background: #2b7bc6;
 }
 
-/* Fix Dark Mode */
-body.dark .search-box .form-input {
-    background: var(--grey);
-    border-color: #333;
-}
-body.dark .search-box input {
-    color: var(--dark);
-}
-
-/* 1. Container Tabel */
-#content main .table-data .order {
-    border-radius: 20px;
-    background: var(--light); /* Ganti #fff jadi var(--light) biar ikut tema */
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    padding: 30px;
-    border: none;
-}
-
-/* 2. Header Tabel */
-#content main .table-data table thead th {
-    font-size: 13px;
-    text-transform: uppercase;
-    color: var(--dark-grey); /* Pake variabel */
-    font-weight: 700;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--grey); /* Border ikut tema */
-}
-
-/* 3. Baris Body (Row) */
-#content main .table-data table td {
-    padding: 20px 10px;
-    vertical-align: top;
-    border-bottom: 1px solid var(--grey); /* Border ikut tema */
-    color: var(--dark); /* Teks ikut tema (Putih pas dark mode) */
-}
-
-/* 4. Membatasi Teks Makna */
-/* Update Class ini sepenuhnya */
-.limit-text {
-    /* 1. Kembalikan ke display block biasa (Hapus -webkit-box) */
-    display: block; 
-    
-    /* 2. Atur tinggi baris */
-    line-height: 1.6em; 
-    
-    /* 3. Batasi tinggi kotak (Rumus: 1.6em x 3 baris = 4.8em) */
-    max-height: 4.8em; 
-    
-    /* 4. Sembunyikan teks yang lewat batas */
-    overflow: hidden; 
-    
-    /* 5. Styling Teks */
-    color: var(--dark);
-    font-size: 14px;
-    opacity: 0.8;
-    
-    /* Tambahan biar rapi */
-    margin-right: 40px; /* Jarak ke tombol aksi */
-    text-align: justify; /* Biar rata kiri-kanan, jadi potongannya kotak rapi */
-}
-
-/* Tambahin ini biar kolom aksi punya harga diri (gak mau dikecilin) */
-#content main .table-data table td:last-child {
-    white-space: nowrap; /* Tombol Edit & Hapus dilarang turun baris */
-    width: 1%; /* Trik biar kolom ini ambil lebar secukupnya aja */
-}
-
-/* 5. Gambar Batik */
-.img-box {
-    width: 65px;
-    height: 65px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--grey); /* Border ikut tema */
-    display: flex;
-    background: var(--grey); /* Background placeholder */
-}
-
-#content main .table-data .order table td .img-box img {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    object-fit: cover;
-}
-
-/* 6. Label Harga */
-.price-tag {
-    background: rgba(60, 145, 230, 0.1); /* Pake transparansi biar aman di dark mode */
-    color: var(--blue);
-    padding: 6px 12px;
+/* Batik Thumbnail Styling */
+.batik-thumb {
+    width: 110px; /* Ukuran yang pas agar detail motif terlihat */
+    aspect-ratio: 4 / 3; 
     border-radius: 8px;
-    font-weight: 600;
-    font-size: 13px;
-    display: inline-block;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* 7. Tombol Aksi */
+.batik-thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 0 !important; 
+    display: block !important;
+    transition: transform 0.3s ease;
+}
+
+.batik-thumb:hover img {
+    transform: scale(1.15); /* Efek zoom agar detail motif batik terlihat saat di-hover */
+}
+
+/* Text & Content Styling */
+.batik-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--dark);
+    display: block;
+}
+
+.limit-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Batasi teks makna batik maksimal 2 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Action Buttons */
 .action-btn {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 8px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    color: #fff;
     text-decoration: none;
-    transition: all 0.2s;
-    font-size: 18px;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
-/* Warna Tombol Edit */
-.btn-edit { 
-    background: rgba(60, 145, 230, 0.1); /* Transparan Biru */
-    color: var(--blue); 
-}
-.btn-edit:hover { 
-    background: var(--blue); 
-    color: var(--light); 
-}
+.btn-edit { background: #FFCE26; color: #333; }
+.btn-edit:hover { background: #e5b822; transform: translateY(-2px); }
 
-/* Warna Tombol Hapus */
-.btn-delete { 
-    background: rgba(219, 80, 74, 0.1); /* Transparan Merah */
-    color: var(--red); 
-}
-.btn-delete:hover { 
-    background: var(--red); 
-    color: var(--light); 
+.btn-delete { background: #FD7238; color: #fff; }
+.btn-delete:hover { background: #e06532; transform: translateY(-2px); }
+
+/* Pagination Styling (Disamakan dengan sebelumnya agar rapi) */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
 }
 
-/* --- KHUSUS FIX DARK MODE --- */
-/* Ini aturan tambahan kalau body punya class .dark */
-body.dark #content main .table-data .order {
-    box-shadow: none; /* Hilangin bayangan pas dark mode */
+.pagi-info { font-size: 14px; color: #888; }
+.pagi-info b { color: var(--dark); }
+
+.pagi-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-body.dark .img-box {
-    border-color: #333; /* Border gambar lebih gelap */
+.pagi-numbers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-body.dark .price-tag, 
-body.dark .btn-edit, 
-body.dark .btn-delete {
-    /* Biar tombol gak terlalu terang di background gelap */
-    background-color: rgba(255, 255, 255, 0.05); 
+.pagi-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 36px;
+    padding: 0 14px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--dark);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-body.dark .btn-edit { color: #6ab0ff; } /* Biru lebih terang dikit */
-body.dark .btn-delete { color: #ff8782; } /* Merah lebih terang dikit */
-
-
-/* --- FORM STYLE UNTUK TAMBAH & EDIT DATA BATIK --- */
-/* Style Grid & Layout sama kayak sebelumnya */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-    
-    .form-group { margin-bottom: 24px; }
-    .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #342E37; }
-    
-    /* Input Style */
-    input[type="text"], textarea {
-        width: 100%; padding: 12px 16px; font-size: 14px;
-        background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px;
-        transition: all 0.3s;
-    }
-    input:focus, textarea:focus { background: #fff; border-color: #3C91E6; outline: none; box-shadow: 0 0 0 3px rgba(60,145,230,0.1); }
-
-    /* Style Khusus buat Input Harga (Ada RP nya) */
-    .input-icon-wrapper { position: relative; }
-    .currency-symbol {
-        position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-        font-weight: 600; color: #888; font-size: 14px;
-    }
-
-    /* Style Custom Upload Box */
-    .file-upload-box {
-        border: 2px dashed #ccc; padding: 20px; text-align: center;
-        background: #fafafa; border-radius: 8px; cursor: pointer; position: relative;
-    }
-    .file-upload-box:hover { background: #f0f8ff; border-color: #3C91E6; }
-    .file-upload-box input {
-        position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;
-    }
-
-    /* Tombol */
-    .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-    .btn-save { background: #3C91E6; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display:flex; align-items:center; gap:8px;}
-    .btn-cancel { padding: 12px 24px; border: 1px solid #ddd; border-radius: 8px; text-decoration: none; color: #666; font-weight: 600; }
-
-    /* --- DARK MODE: Form & Upload --- */
-    body.dark .form-group label { color: #ddd; }
-    body.dark input[type="text"], body.dark textarea {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: #333;
-        color: #eee;
-    }
-    body.dark input::placeholder, body.dark textarea::placeholder { color: #999; }
-    body.dark input:focus, body.dark textarea:focus {
-        background: rgba(255, 255, 255, 0.09);
-        border-color: #3C91E6;
-        box-shadow: 0 0 0 3px rgba(60,145,230,0.15);
-        outline: none;
-    }
-
-    body.dark .currency-symbol { color: #aaa; }
-
-    body.dark .file-upload-box {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: #333;
-    }
-    body.dark .file-upload-box:hover {
-        background: #333;
-        border-color: #3C91E6;
-    }
-
-    body.dark .form-actions { border-top-color: #333; }
-
-    body.dark .btn-save {
-        background: var(--blue);
-        color: var(--light);
-    }
-    body.dark .btn-save:hover { filter: brightness(1.05); }
-
-    body.dark .btn-cancel {
-        border-color: #333;
-        color: #ccc;
-        background: transparent;
-    }
-    body.dark .btn-cancel:hover {
-        background: #333;
-        color: var(--light);
-        border-color: #555;
-    }
-
-
-
-    /* --- RESPONSIVE TABLE FIX --- */
-
-/* 1. Bikin container tabel bisa di-scroll ke samping */
-.table-data .order {
-    overflow-x: auto !important; /* Wajib ada biar muncul scrollbar bawah */
-    -webkit-overflow-scrolling: touch; /* Biar licin pas discroll di HP */
-    padding-bottom: 10px; /* Kasih jarak biar scrollbar gak nempel tabel */
+.pagi-btn.number {
+    padding: 0;
+    width: 36px;
 }
 
-/* 2. Paksa Tabel punya 'Harga Diri' (Lebar Minimal) */
-/* Ini mencegah tabel jadi gepeng. Kalau layar sempit, dia bakal scroll. */
-.table-data .order table {
+.pagi-btn:hover, .pagi-btn.active {
+    background: #3C91E6;
+    color: #fff;
+    border-color: #3C91E6;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+
+/* =========================================
+   DARK MODE OVERRIDES
+========================================= */
+
+body.dark .search-box .form-input { background: #25282b; }
+body.dark .search-box .form-input input { color: #fff; }
+body.dark .search-box .form-input:focus-within { background: #1e2124; }
+
+body.dark .batik-thumb { box-shadow: 0 2px 4px rgba(0,0,0,0.4); background: #25282b; }
+body.dark .batik-title { color: #fff; }
+body.dark .limit-text { color: #bbb; }
+
+body.dark .pagination-wrapper { border-top-color: #3f444a; }
+body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
+body.dark .pagi-btn:hover, body.dark .pagi-btn.active { background: #3C91E6; color: #fff; border-color: #3C91E6; box-shadow: 0 4px 6px rgba(60, 145, 230, 0.3); }
+body.dark .pagi-info { color: #aaa; }
+body.dark .pagi-info b { color: #fff; }
+
+
+/* =========================================
+   MODERN FORM STYLING FOR BATIK CREATION
+========================================= */
+
+.batik-form-container {
+    padding: 30px !important;
+    background: var(--light);
+    border-radius: 16px;
+}
+
+.batik-group {
+    margin-bottom: 24px;
+}
+
+.batik-label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.batik-input {
     width: 100%;
-    min-width: 1000px; /* <-- INI KUNCINYA. Total lebar tabel minimal 1000px */
-    border-collapse: collapse;
+    padding: 12px 16px;
+    background: var(--light);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--dark);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-/* 3. Atur lebar minimal per-kolom biar teksnya gak kejepit */
-
-/* Kolom Gambar (ke-1) */
-.table-data .order table th:nth-child(1),
-.table-data .order table td:nth-child(1) {
-    width: 100px;
-    min-width: 100px;
+.batik-input:focus {
+    border-color: #3C91E6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
 }
 
-/* Kolom Nama (ke-2) & Harga (ke-3) */
-.table-data .order table th:nth-child(2),
-.table-data .order table td:nth-child(2),
-.table-data .order table th:nth-child(3),
-.table-data .order table td:nth-child(3) {
-    min-width: 150px;
-}
-
-/* Kolom Makna (ke-4) - Ini yang paling butuh ruang */
-.table-data .order table th:nth-child(4),
-.table-data .order table td:nth-child(4) {
-    min-width: 350px; /* Kasih lebar minimal 350px biar enak dibaca */
-    white-space: normal; /* Pastikan teks bisa turun baris */
-}
-
-/* Kolom Aksi (Terakhir) */
-.table-data .order table th:last-child,
-.table-data .order table td:last-child {
-    min-width: 100px;
+/* Custom File Upload Box */
+.file-upload-box {
+    position: relative;
+    width: 100%;
+    padding: 30px 20px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
     text-align: center;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* --- BONUS: PERCANTIK SCROLLBAR (Opsional) --- */
-/* Biar scrollbar bawahnya gak kotak jelek, kita bikin tipis & estetik */
-.table-data .order::-webkit-scrollbar {
-    height: 8px; /* Tinggi scrollbar horizontal */
+.file-upload-box:hover {
+    border-color: #3C91E6;
+    background: #f0f8ff;
 }
-.table-data .order::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-    border-radius: 10px;
+
+.file-upload-box input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
 }
-.table-data .order::-webkit-scrollbar-thumb {
-    background: #ccc; 
-    border-radius: 10px;
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
-.table-data .order::-webkit-scrollbar-thumb:hover {
-    background: #aaa; 
+
+.upload-icon {
+    font-size: 40px;
+    color: #3C91E6;
 }
-/* Support Dark Mode buat Scrollbar */
-body.dark .table-data .order::-webkit-scrollbar-track {
-    background: #0C0C1E;
+
+#uploadText {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
 }
-body.dark .table-data .order::-webkit-scrollbar-thumb {
-    background: #333;
+
+/* Style Preview Image */
+#imagePreview {
+    max-width: 250px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
+
+/* Action Buttons Container */
+.batik-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+    padding: 10px 24px;
+    background: #f1f1f1;
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover { background: #e0e0e0; }
+
+.btn-save {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+
+.btn-save:hover {
+    background: #2b7bc6;
+    box-shadow: 0 6px 12px rgba(60, 145, 230, 0.3);
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   DARK MODE OVERRIDES FOR BATIK FORM
+========================================= */
+
+body.dark .batik-form-container {
+    background: #1a1c1e !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .batik-label { color: #e0e0e0; }
+
+body.dark .batik-input {
+    background: #25282b;
+    border-color: #3f444a;
+    color: #ffffff;
+}
+
+body.dark .batik-input:focus {
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.25);
+}
+
+body.dark .file-upload-box {
+    background: #25282b;
+    border-color: #3f444a;
+}
+
+body.dark .file-upload-box:hover {
+    background: #1e2124;
+    border-color: #3C91E6;
+}
+
+body.dark #uploadText { color: #aaa; }
+body.dark #imagePreview { border-color: #3f444a; }
+
+body.dark .batik-actions { border-top-color: #3f444a; }
+
+body.dark .btn-cancel { background: #333; color: #bbb; }
+body.dark .btn-cancel:hover { background: #444; color: #fff; }
+

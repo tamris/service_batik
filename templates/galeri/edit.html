@@ -1,110 +1,145 @@
-{% extends "dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<main>
-    <div class="head-title">
-        <div class="left">
-            <h1>Edit Data Batik</h1>
-            <ul class="breadcrumb">
-                <li><a href="#">Dashboard</a></li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li><a href="{{ url_for('galeri.index') }}">Data Batik</a></li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li><a class="active" href="#">Edit</a></li>
-            </ul>
-        </div>
-    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Edit Batik - AdminHub</title>
+</head>
 
-    <div class="table-data">
-        <div class="order">
-            <div class="head">
-                <h3>Form Edit Data</h3>
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+        <ul class="side-menu top">
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
+                        class="text">Dashboard</span></a></li>
+            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span
+                        class="text">Katalog Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
+                        Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
+                        class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
+            </li>
+            <li><a href="#"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
+            <li><a href="#"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Edit Data Batik</a>
+            <div class="spacer" style="flex-grow: 1;"></div>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification"><i class='bx bxs-bell'></i><span class="num">8</span></a>
+            <a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
+        </nav>
+
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Edit Batik: {{ batik.nama }}</h1>
+                </div>
             </div>
-            
-            <form action="{{ url_for('galeri.edit', batik_id=batik._id) }}" method="POST" enctype="multipart/form-data">
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nama Motif</label>
-                        <input type="text" name="nama_motif" value="{{ batik.nama }}" required>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                        <label>Kisaran Harga</label>
-                        <div class="input-icon-wrapper">
-                            <span class="currency-symbol">Rp</span>
-                            <input type="text" name="harga" value="{{ batik.harga }}" required style="padding-left: 35px;">
+            <div class="table-data">
+                <div class="order batik-form-container">
+                    <form action="{{ url_for('galeri.edit', batik_id=batik._id) }}" method="POST"
+                        enctype="multipart/form-data">
+
+                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
+
+                        <div class="batik-group">
+                            <label class="batik-label">Nama Motif Batik</label>
+                            <input type="text" name="nama_motif" class="batik-input" value="{{ batik.nama }}" required>
                         </div>
-                    </div>
 
-                <div class="form-group">
-                    <label>Gambar Batik</label>
-                    <div class="file-upload-box">
-                        <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)">
-                        <p id="uploadText">Klik untuk ganti gambar (Opsional)</p>
-                    </div>
-                    
-                   <div class="preview-container">
-                        <span style="font-size:12px; color:#666; display:block;">Preview Saat Ini:</span>
-                        <img id="imagePreview" src="{{ url_for('static', filename='img/galeri/' + batik.gambar) }}" 
-                            style="max-width: 200px; border-radius: 10px;">
-                    </div>
+                        <div class="batik-group">
+                            <label class="batik-label">Ganti Gambar Motif (Opsional)</label>
+                            <div class="file-upload-box">
+                                <input type="file" name="gambar" accept="image/*" id="fileInput"
+                                    onchange="previewImage(event)">
+                                <div class="upload-content">
+                                    <i class='bx bx-cloud-upload upload-icon'></i>
+                                    <p id="uploadText">Klik atau seret file ke sini jika ingin mengganti gambar motif
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="preview-container" id="previewWrapper"
+                                style="display: block; margin-top: 15px;">
+                                <span class="batik-label" id="previewTitle"
+                                    style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar Saat
+                                    Ini:</span>
+                                <img id="imagePreview"
+                                    src="{{ url_for('static', filename='img/galeri/' + batik.gambar) }}"
+                                    alt="Preview Motif">
+                            </div>
+                        </div>
+
+                        <div class="batik-group">
+                            <label class="batik-label">Makna & Filosofi</label>
+                            <textarea name="makna" class="batik-input" rows="6" required>{{ batik.makna }}</textarea>
+                        </div>
+
+                        <div class="batik-actions">
+                            <a href="{{ url_for('galeri.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Batik</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
+        </main>
+    </section>
 
-                <div class="form-group">
-                    <label>Makna & Filosofi</label>
-                    <textarea name="makna" rows="6" required>{{ batik.makna }}</textarea>
-                </div>
+    <script>
+        // Logika Dark Mode
+        const switchMode = document.getElementById('switch-mode');
+        if (localStorage.getItem('theme') === 'dark') {
+            switchMode.checked = true;
+        }
+        switchMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
 
-                <div class="form-actions">
-                    <a href="{{ url_for('galeri.index') }}" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-save">
-                        <i class='bx bx-save'></i> Simpan Perubahan
-                    </button>
-                </div>
+        // Script Preview Gambar (Akan menimpa gambar lama jika file baru dipilih)
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                var title = document.getElementById('previewTitle');
 
-            </form>
-        </div>
-    </div>
-</main>
+                output.src = reader.result;
+                title.innerText = "Preview Gambar Baru:";
+                title.style.color = "#3C91E6"; // Highlight warna biru agar user sadar gambarnya sudah ganti
 
-<script>
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('imagePreview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
+                document.getElementById('uploadText').innerText = "Gambar baru berhasil dipilih. Klik lagi untuk mengganti.";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
 
-<style>
-    /* CSS tetap seperti aslimu */
-    .form-grid { display: grid; grid-template-columns: 1fr; gap: 20px; } /* Diubah ke 1fr karena harga dihapus */
-    @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-    .form-group { margin-bottom: 24px; }
-    .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: var(--dark); }
-    
-    input[type="text"], textarea {
-        width: 100%; padding: 12px 16px; font-size: 14px;
-        background: var(--light); color: var(--dark); 
-        border: 1px solid var(--grey); border-radius: 8px;
-        transition: all 0.3s;
-    }
-    input:focus, textarea:focus { border-color: #3C91E6; outline: none; }
-
-    .file-upload-box {
-        border: 2px dashed var(--dark-grey); padding: 20px; text-align: center;
-        background: var(--light); border-radius: 8px; cursor: pointer; position: relative;
-    }
-    .file-upload-box input {
-        position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;
-    }
-
-    .form-actions { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; border-top: 1px solid var(--grey); padding-top: 20px; }
-    .btn-save { background: #3C91E6; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display:flex; align-items:center; gap:8px;}
-    .btn-cancel { padding: 12px 24px; border: 1px solid var(--dark-grey); border-radius: 8px; text-decoration: none; color: var(--dark); font-weight: 600; }
-</style>
-{% endblock %}
+</html>

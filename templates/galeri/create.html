@@ -1,74 +1,126 @@
-{% extends "dashboard.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<main>
-    <div class="head-title">
-        <div class="left">
-            <h1>Tambah Batik Baru</h1>
-            <ul class="breadcrumb">
-                <li><a href="#">Dashboard</a></li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li><a href="{{ url_for('galeri.index') }}">Data Batik</a></li>
-                <li><i class='bx bx-chevron-right'></i></li>
-                <li><a class="active" href="#">Tambah</a></li>
-            </ul>
-        </div>
-    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Tambah Batik - AdminHub</title>
+</head>
 
-    <div class="table-data">
-        <div class="order">
-            <div class="head">
-                <h3>Form Input Data Batik</h3>
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+        <ul class="side-menu top">
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
+            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
+            <li><a href="#"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
+            <li><a href="#"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Tambah Data Batik</a>
+            <div class="spacer" style="flex-grow: 1;"></div>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification"><i class='bx bxs-bell'></i><span class="num">8</span></a>
+            <a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
+        </nav>
+
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Tambah Batik Baru</h1>
+                </div>
             </div>
-            
-            <form action="{{ url_for('galeri.create') }}" method="POST" enctype="multipart/form-data">
+
+            <div class="table-data">
+                <div class="order batik-form-container">
+                    <form action="{{ url_for('galeri.create') }}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="batik-group">
+                            <label class="batik-label">Nama Motif Batik</label>
+                            <input type="text" name="nama_motif" class="batik-input" placeholder="Contoh: Batik Mega Mendung" required>
+                        </div>
+
+                        <div class="batik-group">
+                            <label class="batik-label">Gambar Motif Batik</label>
+                            <div class="file-upload-box">
+                                <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)" required>
+                                <div class="upload-content">
+                                    <i class='bx bx-cloud-upload upload-icon'></i>
+                                    <p id="uploadText">Klik atau seret gambar batik ke sini</p>
+                                </div>
+                            </div>
+                            
+                            <div class="preview-container" id="previewContainer" style="display: none; margin-top: 15px;">
+                                <span class="batik-label" style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar:</span>
+                                <img id="imagePreview" src="#" alt="Preview Motif">
+                            </div>
+                        </div>
+
+                        <div class="batik-group">
+                            <label class="batik-label">Makna & Filosofi</label>
+                            <textarea name="makna" class="batik-input" rows="6" placeholder="Tuliskan cerita, sejarah, dan filosofi di balik motif batik ini..." required></textarea>
+                        </div>
+
+                        <div class="batik-actions">
+                            <a href="{{ url_for('galeri.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Batik</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script>
+        // Logika Dark Mode
+        const switchMode = document.getElementById('switch-mode');
+        if (localStorage.getItem('theme') === 'dark') {
+            switchMode.checked = true;
+        }
+        switchMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Script Preview Gambar Upload
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('imagePreview');
+                var container = document.getElementById('previewContainer');
+                output.src = reader.result;
+                container.style.display = 'block';
                 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Nama Motif Batik</label>
-                    <input type="text" name="nama_motif" placeholder="Contoh: Batik Mega Mendung" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); background: var(--light); color: var(--dark);">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Gambar Batik</label>
-                    <div class="file-upload-wrapper" style="border: 2px dashed var(--grey); padding: 20px; border-radius: 10px; text-align: center; position: relative; background: var(--light);">
-                        <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)" style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;">
-                        <i class='bx bxs-cloud-upload' style="font-size: 40px; color: #3C91E6;"></i>
-                        <p style="margin-top: 10px; color: var(--dark);">Klik atau seret gambar batik ke sini</p>
-                    </div>
-                    
-                    <div id="previewContainer" style="display: none; margin-top: 15px; text-align: center;">
-                        <span style="font-size: 12px; color: var(--dark-grey); display: block; margin-bottom: 5px;">Preview Gambar:</span>
-                        <img id="imagePreview" src="#" style="max-width: 250px; border-radius: 10px; border: 2px solid #3C91E6; padding: 5px;">
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; display: block; margin-bottom: 8px;">Makna & Filosofi</label>
-                    <textarea name="makna" rows="6" placeholder="Tuliskan cerita di balik motif batik ini..." required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--grey); background: var(--light); color: var(--dark);"></textarea>
-                </div>
-
-                <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 30px;">
-                    <a href="{{ url_for('galeri.index') }}" style="padding: 10px 20px; border-radius: 8px; border: 1px solid var(--grey); text-decoration: none; color: var(--dark);">Batal</a>
-                    <button type="submit" style="background: #3C91E6; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                        <i class='bx bx-save'></i> Simpan Batik
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-</main>
-
-<script>
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('imagePreview');
-            var container = document.getElementById('previewContainer');
-            output.src = reader.result;
-            container.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
-{% endblock %}
+                document.getElementById('uploadText').innerText = "Gambar motif berhasil dipilih. Klik lagi untuk mengganti.";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>

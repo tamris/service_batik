@@ -58,7 +58,7 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-     border-radius: 0 !important; 
+    border-radius: 0 !important; 
     display: block !important;
     transition: transform 0.3s ease;
 }
@@ -78,7 +78,7 @@
 
 .limit-text {
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Batasi teks maksimal 2 baris */
+    -webkit-line-clamp: 3; /* Batasi teks maksimal 2 baris */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;

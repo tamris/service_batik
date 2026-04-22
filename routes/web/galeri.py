@@ -1,6 +1,7 @@
 from datetime import datetime
 import math
 import os
+from posthog import page
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.batik_model import BatikModel
@@ -79,9 +80,9 @@ def edit(batik_id):
         return redirect(url_for('galeri.index'))
 
     if request.method == 'POST':
+        page = request.form.get('page', 1, type=int)
         data_update = {
             "nama": request.form['nama_motif'],
-            "harga": request.form['harga'],
             "makna": request.form['makna']
         }
         
@@ -95,7 +96,7 @@ def edit(batik_id):
         
         batik_model.update(batik_id, data_update)
         flash('Data batik berhasil diperbarui!', 'success')
-        return redirect(url_for('galeri.index'))
+        return redirect(url_for('galeri.index', page=page))
 
     return render_template('galeri/edit.html', batik=batik_terpilih)
 
