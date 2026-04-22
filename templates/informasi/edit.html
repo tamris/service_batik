@@ -1,127 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
-    <title>Tambah Informasi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/informasi.css') }}">
+    <title>Edit Artikel - AdminHub</title>
 </head>
+
 <body>
     <script>
-        // Script untuk menjaga konsistensi tema saat page load
         const theme = localStorage.getItem('theme');
         if (theme === 'dark') { document.body.classList.add('dark'); }
     </script>
 
     <section id="sidebar">
-		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
-		<ul class="side-menu top">
-			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
-			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
-			<li class="active"><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle' ></i><span class="text">Informasi</span></a></li>
-			<li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
-			<li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video' ></i><span class="text">Video</span></a></li>
-			<li><a href="#"><i class='bx bxs-map' ></i><span class="text">Mapping</span></a></li>
-			<li><a href="#"><i class='bx bxs-user' ></i><span class="text">Users Manager</span></a></li>
-			<li><a href="#"><i class='bx bxs-message-dots' ></i><span class="text">Dataset Chatbot</span></a></li>
-		</ul>
-		<ul class="side-menu">
-			<li><a href="#"><i class='bx bxs-cog' ></i><span class="text">Settings</span></a></li>
-			<li><a href="#" class="logout"><i class='bx bxs-log-out-circle' ></i><span class="text">Logout</span></a></li>
-		</ul>
-	</section>
+        <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+        <ul class="side-menu top">
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
+            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
+            <li class="active"><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
+            <li><a href="#"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
+            <li><a href="#"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+        </ul>
+    </section>
 
     <section id="content">
         <nav>
-			<i class='bx bx-menu' ></i>
-			<a href="#" class="nav-link">Data Informasi</a>
-			<form action="{{ url_for('informasi.index') }}" method="GET" class="search-box">
-				<div class="form-input">
-					<input type="search" name="q" placeholder="Cari informasi..." autocomplete="off">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification"><i class='bx bxs-bell' ></i><span class="num">8</span></a>
-			<a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
-		</nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Edit Data Artikel</a>
+            <div class="spacer" style="flex-grow: 1;"></div>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification"><i class='bx bxs-bell'></i><span class="num">8</span></a>
+            <a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
+        </nav>
 
         <main>
-    <div class="head-title">
-        <div class="left"><h1>Edit Informasi</h1></div> </div>
-    <div class="table-data">
-        <div class="order">
-            <form action="{{ url_for('informasi.edit', info_id=info._id) }}" method="POST" enctype="multipart/form-data">
-                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="form-group">
-                        <label>Judul Konten</label>
-                        <input type="text" name="judul" value="{{ info.judul }}" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">
-                    </div>
-                    <div class="form-group">
-                        <label>Kategori</label>
-                        <select name="kategori" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">
-                            <option value="Berita Terkini" {{ 'selected' if info.kategori == 'Berita Terkini' else '' }}>Berita Terkini</option>
-                            <option value="Event" {{ 'selected' if info.kategori == 'Event' else '' }}>Event</option>
-                            <option value="Sosok & Inspirasi" {{ 'selected' if info.kategori == 'Sosok & Inspirasi' else '' }}>Sosok & Inspirasi</option>
-                            <option value="Edukasi" {{ 'selected' if info.kategori == 'Edukasi' else '' }}>Edukasi</option>
-                        </select>
-                    </div>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Edit Artikel: {{ info.judul }}</h1>
                 </div>
-                
-                <div class="form-group" style="margin-top:20px;">
-                    <label>Preview Gambar Saat Ini</label><br>
-                    <img src="{{ url_for('static', filename='img/informasi/' + info.gambar_url) }}" style="max-width: 150px; border-radius: 8px; margin-bottom:10px;">
-                    <input type="file" name="gambar" accept="image/*">
-                </div>
+            </div>
 
-                <div class="form-group">
-                    <label>Isi Deskripsi</label>
-                    <textarea name="deskripsi" rows="8" required style="width:100%; padding:12px; border-radius:8px; border:1px solid var(--grey); background: var(--light); color: var(--dark);">{{ info.deskripsi }}</textarea>
-                </div>
+            <div class="table-data">
+                <div class="order info-form-container">
+                    <form action="{{ url_for('informasi.edit', info_id=info._id) }}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="info-grid title-category-grid">
+                            <div class="info-group">
+                                <label class="info-label">Judul Konten</label>
+                                <input type="text" name="judul" class="info-input" value="{{ info.judul }}" required>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">Kategori</label>
+                                <select name="kategori" class="info-input" required>
+                                    <option value="Berita Terkini" {{ 'selected' if info.kategori == 'Berita Terkini' }}>Berita Terkini</option>
+                                    <option value="Event" {{ 'selected' if info.kategori == 'Event' }}>Event</option>
+                                    <option value="Sosok & Inspirasi" {{ 'selected' if info.kategori == 'Sosok & Inspirasi' }}>Sosok & Inspirasi</option>
+                                    <option value="Edukasi" {{ 'selected' if info.kategori == 'Edukasi' }}>Edukasi</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="form-actions" style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-                    <a href="{{ url_for('informasi.index') }}" class="btn-cancel">Batal</a>
-                    <button type="submit" class="btn-save" style="background:#3C91E6; color:white;">Simpan Perubahan</button>
+                        <div class="info-group">
+                            <label class="info-label">Ganti Thumbnail (Opsional)</label>
+                            <div class="file-upload-box">
+                                <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)">
+                                <div class="upload-content">
+                                    <i class='bx bx-cloud-upload upload-icon'></i>
+                                    <p id="uploadText">Klik atau seret file ke sini jika ingin mengganti thumbnail</p>
+                                </div>
+                            </div>
+                            
+                            <div class="preview-container" id="previewWrapper" style="display: block; margin-top: 15px;">
+                                <span class="info-label" id="previewTitle" style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar Saat Ini:</span>
+                                <img id="imagePreview" src="{{ url_for('static', filename='img/informasi/' + info.gambar_url) }}" alt="Preview">
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <label class="info-label">Isi Deskripsi / Artikel</label>
+                            <textarea name="deskripsi" class="info-input" rows="8" required>{{ info.deskripsi }}</textarea>
+                        </div>
+
+                        <div class="info-actions">
+                            <a href="{{ url_for('informasi.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Konten</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-    </div>
-</main>
+            </div>
+        </main>
     </section>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
+        // Logika Dark Mode
+        const switchMode = document.getElementById('switch-mode');
+        if (localStorage.getItem('theme') === 'dark') {
+            switchMode.checked = true;
+        }
+        switchMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Script Preview Gambar (Akan menimpa gambar lama jika file baru dipilih)
         function previewImage(event) {
             var reader = new FileReader();
             reader.onload = function(){
                 var output = document.getElementById('imagePreview');
-                var wrapper = document.getElementById('previewWrapper');
+                var title = document.getElementById('previewTitle');
+                
                 output.src = reader.result;
-                wrapper.style.display = 'block'; // Tampilkan saat gambar terpilih
+                title.innerText = "Preview Gambar Baru:";
+                title.style.color = "#3C91E6"; // Kasih highlight biru biar jelas ini gambar baru
+                
+                document.getElementById('uploadText').innerText = "Gambar baru berhasil dipilih. Klik lagi untuk mengganti.";
             };
             reader.readAsDataURL(event.target.files[0]);
         }
     </script>
-
-    <style>
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 14px;
-            background: var(--light);
-            color: var(--dark);
-            border: 1px solid var(--grey);
-            border-radius: 8px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .form-group select:focus {
-            border-color: #3C91E6;
-            outline: none;
-        }
-    </style>
 </body>
-</html> 
+</html>
