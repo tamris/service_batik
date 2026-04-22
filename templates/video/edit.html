@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/video.css') }}">
+    <title>Edit Video - AdminHub</title>
+</head>
+
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+        <ul class="side-menu top">
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
+            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
+            <li class="active"><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
+            <li><a href="#"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
+            <li><a href="#"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Edit Data Video</a>
+            <div class="spacer" style="flex-grow: 1;"></div>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification"><i class='bx bxs-bell'></i><span class="num">8</span></a>
+            <a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
+        </nav>
+
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Edit Video: {{ video.judul }}</h1>
+                </div>
+            </div>
+
+            <div class="table-data">
+                <div class="order video-form-container">
+                    <form action="{{ url_for('video.edit', video_id=video._id) }}" method="POST">
+                        
+                        <div class="video-grid title-category-grid">
+                            <div class="video-group">
+                                <label class="video-label">Judul Video</label>
+                                <input type="text" name="judul" class="video-input" value="{{ video.judul }}" required>
+                            </div>
+                            <div class="video-group">
+                                <label class="video-label">Kategori</label>
+                                <select name="kategori" class="video-input" required>
+                                    <option value="Sejarah" {{ 'selected' if video.kategori == 'Sejarah' }}>Sejarah</option>
+                                    <option value="Event" {{ 'selected' if video.kategori == 'Event' }}>Event</option>
+                                    <option value="Motif & Makna" {{ 'selected' if video.kategori == 'Motif & Makna' }}>Motif & Makna</option>
+                                    <option value="Edukasi" {{ 'selected' if video.kategori == 'Edukasi' }}>Edukasi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="video-group">
+                            <label class="video-label">URL YouTube</label>
+                            <input type="url" name="youtube_url" class="video-input" value="{{ video.youtube_url }}" required>
+                            <small class="input-hint">Jika link YouTube diubah, thumbnail pada daftar video akan diperbarui otomatis.</small>
+                        </div>
+
+                        <div class="video-group">
+                            <label class="video-label">Deskripsi Video</label>
+                            <textarea name="deskripsi" class="video-input" rows="6" required>{{ video.deskripsi }}</textarea>
+                        </div>
+
+                        <div class="video-actions">
+                            <a href="{{ url_for('video.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Video</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script>
+        const switchMode = document.getElementById('switch-mode');
+        if (localStorage.getItem('theme') === 'dark') {
+            switchMode.checked = true;
+        }
+        switchMode.addEventListener('change', function () {
+            if (this.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+
+</html>
