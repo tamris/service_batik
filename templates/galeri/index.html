@@ -39,13 +39,13 @@
 			<li class="active">
 				<a href="{{ url_for('galeri.index') }}">
 					<i class='bx bxs-collection'></i>
-					<span class="text">Data Batik</span>
+					<span class="text">Katalog Batik</span>
 				</a>
 			</li>
 			<li>
 				<a href="{{ url_for('informasi.index') }}">
 					<i class='bx bxs-info-circle'></i>
-					<span class="text">Informasi</span>
+					<span class="text">Konten Artikel</span>
 				</a>
 			</li>
 			<li>
@@ -63,7 +63,7 @@
 			<li>
 				<a href="#">
 					<i class='bx bxs-map'></i>
-					<span class="text">Mapping</span>
+					<span class="text">Mapping Lokasi</span>
 				</a>
 			</li>
 			<li>
@@ -102,15 +102,12 @@
 		<nav>
 			<i class='bx bx-menu'></i>
 			<a href="#" class="nav-link">Data Batik</a>
-			<form action="#" class="search-box" onsubmit="return false;">
-				<div class="form-input">
-					<input type="search" placeholder="Cari batik..." autocomplete="off">
 
-					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
+			<div class="spacer" style="flex-grow: 1;"></div>
+
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
+
 			<a href="#" class="notification">
 				<i class='bx bxs-bell'></i>
 				<span class="num">8</span>
@@ -146,7 +143,7 @@
 
 						<form class="search-box" onsubmit="return false;">
 							<div class="form-input" style="position: relative;">
-								<input type="search" id="searchInput" placeholder="Cari batik..." autocomplete="off">
+								<input type="search" id="searchInput" placeholder="Cari batik..." autocomplete="off" data-url="{{ url_for('galeri.index') }}">
 								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</form>
@@ -236,69 +233,7 @@
 	</section>
 
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-	<script>
-		// ELEMENT SELECTOR
-		const searchInput = document.getElementById('searchInput');
-		const tableBody = document.getElementById('tableBody');
-		const paginationContainer = document.getElementById('paginationContainer');
-		let timeout = null;
-
-		// EVENT LISTENER (LIVE SEARCH)
-		// 'input' mendeteksi setiap ketikan DAN klik tombol silang (clear)
-		searchInput.addEventListener('input', function () {
-			const query = this.value;
-
-			// Debounce: Tunggu user selesai ngetik 300ms baru cari (biar gak berat)
-			clearTimeout(timeout);
-			timeout = setTimeout(() => {
-				fetchData(query);
-			}, 300);
-		});
-
-		// FUNGSI AJAX FETCH
-		function fetchData(query) {
-			// Panggil backend tanpa reload browser
-			// query kosong = ambil semua data
-			fetch(`{{ url_for('galeri.index') }}?q=${query}`)
-				.then(response => response.text())
-				.then(html => {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(html, 'text/html');
-
-					// Update Tabel
-					const newTableBody = doc.getElementById('tableBody');
-					if (newTableBody && tableBody) {
-						tableBody.innerHTML = newTableBody.innerHTML;
-					}
-
-					// Update Pagination
-					const newPagination = doc.getElementById('paginationContainer');
-					if (newPagination && paginationContainer) {
-						paginationContainer.innerHTML = newPagination.innerHTML;
-					}
-				})
-				.catch(err => console.error('Error fetching data:', err));
-		}
-
-		function confirmDelete(id) {
-			Swal.fire({
-				title: 'Hapus Data?',
-				text: "Data batik akan dihapus permanen!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#d33',
-				cancelButtonColor: '#3085d6',
-				confirmButtonText: 'Ya, Hapus!',
-				cancelButtonText: 'Batal',
-				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
-				color: document.body.classList.contains('dark') ? '#fff' : '#000'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					window.location.href = "/data-batik/hapus/" + id;
-				}
-			})
-		}
-	</script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}

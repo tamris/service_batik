@@ -71,6 +71,44 @@ def create():
 
     return render_template('events/create.html')
 
+@event_bp.route('/data-events/edit/<string:event_id>', methods=['GET', 'POST'])
+def edit(event_id):
+    # Ambil data lama berdasarkan ID
+    event = event_model.get_by_id(event_id)
+    
+    if request.method == 'POST':
+        # Handle Upload Banner Baru (jika ada)
+        file = request.files.get('banner')
+        if file and file.filename != '':
+            filename = secure_filename(file.filename)
+            if not os.path.exists(UPLOAD_FOLDER):
+                os.makedirs(UPLOAD_FOLDER)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            banner_url = filename
+        else:
+            # Tetap gunakan banner lama jika tidak upload baru
+            banner_url = event.get('banner_image_url', 'default_event.png')
+
+        data_update = {
+            "title": request.form.get("title"),
+            "kategori": request.form.get("kategori"),
+            "description": request.form.get("description"),
+            "banner_image_url": banner_url,
+            "event_date": request.form.get("event_date"),
+            "latitude": request.form.get("latitude"),
+            "longitude": request.form.get("longitude"),
+            "address": {"full": request.form.get("address")},
+            "is_free": request.form.get("is_free") == "on",
+            "price": request.form.get("price") if request.form.get("is_free") != "on" else "0",
+            "updated_at": datetime.now()
+        }
+
+        event_model.update(event_id, data_update)
+        flash('Data event berhasil diperbarui!', 'success')
+        return redirect(url_for('event.index'))
+
+    return render_template('events/edit.html', event=event)
+
 @event_bp.route('/data-events/hapus/<string:event_id>')
 def delete(event_id):
     event_model.delete(event_id)

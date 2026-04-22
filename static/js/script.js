@@ -1,79 +1,74 @@
 const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
 
-allSideMenu.forEach(item=> {
+allSideMenu.forEach(item => {
 	const li = item.parentElement;
 
 	item.addEventListener('click', function () {
-		allSideMenu.forEach(i=> {
+		allSideMenu.forEach(i => {
 			i.parentElement.classList.remove('active');
 		})
 		li.classList.add('active');
 	})
 });
 
-
-
-
 // TOGGLE SIDEBAR
 const menuBar = document.querySelector('#content nav .bx.bx-menu');
 const sidebar = document.getElementById('sidebar');
 
-menuBar.addEventListener('click', function () {
-	sidebar.classList.toggle('hide');
-})
+if (menuBar) { // Tambahkan pengecekan agar aman
+	menuBar.addEventListener('click', function () {
+		sidebar.classList.toggle('hide');
+	})
+}
 
+// --- BAGIAN YANG BIKIN ERROR (DIPERBAIKI) ---
 const searchButton = document.querySelector('#content nav form .form-input button');
 const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
 const searchForm = document.querySelector('#content nav form');
 
-searchButton.addEventListener('click', function (e) {
-	if(window.innerWidth < 576) {
-		e.preventDefault();
-		searchForm.classList.toggle('show');
-		if(searchForm.classList.contains('show')) {
-			searchButtonIcon.classList.replace('bx-search', 'bx-x');
-		} else {
-			searchButtonIcon.classList.replace('bx-x', 'bx-search');
+// Cek dulu: "Ada gak tombol search-nya?" Kalau ada baru jalankan fungsi
+if (searchButton && searchButtonIcon && searchForm) {
+	searchButton.addEventListener('click', function (e) {
+		if (window.innerWidth < 576) {
+			e.preventDefault();
+			searchForm.classList.toggle('show');
+			if (searchForm.classList.contains('show')) {
+				searchButtonIcon.classList.replace('bx-search', 'bx-x');
+			} else {
+				searchButtonIcon.classList.replace('bx-x', 'bx-search');
+			}
 		}
-	}
-})
+	})
 
+	window.addEventListener('resize', function () {
+		if (this.innerWidth > 576) {
+			searchButtonIcon.classList.replace('bx-x', 'bx-search');
+			searchForm.classList.remove('show');
+		}
+	})
+}
+// --------------------------------------------
 
-if(window.innerWidth < 768) {
+if (window.innerWidth < 768) {
 	sidebar.classList.add('hide');
-} else if(window.innerWidth > 576) {
-	searchButtonIcon.classList.replace('bx-x', 'bx-search');
-	searchForm.classList.remove('show');
 }
 
-
-window.addEventListener('resize', function () {
-	if(this.innerWidth > 576) {
-		searchButtonIcon.classList.replace('bx-x', 'bx-search');
-		searchForm.classList.remove('show');
-	}
-})
-
-
-
+// DARK MODE (Pastiin ini tetap di bawah)
 const switchMode = document.getElementById('switch-mode');
 
-// 1. LOGIKA SAAT HALAMAN DILOAD (Cek Memori)
-// Kita cek: "Eh, user ini sebelumnya pilih dark mode gak ya di localStorage?"
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark'); // Kalau iya, langsung gelapin
-    switchMode.checked = true; // Jangan lupa tombolnya dicentang juga
-}
+if (switchMode) { // Tambahkan pengecekan
+	if (localStorage.getItem('theme') === 'dark') {
+		document.body.classList.add('dark');
+		switchMode.checked = true;
+	}
 
-// 2. LOGIKA SAAT TOMBOL DIKLIK
-switchMode.addEventListener('change', function () {
-    if(this.checked) {
-        // Kalau dicentang: Aktifin Dark Mode & Simpan kata 'dark' ke memori
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        // Kalau dimatiin: Hapus Dark Mode & Simpan kata 'light' ke memori
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-    }
-});
+	switchMode.addEventListener('change', function () {
+		if (this.checked) {
+			document.body.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
+		} else {
+			document.body.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
+		}
+	});
+}

@@ -15,7 +15,7 @@ UPLOAD_FOLDER = 'static/img/informasi'
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
-    per_page = 7 
+    per_page = 5 
 
     all_data = info_model.get_all(search_query)
 

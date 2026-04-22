@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+    <title>Edit Event - AdminHub</title>
+    <style>
+        #map { height: 350px; width: 100%; border-radius: 12px; border: 2px solid var(--grey); margin-bottom: 20px; z-index: 1; }
+        .price-card { display: flex; align-items: center; background: var(--light); border: 1px solid var(--grey); border-radius: 10px; padding: 0 15px; height: 50px; gap: 12px; }
+        .price-card.is-disabled { background: var(--grey); opacity: 0.6; }
+        .price-input-group { display: flex; align-items: center; flex: 1; gap: 8px; }
+        .price-input-group input { border: none !important; background: transparent !important; width: 100%; outline: none; }
+        .loading-text { font-size: 12px; color: #3C91E6; display: none; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <section id="sidebar">
+		<a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
+		<ul class="side-menu top">
+			<li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard' ></i><span class="text">Dashboard</span></a></li>
+			<li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection' ></i><span class="text">Data Batik</span></a></li>
+            <li class="active"><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar' ></i><span class="text">Event</span></a></li>
+		</ul>
+	</section>
+
+    <section id="content">
+        <nav><i class='bx bx-menu' ></i><a href="#" class="nav-link">Edit Event</a></nav>
+
+        <main>
+            <div class="head-title"><div class="left"><h1>Edit Event: {{ event.title }}</h1></div></div>
+
+            <div class="table-data">
+                <div class="order">
+                    <form action="{{ url_for('event.edit', event_id=event._id) }}" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="font-weight:600;">Nama Event</label>
+                                <input type="text" name="title" value="{{ event.title }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Kategori</label>
+                                <select name="kategori" required>
+                                    <option value="Workshop" {{ 'selected' if event.kategori == 'Workshop' }}>Workshop</option>
+                                    <option value="Festival" {{ 'selected' if event.kategori == 'Festival' }}>Festival</option>
+                                    <option value="Webinar" {{ 'selected' if event.kategori == 'Webinar' }}>Webinar</option>
+                                    <option value="Pameran" {{ 'selected' if event.kategori == 'Pameran' }}>Pameran</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group"><label style="font-weight:600;">Lokasi Event (Geser Marker)</label><div id="map"></div></div>
+
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group"><label style="font-weight:600;">Latitude</label><input type="text" name="latitude" id="latInput" value="{{ event.latitude }}" readonly required></div>
+                            <div class="form-group"><label style="font-weight:600;">Longitude</label><input type="text" name="longitude" id="lngInput" value="{{ event.longitude }}" readonly required></div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:20px;">
+                            <label style="font-weight:600;">Alamat Lengkap <span id="loadingAddr" class="loading-text">Menarik alamat...</span></label>
+                            <textarea name="address" id="addressInput" rows="2" required>{{ event.address.full }}</textarea>
+                        </div>
+
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="font-weight:600;">Tanggal & Waktu</label>
+                                <input type="datetime-local" name="event_date" value="{{ event.event_date }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label style="font-weight:600;">Ganti Banner (Opsional)</label>
+                                <input type="file" name="banner" accept="image/*">
+                                <small>File saat ini: {{ event.banner_image_url }}</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label style="font-weight: 600;">Biaya Masuk</label>
+                            <div class="price-card {{ 'is-disabled' if event.is_free }}" id="priceCard">
+                                <label class="free-option">
+                                    <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()" {{ 'checked' if event.is_free }}>
+                                    <span>Gratis?</span>
+                                </label>
+                                <div class="price-input-group">
+                                    <span style="font-weight:700;">Rp</span>
+                                    <input type="number" name="price" id="priceInput" value="{{ event.price }}" {{ 'disabled' if event.is_free }}>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group"><label style="font-weight:600;">Deskripsi</label><textarea name="description" rows="5" required>{{ event.description }}</textarea></div>
+
+                        <div class="form-actions" style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                            <a href="{{ url_for('event.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save" style="background:#3C91E6; color:white; border:none; padding:10px 25px; border-radius:8px; cursor:pointer; font-weight: 600;">Update Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([-6.867, 109.137], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        var marker = L.marker([-6.867, 109.137]).addTo(map);
+
+        async function updateAddress(lat, lng) {
+            const addr = document.getElementById('addressInput');
+            const loader = document.getElementById('loadingAddr');
+            loader.style.display = "inline";
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                const data = await res.json();
+                addr.value = data.display_name || "";
+            } catch (e) { addr.value = "Gagal mengambil alamat otomatis."; }
+            finally { loader.style.display = "none"; }
+        }
+
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
+            document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
+            updateAddress(e.latlng.lat, e.latlng.lng);
+        });
+
+        function togglePrice() {
+            const isFree = document.getElementById('isFree').checked;
+            const input = document.getElementById('priceInput');
+            const card = document.getElementById('priceCard');
+            if (isFree) {
+                input.value = "0"; input.disabled = true; card.classList.add('is-disabled');
+            } else {
+                input.value = ""; input.disabled = false; card.classList.remove('is-disabled'); input.focus();
+            }
+        }
+    </script>
+</body>
+</html>
