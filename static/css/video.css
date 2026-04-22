@@ -110,7 +110,10 @@
     box-shadow: 0 4px 6px rgba(253, 114, 56, 0.3);
 }
 
-/* Pagination Wrapper */
+/* =========================================
+   PAGINATION STYLING (MODERN & RAPI)
+========================================= */
+
 .pagination-wrapper {
     display: flex;
     justify-content: space-between;
@@ -129,16 +132,28 @@
     color: var(--dark);
 }
 
+/* Membungkus semua tombol (Prev, Numbers, Next) */
 .pagi-buttons {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
 }
 
+/* Membungkus khusus angka agar sejajar */
+.pagi-numbers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Tombol Umum (Prev & Next) */
 .pagi-btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
-    padding: 8px 16px;
+    height: 36px; /* Tinggi diseragamkan */
+    padding: 0 14px;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -149,10 +164,48 @@
     transition: all 0.3s ease;
 }
 
-.pagi-btn:hover {
+/* Khusus untuk tombol angka (biar kotak presisi) */
+.pagi-btn.number {
+    padding: 0;
+    width: 36px; /* Lebar disamakan dengan tinggi */
+}
+
+/* Efek Hover & Active */
+.pagi-btn:hover, .pagi-btn.active {
     background: #3C91E6;
     color: #fff;
     border-color: #3C91E6;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+
+/* =========================================
+   DARK MODE OVERRIDES (PAGINATION)
+========================================= */
+
+body.dark .pagination-wrapper {
+    border-top-color: #3f444a;
+}
+
+body.dark .pagi-info {
+    color: #aaa;
+}
+
+body.dark .pagi-info b {
+    color: #fff;
+}
+
+body.dark .pagi-btn {
+    background: #25282b;
+    border-color: #3f444a;
+    color: #e0e0e0;
+}
+
+body.dark .pagi-btn:hover, 
+body.dark .pagi-btn.active {
+    background: #3C91E6;
+    border-color: #3C91E6;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.3);
 }
 
 /* =========================================
