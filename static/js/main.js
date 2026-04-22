@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // FUNGSI DELETE (Ditaruh di luar DOMContentLoaded agar bisa dipanggil lewat onclick di HTML)
-function confirmDelete(id) {
+function galeriDelete(id) {
     Swal.fire({
         title: 'Hapus Data?',
         text: "Data batik akan dihapus permanen!",
@@ -60,7 +60,7 @@ function confirmDelete(id) {
     })
 }
 
-function confirmDelete(id) {
+function artikelDelete(id) {
     Swal.fire({
         title: 'Hapus Data?',
         text: "Data artikel akan dihapus permanen!",
@@ -79,7 +79,7 @@ function confirmDelete(id) {
     })
 }
 
-function confirmDelete(id) {
+function eventDelete(id) {
     Swal.fire({
         title: 'Hapus Data?',
         text: "Data event akan dihapus permanen!",
@@ -93,12 +93,12 @@ function confirmDelete(id) {
         color: document.body.classList.contains('dark') ? '#fff' : '#000'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/data-event/hapus/" + id;
+            window.location.href = "/data-events/hapus/" + id;
         }
     })
 }
 
-function confirmDelete(id) {
+function videoDelete(id) {
     Swal.fire({
         title: 'Hapus Data?',
         text: "Data video akan dihapus permanen!",
@@ -116,3 +116,4 @@ function confirmDelete(id) {
         }
     })
 }
+

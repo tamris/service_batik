@@ -1,0 +1,463 @@
+/* =========================================
+   MODERN STYLING FOR EVENT INDEX (LIST)
+========================================= */
+
+/* Search Box Customization */
+.search-box .form-input {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 36px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.search-box .form-input:focus-within {
+    border-color: #3C91E6;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.search-box .form-input input {
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 250px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--dark);
+}
+
+.search-box .form-input button {
+    padding: 10px 16px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.search-box .form-input button:hover {
+    background: #2b7bc6;
+}
+
+/* Action Buttons (Edit & Delete) */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-edit {
+    background: #FFCE26; /* Kuning/Gold */
+    color: #333;
+}
+
+.btn-edit:hover {
+    background: #e5b822;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(255, 206, 38, 0.3);
+}
+
+.btn-delete {
+    background: #FD7238; /* Merah/Orange */
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #e06532;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(253, 114, 56, 0.3);
+}
+
+/* Pagination Wrapper */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.pagi-info {
+    font-size: 14px;
+    color: #888;
+}
+
+.pagi-info b {
+    color: var(--dark);
+}
+
+.pagi-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.pagi-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--dark);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.pagi-btn:hover {
+    background: #3C91E6;
+    color: #fff;
+    border-color: #3C91E6;
+}
+
+/* =========================================
+   DARK MODE OVERRIDES FOR EVENT INDEX
+========================================= */
+
+body.dark .search-box .form-input {
+    background: #25282b;
+}
+
+body.dark .search-box .form-input input {
+    color: #fff;
+}
+
+body.dark .search-box .form-input:focus-within {
+    background: #1e2124;
+}
+
+body.dark .pagination-wrapper {
+    border-top-color: #3f444a;
+}
+
+body.dark .pagi-btn {
+    background: #25282b;
+    border-color: #3f444a;
+    color: #e0e0e0;
+}
+
+body.dark .pagi-btn:hover {
+    background: #3C91E6;
+    border-color: #3C91E6;
+    color: #fff;
+}
+
+body.dark .pagi-info {
+    color: #aaa;
+}
+
+body.dark .pagi-info b {
+    color: #fff;
+}
+
+
+/* =========================================
+   MODERN FORM STYLING FOR EVENT CREATION
+========================================= */
+
+/* Container Setup */
+.event-form-container {
+    padding: 30px !important;
+    background: var(--light);
+    border-radius: 16px;
+}
+
+/* Grid Layouts */
+.event-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.title-category-grid {
+    grid-template-columns: 2fr 1fr;
+}
+
+.col-2-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Form Groups & Labels */
+.event-group {
+    margin-bottom: 24px;
+}
+
+.event-label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.d-flex-align {
+    display: flex;
+    align-items: center;
+}
+
+/* Inputs, Textareas, Selects */
+.event-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--light);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--dark);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.event-input:focus {
+    border-color: #3C91E6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.readonly-input {
+    background-color: #f5f5f5;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.file-input {
+    padding: 9px 16px; /* Adjustment for file input type */
+}
+
+/* Map Styling */
+.event-map {
+    height: 350px;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    z-index: 1; /* Supaya dropdown Leaflet tidak menutupi navbar/sidebar */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
+
+/* Loading Indicator untuk Alamat */
+.loading-text {
+    font-size: 13px;
+    color: #FD7238;
+    display: none;
+    align-items: center;
+    gap: 5px;
+    margin-left: 12px;
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* Custom Price Card (Biaya Masuk) */
+.price-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px 16px;
+    gap: 16px;
+    transition: all 0.3s ease;
+}
+
+.price-card:focus-within {
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.price-card.is-disabled {
+    background: #f5f5f5;
+    opacity: 0.8;
+}
+
+.free-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--dark);
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background: #ddd;
+}
+
+.price-input-group {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    gap: 8px;
+}
+
+.currency-label {
+    font-weight: 700;
+    color: var(--dark-grey);
+}
+
+.price-input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--dark);
+}
+
+.price-input:focus {
+    outline: none;
+}
+
+.price-input:disabled {
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Action Buttons */
+.event-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+    padding: 10px 24px;
+    background: #f1f1f1;
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.btn-save {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+
+.btn-save:hover {
+    background: #2b7bc6;
+    box-shadow: 0 6px 12px rgba(60, 145, 230, 0.3);
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   DARK MODE OVERRIDES (Sempurna & Clean)
+========================================= */
+
+/* Pastikan body.dark sudah aktif di script */
+body.dark .event-form-container {
+    background: #1a1c1e !important; /* Warna abu gelap yang elegan */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .event-label {
+    color: #e0e0e0;
+}
+
+body.dark .event-input {
+    background: #25282b;
+    border-color: #3f444a;
+    color: #ffffff;
+}
+
+body.dark .event-input:focus {
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.25);
+}
+
+body.dark .readonly-input {
+    background-color: #1e2124;
+    color: #777;
+    border-color: #333;
+}
+
+body.dark .price-card {
+    background: #25282b;
+    border-color: #3f444a;
+}
+
+body.dark .price-card.is-disabled {
+    background: #1e2124;
+    opacity: 0.6;
+}
+
+body.dark .divider {
+    background: #3f444a;
+}
+
+body.dark .currency-label {
+    color: #3C91E6; /* Berikan aksen biru agar lebih kontras */
+}
+
+body.dark .price-input {
+    color: #fff;
+}
+
+body.dark .free-option {
+    color: #e0e0e0;
+}
+
+body.dark .btn-cancel {
+    background: #333;
+    color: #bbb;
+}
+
+body.dark .btn-cancel:hover {
+    background: #444;
+    color: #fff;
+}
+
+/* Map adjustment di dark mode agar border tidak terlalu terang */
+body.dark .event-map {
+    border-color: #3f444a;
+    filter: grayscale(0.2) brightness(0.9); /* Sedikit meredupkan peta agar sinkron */
+}
+
+/* Loading text color adjustment */
+body.dark .loading-text {
+    color: #ff9f68;
+}

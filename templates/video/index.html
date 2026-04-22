@@ -171,7 +171,7 @@
 								<td>
 									<div class="action-btn">
 										<a href="{{ url_for('video.edit', video_id=item._id) }}" class="btn-icon btn-edit" title="Edit"><i class='bx bxs-edit'></i></a>
-										<a href="#" onclick="confirmDelete('{{ item._id }}')" class="btn-icon btn-delete" title="Hapus"><i class='bx bxs-trash'></i></a>
+										<a href="#" onclick="videoDelete('{{ item._id }}')" class="btn-icon btn-delete" title="Hapus"><i class='bx bxs-trash'></i></a>
 									</div>
 								</td>
 							</tr>	
@@ -193,43 +193,7 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-	<script>
-		const searchInput = document.getElementById('searchInput');
-		const tableBody = document.getElementById('tableBody');
-		const paginationContainer = document.getElementById('paginationContainer');
-
-		function fetchData(query) {
-			fetch(`{{ url_for('video.index') }}?q=${query}`)
-				.then(response => response.text())
-				.then(html => {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(html, 'text/html');
-					tableBody.innerHTML = doc.getElementById('tableBody').innerHTML;
-					paginationContainer.innerHTML = doc.getElementById('paginationContainer').innerHTML;
-				});
-		}
-
-		searchInput.addEventListener('input', function() { fetchData(this.value); });
-
-		function confirmDelete(id) {
-			Swal.fire({
-				title: 'Hapus Data?',
-				text: "Data video akan dihapus permanen!",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#d33',
-				cancelButtonColor: '#3085d6',
-				confirmButtonText: 'Ya, Hapus!',
-				cancelButtonText: 'Batal',
-				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
-				color: document.body.classList.contains('dark') ? '#fff' : '#000'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					window.location.href = "/data-video/hapus/" + id;
-				}
-			})
-		}
-	</script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
