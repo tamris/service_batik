@@ -132,6 +132,49 @@
 }
 
 /* =========================================
+   BANNER THUMBNAIL IN TABLE
+========================================= */
+
+.event-banner-thumb {
+    width: 110px; /* Ukuran dilebarkan sedikit biar jelas */
+    aspect-ratio: 16 / 9; /* Format standar banner/video */
+    border-radius: 6px; /* Sudut membulat yang pas, nggak bikin oval */
+    overflow: hidden;
+    background-color: #f1f1f1; /* Warna dasar kalau gambar telat loading */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Shadow tipis */
+}
+
+.event-banner-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Biar gambar nggak gepeng */
+    object-position: center;
+    transition: transform 0.3s ease; /* Transisi untuk efek hover */
+}
+
+/* Efek zoom saat kursor diarahkan ke gambar */
+.event-banner-thumb:hover img {
+    transform: scale(1.1);
+}
+
+/* Dark Mode Adjustment */
+body.dark .event-banner-thumb {
+    background-color: #25282b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Tambahkan !important untuk mengalahkan CSS bawaan template AdminHub */
+.event-banner-thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important; /* Mematikan bentuk bulat (circle) bawaan template */
+    object-fit: cover !important;
+    object-position: center;
+    display: block !important;
+    transition: transform 0.3s ease;
+}
+
+/* =========================================
    DARK MODE OVERRIDES FOR EVENT INDEX
 ========================================= */
 

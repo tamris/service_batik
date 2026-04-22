@@ -127,7 +127,8 @@
 						<h3>List Agenda Event</h3>
 						<div class="search-box">
 							<div class="form-input">
-								<input type="search" id="searchInput" placeholder="Cari nama event..." autocomplete="off" data-url="{{ url_for('event.index') }}">
+								<input type="search" id="searchInput" placeholder="Cari nama event..."
+									autocomplete="off" data-url="{{ url_for('event.index') }}">
 								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</div>
@@ -146,16 +147,14 @@
 							{% for item in events %}
 							<tr>
 								<td>
-									<div class="img-box"
-										style="width: 80px; height: 50px; border-radius: 8px; overflow: hidden;">
+									<div class="event-banner-thumb">
 										<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
-											onerror="this.src='/static/img/default_event.png';"
-											style="width:100%; height:100%; object-fit:cover;">
+											onerror="this.src='/static/img/default_event.png';" alt="Banner Event">
 									</div>
 								</td>
 								<td>
 									<span style="font-weight: 600; display: block;">{{ item.title }}</span>
-									<small style="color: #888;">{{ item.event_date }}</small>
+									<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
 								</td>
 								<td><small>{{ item.address.full | truncate(30) }}</small></td>
 								<td>
@@ -199,8 +198,39 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-	
 
+	<script>
+		// Script untuk merapikan format tanggal dengan gaya: DD Month YYYY | HH.MM WIB
+		document.addEventListener("DOMContentLoaded", function () {
+			const dateElements = document.querySelectorAll('.format-date');
+
+			dateElements.forEach(el => {
+				const rawDate = el.textContent.trim();
+				if (rawDate) {
+					const dateObj = new Date(rawDate);
+
+					// 1. Ambil Tanggal (pastikan selalu 2 digit, misal: 04, 09, 12)
+					const day = String(dateObj.getDate()).padStart(2, '0');
+
+					// 2. Ambil Bulan full text bahasa Indonesia (April, Mei, dll)
+					const month = dateObj.toLocaleDateString('id-ID', { month: 'long' });
+
+					// 3. Ambil Tahun
+					const year = dateObj.getFullYear();
+
+					// 4. Ambil Jam dan Menit (pastikan selalu 2 digit)
+					const hours = String(dateObj.getHours()).padStart(2, '0');
+					const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+					// 5. Rakit semuanya jadi satu format yang kamu mau
+					const formattedString = `${day} ${month} ${year} | ${hours}.${minutes} WIB`;
+
+					// Terapkan ke HTML
+					el.textContent = formattedString;
+				}
+			});
+		});
+	</script>
 
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
