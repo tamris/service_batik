@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from models.informasi_model import InformasiModel
 
+
 # 1. Pastikan nama Blueprint adalah 'informasi' agar url_for('informasi.edit') jalan
 informasi_bp = Blueprint('informasi', __name__)
 info_model = InformasiModel()
@@ -71,6 +72,7 @@ def create():
 # 2. INI RUTE YANG ERROR TADI: Pastikan nama fungsinya 'edit' dan parameternya 'info_id'
 @informasi_bp.route('/data-informasi/edit/<string:info_id>', methods=['GET', 'POST'])
 def edit(info_id):
+    page = request.form.get('page', 1, type=int)
     info_terpilih = info_model.get_by_id(info_id)
     if not info_terpilih:
         flash('Data tidak ditemukan!', 'danger')
@@ -91,7 +93,7 @@ def edit(info_id):
         
         info_model.update(info_id, data_update)
         flash('Informasi berhasil diperbarui!', 'success')
-        return redirect(url_for('informasi.index'))
+        return redirect(url_for('informasi.index', page=page))
         
     return render_template('informasi/edit.html', info=info_terpilih)
 

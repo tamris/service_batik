@@ -50,6 +50,7 @@ def create():
 
 @video_bp.route('/data-video/edit/<string:video_id>', methods=['GET', 'POST'])
 def edit(video_id):
+    page = request.form.get('page', 1, type=int)
     video_terpilih = video_model.get_by_id(video_id)
     if not video_terpilih:
         flash('Video tidak ditemukan!', 'danger')
@@ -64,7 +65,7 @@ def edit(video_id):
         }
         video_model.update(video_id, data_update)
         flash('Video berhasil diperbarui!', 'success')
-        return redirect(url_for('video.index'))
+        return redirect(url_for('video.index', page=page))
     return render_template('video/edit.html', video=video_terpilih)
 
 @video_bp.route('/data-video/hapus/<string:video_id>')

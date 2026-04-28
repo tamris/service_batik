@@ -74,6 +74,7 @@ def create():
 @event_bp.route('/data-events/edit/<string:event_id>', methods=['GET', 'POST'])
 def edit(event_id):
     # Ambil data lama berdasarkan ID
+    page = request.form.get('page', 1, type=int)
     event = event_model.get_by_id(event_id)
     
     if request.method == 'POST':
@@ -105,7 +106,7 @@ def edit(event_id):
 
         event_model.update(event_id, data_update)
         flash('Data event berhasil diperbarui!', 'success')
-        return redirect(url_for('event.index'))
+        return redirect(url_for('event.index', page=page))
 
     return render_template('events/edit.html', event=event)
 

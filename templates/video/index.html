@@ -175,8 +175,10 @@
 											class='bx bx-link-external'></i></a></td>
 								<td>
 									<div class="action-btn">
-										<a href="{{ url_for('video.edit', video_id=item._id) }}"
-											class="btn-icon btn-edit" title="Edit"><i class='bx bxs-edit'></i></a>
+										<a href="{{ url_for('video.edit', video_id=item._id) }}?page={{ page }}"
+											class="btn-icon btn-edit" title="Edit">
+											<i class='bx bxs-edit'></i>
+										</a>
 										<a href="#" onclick="videoDelete('{{ item._id }}')" class="btn-icon btn-delete"
 											title="Hapus"><i class='bx bxs-trash'></i></a>
 									</div>

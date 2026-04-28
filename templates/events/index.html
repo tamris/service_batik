@@ -164,8 +164,8 @@
 								</td>
 								<td>
 									<div class="action-btn">
-										<a href="{{ url_for('event.edit', event_id=item._id) }}"
-											class="btn-icon btn-edit">
+										<a href="{{ url_for('event.edit', event_id=item._id) }}?page={{ page }}"
+											class="btn-icon btn-edit" title="Edit">
 											<i class='bx bxs-edit'></i>
 										</a>
 										<a href="#" onclick="eventDelete('{{ item._id|string }}')"
@@ -187,14 +187,14 @@
 
 						<div class="pagi-buttons">
 							{% if page > 1 %}
-							<a href="{{ url_for('video.index', page=page-1, q=search_query) }}" class="pagi-btn prev">
+							<a href="{{ url_for('event.index', page=page-1, q=search_query) }}" class="pagi-btn prev">
 								<i class='bx bx-chevron-left'></i> Prev
 							</a>
 							{% endif %}
 
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('video.index', page=p, q=search_query) }}"
+								<a href="{{ url_for('event.index', page=p, q=search_query) }}"
 									class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
@@ -202,7 +202,7 @@
 							</div>
 
 							{% if page < total_pages %} <a
-								href="{{ url_for('video.index', page=page+1, q=search_query) }}" class="pagi-btn next">
+								href="{{ url_for('event.index', page=page+1, q=search_query) }}" class="pagi-btn next">
 								Next <i class='bx bx-chevron-right'></i>
 								</a>
 								{% endif %}

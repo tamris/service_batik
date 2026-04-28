@@ -139,7 +139,7 @@
 							<tr>
 								<th width="10%">Gambar</th>
 								<th width="30%">Judul & Kategori</th>
-								<th width="45%">Cuplikan Isi</th>
+								<th width="50%">Isi Artikel</th>
 								<th width="15%">Aksi</th>
 							</tr>
 						</thead>
@@ -167,7 +167,7 @@
 
 								<td>
 									<div class="action-btn">
-										<a href="{{ url_for('informasi.edit', info_id=item._id) }}"
+										<a href="{{ url_for('informasi.edit', info_id=item._id) }}?page={{ page }}"
 											class="btn-icon btn-edit" title="Edit">
 											<i class='bx bxs-edit'></i>
 										</a>
