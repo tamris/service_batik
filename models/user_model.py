@@ -9,6 +9,7 @@ def create_user(data):
         "username": data["username"],
         "email": data["email"],
         "password": hashed_password,
+        "role": data.get("role", "users"),
         "api_key": data["api_key"],
         "is_verified": data.get("is_verified", False),
         "otp": data.get("otp"), # Simpan OTP 6 digit

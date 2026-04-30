@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template
+from routes.web.auth import login_required
 
 # Bikin Blueprint nama 'web_dashboard'
 web_bp = Blueprint('web_dashboard', __name__)
 
-@web_bp.route('/')
+@web_bp.route('/dashboard')
+@login_required
 def index():
     # Dummy counts (gampang diganti nanti dari database)
     counts = {

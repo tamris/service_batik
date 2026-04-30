@@ -1,7 +1,8 @@
 from datetime import datetime
 import math
 import os
-from posthog import page
+from routes.web.auth import login_required
+# from posthog import page
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.batik_model import BatikModel
@@ -13,6 +14,7 @@ batik_model = BatikModel()
 UPLOAD_FOLDER = 'static/img/galeri'
 
 @galeri_bp.route('/data-batik')
+@login_required
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
@@ -45,6 +47,7 @@ def index():
 
 
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
+@login_required
 def create():
     if request.method == 'POST':
         file = request.files.get('gambar')

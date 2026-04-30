@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from extensions import mongo , jwt, bcrypt, mail
 from routes.web.dashboard import web_bp
+from routes.web.auth import auth_web
 from routes.web.galeri import galeri_bp
 from routes.web.infromasi import informasi_bp
 from routes.web.video import video_bp
@@ -35,6 +36,7 @@ app.mail = mail
 
 # 2. Register Blueprint
 app.register_blueprint(web_bp)
+app.register_blueprint(auth_web)
 app.register_blueprint(galeri_bp)
 app.register_blueprint(informasi_bp)
 app.register_blueprint(video_bp)

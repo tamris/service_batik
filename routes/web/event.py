@@ -1,5 +1,6 @@
 import math
 import os
+from routes.web.auth import login_required
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from models.event_model import EventModel
@@ -11,6 +12,7 @@ event_model = EventModel()
 UPLOAD_FOLDER = 'static/img/events'
 
 @event_bp.route('/data-events')
+@login_required
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
@@ -38,6 +40,7 @@ def index():
                            search_query=search_query)
 
 @event_bp.route('/data-events/tambah', methods=['GET', 'POST'])
+@login_required
 def create():
     if request.method == 'POST':
         # Handle Upload Banner
@@ -72,6 +75,7 @@ def create():
     return render_template('events/create.html')
 
 @event_bp.route('/data-events/edit/<string:event_id>', methods=['GET', 'POST'])
+@login_required
 def edit(event_id):
     # Ambil data lama berdasarkan ID
     page = request.form.get('page', 1, type=int)
