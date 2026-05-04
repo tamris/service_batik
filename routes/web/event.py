@@ -56,7 +56,7 @@ def create():
 
         data_baru = {
             "title": request.form.get("title"),
-            "kategori": request.form.get("kategori"),
+            "category": request.form.get("category"),
             "description": request.form.get("description"),
             "banner_image_url": banner_url,
             "event_date": request.form.get("event_date"),
@@ -96,7 +96,7 @@ def edit(event_id):
 
         data_update = {
             "title": request.form.get("title"),
-            "kategori": request.form.get("kategori"),
+            "category": request.form.get("category"),
             "description": request.form.get("description"),
             "banner_image_url": banner_url,
             "event_date": request.form.get("event_date"),

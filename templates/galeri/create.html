@@ -19,18 +19,24 @@
     <section id="sidebar">
         <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
         <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
+                        class="text">Dashboard</span></a></li>
+            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span
+                        class="text">Katalog Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
+                        Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
+                        class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
+            </li>
             <li><a href="#"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
             <li><a href="#"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
             <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
         </ul>
         <ul class="side-menu">
             <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
-            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a>
+            </li>
         </ul>
     </section>
 
@@ -55,31 +61,49 @@
             <div class="table-data">
                 <div class="order batik-form-container">
                     <form action="{{ url_for('galeri.create') }}" method="POST" enctype="multipart/form-data">
-                        
+
                         <div class="batik-group">
                             <label class="batik-label">Nama Motif Batik</label>
-                            <input type="text" name="nama_motif" class="batik-input" placeholder="Contoh: Batik Mega Mendung" required>
+                            <!-- name diubah dari nama_motif menjadi name -->
+                            <input type="text" name="name" class="batik-input" placeholder="Contoh: Batik Mega Mendung"
+                                required>
+                        </div>
+
+                        <!-- FIELD BARU: Kategori -->
+                        <div class="batik-group">
+                            <label class="batik-label">Kategori Motif</label>
+                            <select name="category" class="batik-input" required>
+                                <option value="" disabled selected>Pilih Kategori...</option>
+                                <option value="Klasik">Klasik</option>
+                                <option value="Kontemporer">Kontemporer</option>
+                            </select>
                         </div>
 
                         <div class="batik-group">
                             <label class="batik-label">Gambar Motif Batik</label>
                             <div class="file-upload-box">
-                                <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)" required>
+                                <!-- name diubah dari gambar menjadi image_url -->
+                                <input type="file" name="image_url" accept="image/*" id="fileInput"
+                                    onchange="previewImage(event)" required>
                                 <div class="upload-content">
                                     <i class='bx bx-cloud-upload upload-icon'></i>
                                     <p id="uploadText">Klik atau seret gambar batik ke sini</p>
                                 </div>
                             </div>
-                            
-                            <div class="preview-container" id="previewContainer" style="display: none; margin-top: 15px;">
-                                <span class="batik-label" style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar:</span>
+
+                            <div class="preview-container" id="previewContainer"
+                                style="display: none; margin-top: 15px;">
+                                <span class="batik-label" style="font-size:12px; margin-bottom:5px; color:#888;">Preview
+                                    Gambar:</span>
                                 <img id="imagePreview" src="#" alt="Preview Motif">
                             </div>
                         </div>
 
                         <div class="batik-group">
                             <label class="batik-label">Makna & Filosofi</label>
-                            <textarea name="makna" class="batik-input" rows="6" placeholder="Tuliskan cerita, sejarah, dan filosofi di balik motif batik ini..." required></textarea>
+                            <textarea name="makna" class="batik-input" rows="6"
+                                placeholder="Tuliskan cerita, sejarah, dan filosofi di balik motif batik ini..."
+                                required></textarea>
                         </div>
 
                         <div class="batik-actions">
@@ -111,16 +135,17 @@
         // Script Preview Gambar Upload
         function previewImage(event) {
             var reader = new FileReader();
-            reader.onload = function(){
+            reader.onload = function () {
                 var output = document.getElementById('imagePreview');
                 var container = document.getElementById('previewContainer');
                 output.src = reader.result;
                 container.style.display = 'block';
-                
+
                 document.getElementById('uploadText').innerText = "Gambar motif berhasil dipilih. Klik lagi untuk mengganti.";
             };
             reader.readAsDataURL(event.target.files[0]);
         }
     </script>
 </body>
+
 </html>

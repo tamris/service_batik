@@ -12,7 +12,7 @@ class BatikModel:
             # Cari berdasarkan nama atau makna (case-insensitive)
             query = {
                 "$or": [
-                    {"nama": {"$regex": search_query, "$options": "i"}},
+                    {"name": {"$regex": search_query, "$options": "i"}},
                     {"makna": {"$regex": search_query, "$options": "i"}}
                 ]
             }

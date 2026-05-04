@@ -13,8 +13,8 @@ class InformasiModel:
             # Cari berdasarkan judul atau deskripsi (case-insensitive)
             query = {
                 "$or": [
-                    {"judul": {"$regex": search_query, "$options": "i"}},
-                    {"deskripsi": {"$regex": search_query, "$options": "i"}}
+                    {"title": {"$regex": search_query, "$options": "i"}},
+                    {"description": {"$regex": search_query, "$options": "i"}}
                 ]
             }
         return list(self.collection.find(query).sort("created_at", -1))

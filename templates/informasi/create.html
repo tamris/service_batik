@@ -59,11 +59,11 @@
                         <div class="info-grid title-category-grid">
                             <div class="info-group">
                                 <label class="info-label">Judul Konten</label>
-                                <input type="text" name="judul" class="info-input" placeholder="Masukkan judul informasi..." required>
+                                <input type="text" name="title" class="info-input" placeholder="Masukkan judul informasi..." required>
                             </div>
                             <div class="info-group">
                                 <label class="info-label">Kategori</label>
-                                <select name="kategori" class="info-input" required>
+                                <select name="category" class="info-input" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
                                     <option value="Berita Terkini">Berita Terkini</option>
                                     <option value="Event">Event</option>
@@ -76,7 +76,7 @@
                         <div class="info-group">
                             <label class="info-label">Thumbnail Informasi</label>
                             <div class="file-upload-box">
-                                <input type="file" name="gambar" accept="image/*" id="fileInput" onchange="previewImage(event)">
+                                <input type="file" name="image_url" accept="image/*" id="fileInput" onchange="previewImage(event)">
                                 <div class="upload-content">
                                     <i class='bx bx-cloud-upload upload-icon'></i>
                                     <p id="uploadText">Klik atau seret file ke sini untuk memilih gambar thumbnail</p>
@@ -91,7 +91,7 @@
 
                         <div class="info-group">
                             <label class="info-label">Isi Deskripsi / Artikel</label>
-                            <textarea name="deskripsi" class="info-input" rows="8" placeholder="Tulis detail informasi di sini..." required></textarea>
+                            <textarea name="description" class="info-input" rows="8" placeholder="Tulis detail informasi di sini..." required></textarea>
                         </div>
 
                         <div class="info-actions">

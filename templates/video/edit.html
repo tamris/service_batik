@@ -54,7 +54,7 @@
         <main>
             <div class="head-title">
                 <div class="left">
-                    <h1>Edit Video: {{ video.judul }}</h1>
+                    <h1>Edit Video: {{ video.title }}</h1>
                 </div>
             </div>
 
@@ -67,17 +67,17 @@
                         <div class="video-grid title-category-grid">
                             <div class="video-group">
                                 <label class="video-label">Judul Video</label>
-                                <input type="text" name="judul" class="video-input" value="{{ video.judul }}" required>
+                                <input type="text" name="title" class="video-input" value="{{ video.title }}" required>
                             </div>
                             <div class="video-group">
                                 <label class="video-label">Kategori</label>
-                                <select name="kategori" class="video-input" required>
-                                    <option value="Sejarah" {{ 'selected' if video.kategori=='Sejarah' }}>Sejarah
+                                <select name="category" class="video-input" required>
+                                    <option value="Sejarah" {{ 'selected' if video.category=='Sejarah' }}>Sejarah
                                     </option>
-                                    <option value="Event" {{ 'selected' if video.kategori=='Event' }}>Event</option>
-                                    <option value="Motif & Makna" {{ 'selected' if video.kategori=='Motif & Makna' }}>
+                                    <option value="Event" {{ 'selected' if video.category=='Event' }}>Event</option>
+                                    <option value="Motif & Makna" {{ 'selected' if video.category=='Motif & Makna' }}>
                                         Motif & Makna</option>
-                                    <option value="Edukasi" {{ 'selected' if video.kategori=='Edukasi' }}>Edukasi
+                                    <option value="Edukasi" {{ 'selected' if video.category=='Edukasi' }}>Edukasi
                                     </option>
                                 </select>
                             </div>
@@ -93,8 +93,8 @@
 
                         <div class="video-group">
                             <label class="video-label">Deskripsi Video</label>
-                            <textarea name="deskripsi" class="video-input" rows="6"
-                                required>{{ video.deskripsi }}</textarea>
+                            <textarea name="description" class="video-input" rows="6"
+                                required>{{ video.description }}</textarea>
                         </div>
 
                         <div class="video-actions">

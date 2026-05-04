@@ -2,7 +2,6 @@ from datetime import datetime
 import math
 import os
 from routes.web.auth import login_required
-# from posthog import page
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.batik_model import BatikModel
@@ -44,26 +43,26 @@ def index():
                            end_index=end_index,
                            search_query=search_query)
 
-
-
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'POST':
-        file = request.files.get('gambar')
+        # Ubah gambar menjadi image_url[cite: 7]
+        file = request.files.get('image_url') 
         if file and file.filename != '':
             filename = secure_filename(file.filename)
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            gambar = filename
+            image_url = filename
         else:
-            gambar = 'default_batik.png'
-
+            image_url = 'default_batik.png'
+            
         data_baru = {
-            "nama": request.form['nama_motif'],
+            "name": request.form['name'], # Ubah nama menjadi name[cite: 7]
+            "category": request.form['category'], # Tambahan field category[cite: 7]
             "makna": request.form['makna'],
-            "gambar": gambar, 
+            "image_url": image_url, # Ubah gambar menjadi image_url[cite: 7]
             "created_at": datetime.now()
         }
 
@@ -75,7 +74,6 @@ def create():
 
 @galeri_bp.route('/data-batik/edit/<string:batik_id>', methods=['GET', 'POST'])
 def edit(batik_id):
-    # Ambil data dari DB berdasarkan ObjectId
     batik_terpilih = batik_model.get_by_id(batik_id)
 
     if not batik_terpilih:
@@ -85,17 +83,19 @@ def edit(batik_id):
     if request.method == 'POST':
         page = request.form.get('page', 1, type=int)
         data_update = {
-            "nama": request.form['nama_motif'],
+            "name": request.form['name'], # Ubah penangkapan update ke name[cite: 7]
+            "category": request.form['category'], # Buka comment ini nanti kalau form edit juga ditambah category
             "makna": request.form['makna']
         }
         
-        gambar_file = request.files.get('gambar')
+        # Ubah gambar menjadi image_url[cite: 7]
+        gambar_file = request.files.get('image_url') 
         if gambar_file and gambar_file.filename != '':
             filename = secure_filename(gambar_file.filename)
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             gambar_file.save(os.path.join(UPLOAD_FOLDER, filename))
-            data_update['gambar'] = filename
+            data_update['image_url'] = filename # Update field image_url[cite: 7]
         
         batik_model.update(batik_id, data_update)
         flash('Data batik berhasil diperbarui!', 'success')

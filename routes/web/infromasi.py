@@ -45,22 +45,22 @@ def index():
 @informasi_bp.route('/data-informasi/tambah', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        file = request.files.get('gambar')
+        file = request.files.get('image_url')
         if file and file.filename != '':
             filename = secure_filename(file.filename)
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            gambar_url = filename
+            image_url = filename
         else:
-            gambar_url = 'default_info.png'
+            image_url = 'default_info.png'
 
         # 2. MASUKKAN created_at DI SINI
         data_baru = {
-            "judul": request.form['judul'],
-            "deskripsi": request.form['deskripsi'],
-            "kategori": request.form['kategori'],
-            "gambar_url": gambar_url,
+            "title": request.form['title'],
+            "description": request.form['description'],
+            "category": request.form['category'],
+            "image_url": image_url,
             "created_at": datetime.now() # Ini akan mencatat waktu saat tombol simpan diklik
         }
         
@@ -80,16 +80,16 @@ def edit(info_id):
 
     if request.method == 'POST':
         data_update = {
-            "judul": request.form['judul'],
-            "deskripsi": request.form['deskripsi'],
-            "kategori": request.form['kategori']
+            "title": request.form['title'],
+            "description": request.form['description'],
+            "category": request.form['category']
         }
         
-        file = request.files.get('gambar')
+        file = request.files.get('image_url')
         if file and file.filename != '':
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-            data_update['gambar_url'] = filename
+            data_update['image_url'] = filename
         
         info_model.update(info_id, data_update)
         flash('Informasi berhasil diperbarui!', 'success')

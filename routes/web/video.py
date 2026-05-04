@@ -37,9 +37,9 @@ def index():
 def create():
     if request.method == 'POST':
         data_baru = {
-            "judul": request.form['judul'],
-            "deskripsi": request.form['deskripsi'],
-            "kategori": request.form['kategori'],
+            "title": request.form['title'],
+            "description": request.form['description'],
+            "category": request.form['category'],
             "youtube_url": request.form['youtube_url'],
             "created_at": datetime.now() # Menambahkan timestamp pembuatan
         }
@@ -58,9 +58,9 @@ def edit(video_id):
 
     if request.method == 'POST':
         data_update = {
-            "judul": request.form['judul'],
-            "deskripsi": request.form['deskripsi'],
-            "kategori": request.form['kategori'],
+            "title": request.form['title'],
+            "description": request.form['description'],
+            "category": request.form['category'],
             "youtube_url": request.form['youtube_url']
         }
         video_model.update(video_id, data_update)

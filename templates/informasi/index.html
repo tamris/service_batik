@@ -148,20 +148,20 @@
 							<tr>
 								<td>
 									<div class="article-thumb">
-										<img src="{{ url_for('static', filename='img/informasi/' + item.gambar_url) }}"
+										<img src="{{ url_for('static', filename='img/informasi/' + item.image_url) }}"
 											onerror="this.src='/static/img/batik3.jpg';" alt="Thumbnail Artikel">
 									</div>
 								</td>
 
 								<td>
-									<span class="article-title">{{ item.judul }}</span>
+									<span class="article-title">{{ item.title }}</span>
 									<span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
-										item.kategori }}</span>
+										item.category }}</span>
 								</td>
 
 								<td>
-									<div class="limit-text" title="{{ item.deskripsi }}">
-										{{ item.deskripsi }}
+									<div class="limit-text" title="{{ item.description }}">
+										{{ item.description }}
 									</div>
 								</td>
 
