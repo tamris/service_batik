@@ -58,12 +58,14 @@
 					<span class="text">Mapping Lokasi</span>
 				</a>
 			</li>
+			{% if session.get('role') == 'superadmin' %}
 			<li>
-				<a href="#">
+				<a href="{{ url_for('user_manager.index') }}">
 					<i class='bx bxs-user'></i>
 					<span class="text">Users Manager</span>
 				</a>
 			</li>
+			{% endif %}
 			<li>
 				<a href="#">
 					<i class='bx bxs-message-dots'></i>

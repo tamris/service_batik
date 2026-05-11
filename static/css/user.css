@@ -1,0 +1,329 @@
+/* =========================================
+   STYLING KHUSUS USER MANAGER (MODERN UI)
+========================================= */
+
+/* --- 1. BADGE ROLE (Status Akses) --- */
+.badge-role {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.badge-role.superadmin { background: rgba(253, 114, 56, 0.1); color: #FD7238; border: 1px solid rgba(253, 114, 56, 0.2); }
+.badge-role.admin      { background: rgba(60, 145, 230, 0.1); color: #3C91E6; border: 1px solid rgba(60, 145, 230, 0.2); }
+.badge-role.user       { background: rgba(136, 136, 136, 0.1); color: #888; border: 1px solid rgba(136, 136, 136, 0.2); }
+
+/* --- 2. SEARCH BOX (Modern & Mulus) --- */
+.search-box {
+    margin: 0;
+}
+
+.search-box .form-input {
+    display: flex;
+    align-items: center;
+    background: var(--grey);
+    border-radius: 36px;
+    padding: 2px 4px;
+    width: 280px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.search-box .form-input:focus-within {
+    background: transparent;
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.search-box .form-input input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: var(--dark);
+    font-family: inherit;
+}
+
+.search-box .form-input button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    color: var(--dark);
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* --- 3. TOMBOL AKSI TABEL (Edit/View) --- */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-icon.btn-edit { background: #FFCE26; box-shadow: 0 2px 6px rgba(255, 206, 38, 0.3); }
+.btn-icon.btn-edit:hover { background: #e6b822; transform: translateY(-2px); }
+
+.status-text { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+.status-owner { color: #FD7238; }
+.sta.user-form-container {
+    padding: 36px;
+    background: var(--light);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    width: 100%; /* FIX: Ubah dari max-width jadi width 100% biar full rapi */
+    margin-top: 20px;
+    box-sizing: border-box; /* Biar padding gak bikin form meluber ke samping */
+}tus-view { color: #aaa; font-style: italic; font-weight: 400; }
+
+/* =========================================
+   --- 4. FORMULIR USER (CREATE & EDIT) --- 
+========================================= */
+.user-form-container {
+    padding: 36px;
+    background: var(--light);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    width: 100%; /* FIX: Ubah dari max-width jadi width 100% biar full rapi */
+    margin-top: 20px;
+    box-sizing: border-box; /* Biar padding gak bikin form meluber ke samping */
+}
+
+.user-group {
+    margin-bottom: 24px;
+}
+
+.user-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 10px;
+}
+
+.user-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--dark);
+    background: var(--grey);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    box-sizing: border-box; /* Biar padding gak nambah lebar input */
+}
+
+.user-input:focus {
+    border-color: #3C91E6;
+    background: transparent;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.user-input:disabled {
+    background: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--grey);
+}
+
+/* Tombol Batal & Simpan */
+.btn-cancel {
+    padding: 12px 20px;
+    background: var(--grey);
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover { background: #d0d0d0; }
+
+.btn-save {
+    padding: 12px 20px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover { background: #2b7bc9; transform: translateY(-2px); }
+
+/* --- DROPDOWN FILTER ROLE --- */
+.user-filter {
+    appearance: none; /* Mematikan panah dropdown bawaan browser yang kaku */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--grey);
+    
+    /* Panah custom SVG biar tampilannya modern */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px; /* Ukuran panah */
+    
+    padding: 0 40px 0 16px; /* Space ekstra di kanan buat panahnya */
+    height: 42px; /* Disamakan dengan tinggi search box */
+    border-radius: 36px;
+    border: 1px solid transparent;
+    color: var(--dark);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.user-filter:hover {
+    background-color: #e2e2e2;
+}
+
+.user-filter:focus {
+    border-color: #3C91E6;
+    background-color: transparent;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+/* Penyesuaian saat mode gelap (Dark Mode) aktif */
+body.dark .user-filter {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    /* Panah diwarnai lebih terang untuk dark mode */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23aaa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+}
+
+body.dark .user-filter:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .user-filter option {
+    background: #1a1c1e;
+    color: #fff;
+}
+
+/* =========================================
+   --- 6. PAGINATION --- 
+========================================= */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--grey);
+}
+
+.pagi-info {
+    font-size: 13px;
+    color: #888;
+}
+
+.pagi-info b {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.pagi-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagi-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--light);
+    color: var(--dark);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.pagi-btn:hover { background: #f0f0f0; }
+
+.pagi-btn.active {
+    background: #3C91E6;
+    color: #fff;
+    border-color: #3C91E6;
+}
+
+/* Penyesuaian Dark Mode */
+body.dark .pagination-wrapper { border-top-color: #2b2e33; }
+body.dark .pagi-info { color: #888; }
+body.dark .pagi-info b { color: #fff; }
+body.dark .pagi-btn { background: #25282b; color: #fff; border-color: #3f444a; }
+body.dark .pagi-btn:hover { background: #333; }
+body.dark .pagi-btn.active { background: #3C91E6; border-color: #3C91E6; }
+
+
+/* --- 5. PENYESUAIAN DARK MODE --- */
+body.dark .badge-role.superadmin { background: rgba(253, 114, 56, 0.15); color: #ff8b5a; border-color: rgba(253, 114, 56, 0.3); }
+body.dark .badge-role.admin      { background: rgba(60, 145, 230, 0.15); color: #6eb4f7; border-color: rgba(60, 145, 230, 0.3); }
+body.dark .badge-role.user       { background: rgba(255, 255, 255, 0.05); color: #bbb; border-color: rgba(255, 255, 255, 0.1); }
+
+body.dark .search-box .form-input { background: rgba(255, 255, 255, 0.05); }
+body.dark .search-box .form-input:focus-within { background: transparent; }
+body.dark .search-box .form-input input { color: #fff; }
+body.dark .search-box .form-input button { color: #888; }
+
+/* Dark Mode Form User */
+body.dark .user-form-container { background: #1a1c1e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+body.dark .user-input { background: #25282b; color: #fff; }
+body.dark .user-input:focus { background: transparent; border-color: #3C91E6; }
+body.dark .user-input:disabled { background: #1e2124; color: #666; }
+body.dark .user-actions { border-top-color: #2b2e33; }
+
+body.dark .btn-cancel { background: #25282b; color: #ccc; }
+body.dark .btn-cancel:hover { background: #333; color: #fff; }

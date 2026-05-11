@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import current_app
 from datetime import datetime
 
@@ -49,4 +50,39 @@ def update_user_password(email, new_password):
     return current_app.mongo.db.users.update_one(
         {"email": email},
         {"$set": {"password": hashed_password}, "$unset": {"otp": "", "otp_expiry": ""}}
+    )
+
+
+def get_all_users(search_query=""):
+    query = {}
+    if search_query:
+        query = {
+            "$or": [
+                {"username": {"$regex": search_query, "$options": "i"}},
+                {"email": {"$regex": search_query, "$options": "i"}},
+                {"role": {"$regex": search_query, "$options": "i"}}
+            ]
+        }
+    
+    # Ambil data dari MongoDB
+    users = list(current_app.mongo.db.users.find(query).sort("created_at", -1))
+    
+    # KUNCI UTAMA: Urutkan data berdasarkan Role (Superadmin = 0, Admin = 1, User = 2)
+    role_priority = {'superadmin': 0, 'admin': 1, 'users': 2}
+    users.sort(key=lambda x: role_priority.get(x.get('role', 'users'), 3))
+    
+    return users
+
+def get_user_by_id(user_id):
+    return current_app.mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+def update_admin(user_id, data_update):
+    # Jika admin isi password baru di form edit, kita hash dulu
+    if 'password' in data_update and data_update['password']:
+        bcrypt = current_app.bcrypt
+        data_update['password'] = bcrypt.generate_password_hash(data_update['password']).decode('utf-8')
+        
+    return current_app.mongo.db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": data_update}
     )

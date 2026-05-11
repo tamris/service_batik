@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- FIX 1: Panggil user.css yang baru -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+    <!-- FIX 2: Sesuaikan Judul Tab -->
+    <title>AdminHub - Tambah Admin</title>
+</head>
+
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">AdminHub</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="{{ url_for('web_dashboard.index') }}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('galeri.index') }}">
+                    <i class='bx bxs-collection'></i>
+                    <span class="text">Katalog Batik</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('informasi.index') }}">
+                    <i class='bx bxs-info-circle'></i>
+                    <span class="text">Konten Artikel</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('event.index') }}">
+                    <i class='bx bxs-calendar'></i>
+                    <span class="text">Event</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('video.index') }}">
+                    <i class='bx bxs-video'></i>
+                    <span class="text">Video</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-map'></i>
+                    <span class="text">Mapping Lokasi</span>
+                </a>
+            </li>
+            <!-- FIX 3: Pindahkan class="active" ke Users Manager -->
+            <li class="active">
+                <a href="{{ url_for('user_manager.index') }}">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Users Manager</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Dataset Chatbot</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <!-- FIX 4: Sesuaikan Nama Navbar -->
+            <a href="#" class="nav-link">Users Manager</a>
+
+            <div class="spacer" style="flex-grow: 1;"></div>
+
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+
+            <a href="#" class="notification">
+                <i class='bx bxs-bell'></i>
+                <span class="num">8</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="{{ url_for('static', filename='img/avatar.png') }}">
+            </a>
+        </nav>
+        
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Tambah Akun Admin</h1>
+                    <!-- FIX 5: Tambahkan Breadcrumb biar UI lebih pro -->
+                    <ul class="breadcrumb">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a href="{{ url_for('user_manager.index') }}">Users</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="#">Tambah Admin</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-data">
+                <!-- FIX 6: Ubah batik-form-container jadi user-form-container -->
+                <div class="order user-form-container">
+                    <form action="{{ url_for('user_manager.create') }}" method="POST">
+
+                        <!-- FIX 7: Ubah semua class batik-* menjadi user-* -->
+                        <div class="user-group">
+                            <label class="user-label">Username Lengkap</label>
+                            <!-- FIX 8: Pastikan name="username" sesuai dengan database -->
+                            <input type="text" name="username" class="user-input" placeholder="Masukkan nama admin..."
+                                required>
+                        </div>
+
+                        <div class="user-group">
+                            <label class="user-label">Alamat Email</label>
+                            <input type="email" name="email" class="user-input" placeholder="contoh@gmail.com"
+                                required>
+                        </div>
+
+                        <div class="user-group">
+                            <label class="user-label">Password Sementara</label>
+                            <input type="password" name="password" class="user-input" placeholder="Minimal 6 karakter"
+                                required minlength="6">
+                        </div>
+
+                        <div class="user-group">
+                            <label class="user-label">Role Akses</label>
+                            <!-- Input disabled otomatis merespons styling dari user.css -->
+                            <input type="text" class="user-input" value="Admin" disabled>
+                        </div>
+
+                        <div class="user-actions">
+                            <a href="{{ url_for('user_manager.index') }}" class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bxs-user-plus'></i> Buat Akun
+                                Admin</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- SCRIPT TEMA DARK MODE & LOGIKA UI GLOBAL -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

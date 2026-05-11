@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+    <!-- Judul sudah diperbaiki -->
+    <title>AdminHub - Users Manager</title>
+</head>
+
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">AdminHub</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="{{ url_for('web_dashboard.index') }}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('galeri.index') }}">
+                    <i class='bx bxs-collection'></i>
+                    <span class="text">Katalog Batik</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('informasi.index') }}">
+                    <i class='bx bxs-info-circle'></i>
+                    <span class="text">Konten Artikel</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('event.index') }}">
+                    <i class='bx bxs-calendar'></i>
+                    <span class="text">Event</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('video.index') }}">
+                    <i class='bx bxs-video'></i>
+                    <span class="text">Video</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-map'></i>
+                    <span class="text">Mapping Lokasi</span>
+                </a>
+            </li>
+            {% if session.get('role') == 'superadmin' %}
+            <li class="active">
+                <a href="{{ url_for('user_manager.index') }}">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Users Manager</span>
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="#">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Dataset Chatbot</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href=" {{ url_for('auth.logout') }}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <!-- Navbar title sudah diperbaiki -->
+            <a href="#" class="nav-link">Users Manager</a>
+
+            <div class="spacer" style="flex-grow: 1;"></div>
+
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+
+            <a href="#" class="notification">
+                <i class='bx bxs-bell'></i>
+                <span class="num">8</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="{{ url_for('static', filename='img/avatar.png') }}">
+            </a>
+        </nav>
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Users Manager</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="#">Users</a></li>
+                    </ul>
+                </div>
+                <a href="{{ url_for('user_manager.create') }}" class="btn-download">
+                    <i class='bx bxs-user-plus'></i>
+                    <span class="text">Tambah Admin</span>
+                </a>
+            </div>
+
+            <div class="table-data">
+                <div class="order">
+                    <!-- Header Tabel & Search Box -->
+                    <div class="head"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 style="margin: 0;">Daftar Pengguna Sistem</h3>
+
+                        <!-- WRAPPER UNTUK FILTER DAN SEARCH -->
+                        <div style="display: flex; gap: 12px; align-items: center;">
+
+                            <!-- DROPDOWN FILTER ROLE -->
+                            <select id="roleFilter" class="user-filter" onchange="applyFilters()">
+                                <option value="all" {% if role_filter=='all' %}selected{% endif %}>Semua Role</option>
+                                <option value="superadmin" {% if role_filter=='superadmin' %}selected{% endif %}>
+                                    Superadmin</option>
+                                <option value="admin" {% if role_filter=='admin' %}selected{% endif %}>Admin</option>
+                                <option value="users" {% if role_filter=='users' %}selected{% endif %}>User Biasa
+                                </option>
+                            </select>
+
+                            <!-- SEARCH BOX -->
+                            <form class="search-box" onsubmit="event.preventDefault(); applyFilters();">
+                                <div class="form-input">
+                                    <input type="search" id="searchInput" placeholder="Cari nama atau email..."
+                                        autocomplete="off" data-url="{{ url_for('user_manager.index') }}">
+                                    <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Data -->
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--grey);">
+                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Username
+                                </th>
+                                <th style="width: 30%; padding: 0 10px 15px 10px; color: var(--dark);">Email</th>
+                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak Akses
+                                </th>
+                                <th style="width: 20%; padding: 0 10px 15px 10px; color: var(--dark);">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            {% for u in users %}
+                            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
+                                <td style="vertical-align: middle; padding: 18px 10px;">
+                                    <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{
+                                        u.username }}</span>
+                                </td>
+                                <td style="vertical-align: middle; padding: 18px 10px; color: #666;">
+                                    {{ u.email }}
+                                </td>
+                                <td style="vertical-align: middle; padding: 18px 10px;">
+                                    {% if u.role == 'superadmin' %}
+                                    <span class="badge-role superadmin">Superadmin</span>
+                                    {% elif u.role == 'admin' %}
+                                    <span class="badge-role admin">Admin</span>
+                                    {% else %}
+                                    <span class="badge-role user">User Biasa</span>
+                                    {% endif %}
+                                </td>
+                                <td style="vertical-align: middle; padding: 18px 10px;">
+                                    <div class="action-btn">
+                                        {% if u.role == 'superadmin' %}
+                                        <span class="status-text status-owner">Pemilik Sistem</span>
+                                        {% elif u.role == 'admin' %}
+                                        <a href="{{ url_for('user_manager.edit', user_id=u._id) }}?page={{ page }}"
+                                            class="btn-icon btn-edit" title="Edit Admin">
+                                            <i class='bx bxs-edit'></i>
+                                        </a>
+                                        {% else %}
+                                        <span class="status-text status-view">View Only</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <!-- Empty State -->
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 60px 20px;">
+                                    <div class="empty-state">
+                                        <i class='bx bx-group empty-icon'
+                                            style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                                        <p class="empty-title"
+                                            style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada
+                                            data pengguna.</p>
+                                        <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru
+                                            akan muncul di sini.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pagination-wrapper" id="paginationContainer">
+                        <span class="pagi-info">
+                            Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
+                            results
+                        </span>
+
+                        <div class="pagi-buttons">
+                            {% if page > 1 %}
+                            <!-- Tambahkan parameter role dan q di setiap url_for -->
+                            <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}"
+                                class="pagi-btn prev">
+                                <i class='bx bx-chevron-left'></i> Prev
+                            </a>
+                            {% endif %}
+
+                            <div class="pagi-numbers">
+                                {% for p in range(1, total_pages + 1) %}
+                                <a href="{{ url_for('user_manager.index', page=p, q=search_query, role=role_filter) }}"
+                                    class="pagi-btn number {{ 'active' if p == page else '' }}">
+                                    {{ p }}
+                                </a>
+                                {% endfor %}
+                            </div>
+
+                            {% if page < total_pages %} <a
+                                href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}"
+                                class="pagi-btn next">
+                                Next <i class='bx bx-chevron-right'></i>
+                                </a>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+        function applyFilters() {
+            let q = document.getElementById('searchInput').value;
+            let role = document.getElementById('roleFilter').value;
+
+            // Pindah halaman dengan membawa parameter filter ke Backend
+            window.location.href = `?q=${encodeURIComponent(q)}&role=${encodeURIComponent(role)}`;
+        }
+    </script>
+
+
+    <!-- SCRIPT ALERT -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+        const flashMessages = {{ messages | tojson | safe }};
+        flashMessages.forEach(msgItem => {
+            let category = 'info';
+            let message = '';
+
+            if (Array.isArray(msgItem) && msgItem.length === 2) {
+                category = msgItem[0];
+                message = msgItem[1];
+            } else {
+                message = msgItem;
+            }
+
+            if (typeof message === 'object' && message !== null) {
+                const data = message[' t'] || message['t'];
+                if (data && Array.isArray(data)) {
+                    category = data[0];
+                    message = data[1];
+                }
+            }
+
+            const validIcons = ['success', 'error', 'warning', 'info'];
+            Swal.fire({
+                title: 'Informasi',
+                text: message,
+                icon: validIcons.includes(category) ? category : 'info',
+                timer: 2500,
+                showConfirmButton: false,
+                background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
+                color: document.body.classList.contains('dark') ? '#fff' : '#000'
+            });
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
+</body>
+
+</html>
