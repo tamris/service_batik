@@ -1,0 +1,281 @@
+/* =========================================
+   STYLING KHUSUS MAPPING LOKASI
+========================================= */
+
+/* 1. BADGE KATEGORI LOKASI */
+.badge-map {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.cat-sentra { background: rgba(60, 145, 230, 0.1); color: #3C91E6; }
+.cat-toko   { background: rgba(63, 195, 128, 0.1); color: #3FC380; }
+.cat-edukasi { background: rgba(155, 89, 182, 0.1); color: #9B59B6; }
+
+/* 2. FORM & INPUT MAPPING */
+.map-form-container {
+    padding: 36px;
+    background: var(--light);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.map-group { margin-bottom: 24px; }
+.map-label { display: block; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 10px; }
+
+.map-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--dark);
+    background: #ffffff; /* <-- Latar belakang jadi putih bersih */
+    border: 1px solid #ddd; /* <-- Tambahan garis tepi abu-abu tipis biar rapi */
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.map-input:focus { 
+    border-color: #3C91E6; 
+    background: transparent; 
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15); 
+}
+
+/* 3. COORDINATE GRID (Lat/Long Sejajar) */
+.coord-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* 4. SEARCH & FILTER */
+.map-filter-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* =========================================
+   5. WIDGET PETA INTERAKTIF (PENTING!)
+========================================= */
+.map-widget-container {
+    width: 100%;
+    height: 380px; /* Tinggi ideal agar peta terlihat lega */
+    border-radius: 12px;
+    margin-bottom: 10px; 
+    border: 2px solid var(--grey);
+    overflow: hidden;
+    z-index: 1; /* Mencegah Leaflet bentrok dengan elemen lain */
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* =========================================
+   6. TOMBOL AKSI BAWAH (Batal & Simpan)
+========================================= */
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 24px;
+    border-top: 1px solid var(--grey);
+}
+
+.btn-cancel {
+    padding: 12px 20px;
+    background: var(--grey);
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover { background: #d0d0d0; }
+
+.btn-save {
+    padding: 12px 20px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover { background: #2b7bc9; transform: translateY(-2px); }
+
+
+/* =========================================
+   7. DARK MODE OVERRIDES
+========================================= */
+body.dark .map-form-container { background: #1a1c1e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+body.dark .map-input { background: #25282b; color: #fff; border-color: #3f444a; }
+body.dark .map-input:focus { background: transparent; border-color: #3C91E6; }
+body.dark .badge-map.cat-sentra { background: rgba(60, 145, 230, 0.2); }
+
+/* Penyesuaian Peta & Tombol saat mode gelap */
+body.dark .map-widget-container { 
+    border-color: #3f444a; 
+    filter: brightness(0.8) contrast(1.2); /* Bikin peta gak terlalu silau */
+}
+body.dark .user-actions { border-top-color: #2b2e33; }
+body.dark .btn-cancel { background: #25282b; color: #ccc; }
+body.dark .btn-cancel:hover { background: #333; color: #fff; }
+
+/* =========================================
+   8. TABEL, SEARCH BOX & TOMBOL AKSI
+========================================= */
+
+/* Search Box Estetik */
+.map-search-box .form-input {
+    display: flex;
+    align-items: center;
+    background: var(--grey);
+    border-radius: 36px;
+    padding: 2px 4px;
+    width: 280px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.map-search-box .form-input:focus-within {
+    background: transparent;
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+.map-search-box .form-input input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: var(--dark);
+    font-family: inherit;
+}
+
+.map-search-box .form-input button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    color: var(--dark);
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Tombol Aksi Tabel */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.btn-icon.btn-edit { background: #FFCE26; box-shadow: 0 2px 6px rgba(255, 206, 38, 0.3); }
+.btn-icon.btn-edit:hover { background: #e6b822; transform: translateY(-2px); }
+
+.btn-icon.btn-delete { background: #FF4B4B; box-shadow: 0 2px 6px rgba(255, 75, 75, 0.3); }
+.btn-icon.btn-delete:hover { background: #e63939; transform: translateY(-2px); }
+
+/* Penyesuaian Dark Mode Tabel */
+body.dark .map-search-box .form-input { background: rgba(255, 255, 255, 0.05); }
+body.dark .map-search-box .form-input:focus-within { background: transparent; }
+body.dark .map-search-box .form-input input { color: #fff; }
+body.dark .map-search-box .form-input button { color: #888; }
+
+
+/* =========================================
+   --- 6. PAGINATION --- 
+========================================= */
+.pagination-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--grey);
+}
+
+.pagi-info {
+    font-size: 13px;
+    color: #888;
+}
+
+.pagi-info b {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.pagi-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pagi-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--light);
+    color: var(--dark);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.pagi-btn:hover { background: #f0f0f0; }
+
+.pagi-btn.active {
+    background: #3C91E6;
+    color: #fff;
+    border-color: #3C91E6;
+}
+
+/* Penyesuaian Dark Mode */
+body.dark .pagination-wrapper { border-top-color: #2b2e33; }
+body.dark .pagi-info { color: #888; }
+body.dark .pagi-info b { color: #fff; }
+body.dark .pagi-btn { background: #25282b; color: #fff; border-color: #3f444a; }
+body.dark .pagi-btn:hover { background: #333; }
+body.dark .pagi-btn.active { background: #3C91E6; border-color: #3C91E6; }
+
+

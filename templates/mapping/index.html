@@ -4,19 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- My CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
-    <!-- Judul sudah diperbaiki -->
-    <title>AdminHub - Users Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mapping.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>AdminHub</title>
 </head>
 
 <body>
     <script>
+        // Cek LocalStorage SEBELUM render konten
         const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
+        if (theme === 'dark') {
+            document.body.classList.add('dark');
+        }
     </script>
 
+    <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="#" class="brand">
             <i class='bx bxs-smile'></i>
@@ -34,7 +41,6 @@
                     <i class='bx bxs-collection'></i>
                     <span class="text">Katalog Batik</span>
                 </a>
-            </li>
             <li>
                 <a href="{{ url_for('informasi.index') }}">
                     <i class='bx bxs-info-circle'></i>
@@ -53,14 +59,14 @@
                     <span class="text">Video</span>
                 </a>
             </li>
-            <li>
+            <li class="active">
                 <a href="{{ url_for('mapping.index') }}">
                     <i class='bx bxs-map'></i>
                     <span class="text">Mapping Lokasi</span>
                 </a>
             </li>
             {% if session.get('role') == 'superadmin' %}
-            <li class="active">
+            <li>
                 <a href="{{ url_for('user_manager.index') }}">
                     <i class='bx bxs-user'></i>
                     <span class="text">Users Manager</span>
@@ -82,19 +88,21 @@
                 </a>
             </li>
             <li>
-                <a href=" {{ url_for('auth.logout') }}" class="logout">
+                <a href="{{ url_for('auth.logout') }}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="text">Logout</span>
                 </a>
             </li>
         </ul>
     </section>
+    <!-- SIDEBAR -->
 
+    <!-- CONTENT -->
     <section id="content">
+        <!-- NAVBAR -->
         <nav>
             <i class='bx bx-menu'></i>
-            <!-- Navbar title sudah diperbaiki -->
-            <a href="#" class="nav-link">Users Manager</a>
+            <a href="#" class="nav-link">Data Batik</a>
 
             <div class="spacer" style="flex-grow: 1;"></div>
 
@@ -109,111 +117,112 @@
                 <img src="{{ url_for('static', filename='img/avatar.png') }}">
             </a>
         </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
         <main>
             <div class="head-title">
                 <div class="left">
-                    <h1>Users Manager</h1>
+                    <h1>Mapping Lokasi</h1>
                     <ul class="breadcrumb">
                         <li><a href="#">Dashboard</a></li>
                         <li><i class='bx bx-chevron-right'></i></li>
-                        <li><a class="active" href="#">Users</a></li>
+                        <li><a class="active" href="#">Mapping</a></li>
                     </ul>
                 </div>
-                <a href="{{ url_for('user_manager.create') }}" class="btn-download">
-                    <i class='bx bxs-user-plus'></i>
-                    <span class="text">Tambah Admin</span>
+                <a href="{{ url_for('mapping.create') }}" class="btn-download">
+                    <i class='bx bxs-map-add'></i>
+                    <span class="text">Tambah Lokasi</span>
                 </a>
             </div>
 
             <div class="table-data">
                 <div class="order">
-                    <!-- Header Tabel & Search Box -->
                     <div class="head"
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <h3 style="margin: 0;">Daftar Pengguna Sistem</h3>
+                        <h3 style="margin: 0;">Daftar Persebaran Batik</h3>
 
-                        <!-- WRAPPER UNTUK FILTER DAN SEARCH -->
-                        <div style="display: flex; gap: 12px; align-items: center;">
-
-                            <!-- DROPDOWN FILTER ROLE -->
-                            <select id="roleFilter" class="user-filter" onchange="applyFilters()">
-                                <option value="all" {% if role_filter=='all' %}selected{% endif %}>Semua Role</option>
-                                <option value="superadmin" {% if role_filter=='superadmin' %}selected{% endif %}>
-                                    Superadmin</option>
-                                <option value="admin" {% if role_filter=='admin' %}selected{% endif %}>Admin</option>
-                                <option value="users" {% if role_filter=='users' %}selected{% endif %}>User Biasa
-                                </option>
-                            </select>
-
-                            <!-- SEARCH BOX -->
-                            <form class="search-box" onsubmit="event.preventDefault(); applyFilters();">
+                        <form class="map-search-box" onsubmit="event.preventDefault(); applyFilters();">
                                 <div class="form-input">
-                                    <input type="search" id="searchInput" placeholder="Cari nama atau email..."
-                                        autocomplete="off" data-url="{{ url_for('user_manager.index') }}">
+                                    <input type="search" id="searchInput" placeholder="Cari lokasi..." value="{{ search_query }}"
+                                        autocomplete="off" data-url="{{ url_for('mapping.index') }}">
                                     <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
                                 </div>
                             </form>
-                        </div>
                     </div>
 
-                    <!-- Tabel Data -->
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
                         <thead>
                             <tr style="border-bottom: 2px solid var(--grey);">
-                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Username
+                                <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 15%;">Preview</th>
+                                <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 25%;">Informasi Lokasi
                                 </th>
-                                <th style="width: 30%; padding: 0 10px 15px 10px; color: var(--dark);">Email</th>
-                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak Akses
+                                <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 20%;">Koordinat</th>
+                                <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 30%;">Alamat Lengkap
                                 </th>
-                                <th style="width: 20%; padding: 0 10px 15px 10px; color: var(--dark);">Aksi</th>
+                                <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 10%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
-                            {% for u in users %}
+                            {% for m in mappings %}
                             <tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
-                                <td style="vertical-align: middle; padding: 18px 10px;">
-                                    <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{
-                                        u.username }}</span>
+
+                                <td style="vertical-align: middle; padding: 16px 10px;">
+                                    <img src="{{ url_for('static', filename='img/mapping/' + m.image_url) }}"
+                                        style="width: 80px; height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
                                 </td>
-                                <td style="vertical-align: middle; padding: 18px 10px; color: #666;">
-                                    {{ u.email }}
+
+                                <td style="vertical-align: middle; padding: 16px 10px;">
+                                    <strong
+                                        style="display:block; color:var(--dark); font-size: 15px; margin-bottom: 6px;">{{
+                                        m.name }}</strong>
+                                    <span
+                                        class="badge-map {% if m.category == 'Sentra Batik' %}cat-sentra{% elif m.category == 'Toko' %}cat-toko{% else %}cat-edukasi{% endif %}">
+                                        {{ m.category }}
+                                    </span>
                                 </td>
-                                <td style="vertical-align: middle; padding: 18px 10px;">
-                                    {% if u.role == 'superadmin' %}
-                                    <span class="badge-role superadmin">Superadmin</span>
-                                    {% elif u.role == 'admin' %}
-                                    <span class="badge-role admin">Admin</span>
-                                    {% else %}
-                                    <span class="badge-role user">User Biasa</span>
-                                    {% endif %}
+
+                                <td
+                                    style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
+                                    <i class='bx bx-map' style="color: #FD7238; margin-right: 4px;"></i> {{ m.latitude
+                                    }}<br>
+                                    <i class='bx bx-map-pin' style="color: #3C91E6; margin-right: 4px;"></i> {{
+                                    m.longitude }}
                                 </td>
-                                <td style="vertical-align: middle; padding: 18px 10px;">
+
+                                <td
+                                    style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
+                                    {{ m.address.full }}
+                                </td>
+
+                                <td style="vertical-align: middle; padding: 16px 10px;">
                                     <div class="action-btn">
-                                        {% if u.role == 'superadmin' %}
-                                        <span class="status-text status-owner">Pemilik Sistem</span>
-                                        {% elif u.role == 'admin' %}
-                                        <a href="{{ url_for('user_manager.edit', user_id=u._id) }}?page={{ page }}"
-                                            class="btn-icon btn-edit" title="Edit Admin">
+                                        <a href="{{ url_for('mapping.edit', mapping_id=m._id) }}?page={{ page }}"
+                                            class="btn-icon btn-edit" title="Edit Lokasi">
                                             <i class='bx bxs-edit'></i>
                                         </a>
-                                        {% else %}
-                                        <span class="status-text status-view">View Only</span>
-                                        {% endif %}
+
+                                        <form action="{{ url_for('mapping.delete', mapping_id=m._id) }}?page={{ page }}"
+                                            method="POST" style="display:inline;"
+                                            onsubmit="return confirm('Yakin mau menghapus lokasi {{ m.name }} secara permanen?');">
+                                            <button type="submit" class="btn-icon btn-delete" title="Hapus Lokasi"
+                                                style="border:none; cursor:pointer;">
+                                                <i class='bx bxs-trash'></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
+
                             </tr>
                             {% else %}
-                            <!-- Empty State -->
                             <tr>
-                                <td colspan="4" style="text-align: center; padding: 60px 20px;">
+                                <td colspan="5" style="text-align: center; padding: 60px 20px;">
                                     <div class="empty-state">
-                                        <i class='bx bx-group empty-icon'
+                                        <i class='bx bx-map-alt empty-icon'
                                             style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
                                         <p class="empty-title"
                                             style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada
-                                            data pengguna.</p>
-                                        <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru
-                                            akan muncul di sini.</p>
+                                            data lokasi.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -229,7 +238,7 @@
                         <div class="pagi-buttons">
                             {% if page > 1 %}
                             <!-- Tambahkan parameter role dan q di setiap url_for -->
-                            <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}"
+                            <a href="{{ url_for('mapping.index', page=page-1, q=search_query, role=role_filter) }}"
                                 class="pagi-btn prev">
                                 <i class='bx bx-chevron-left'></i> Prev
                             </a>
@@ -237,7 +246,7 @@
 
                             <div class="pagi-numbers">
                                 {% for p in range(1, total_pages + 1) %}
-                                <a href="{{ url_for('user_manager.index', page=p, q=search_query, role=role_filter) }}"
+                                <a href="{{ url_for('mapping.index', page=p, q=search_query, role=role_filter) }}"
                                     class="pagi-btn number {{ 'active' if p == page else '' }}">
                                     {{ p }}
                                 </a>
@@ -245,7 +254,7 @@
                             </div>
 
                             {% if page < total_pages %} <a
-                                href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}"
+                                href="{{ url_for('mapping.index', page=page+1, q=search_query, role=role_filter) }}"
                                 class="pagi-btn next">
                                 Next <i class='bx bx-chevron-right'></i>
                                 </a>
@@ -257,30 +266,21 @@
         </main>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-    <script>
-        function applyFilters() {
-            let q = document.getElementById('searchInput').value;
-            let role = document.getElementById('roleFilter').value;
-
-            // Pindah halaman dengan membawa parameter filter ke Backend
-            window.location.href = `?q=${encodeURIComponent(q)}&role=${encodeURIComponent(role)}`;
-        }
-    </script>
-
-
-    <!-- SCRIPT ALERT -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <script>
+        // 1. Ubah data dari Flask menjadi JSON agar aman dibaca JavaScript
         const flashMessages = {{ messages | tojson | safe }};
+
+        // 2. Gunakan JavaScript murni untuk proses looping dan logika
         flashMessages.forEach(msgItem => {
             let category = 'info';
             let message = '';
 
+            // Logika pengecekan format data
             if (Array.isArray(msgItem) && msgItem.length === 2) {
                 category = msgItem[0];
                 message = msgItem[1];
@@ -288,6 +288,7 @@
                 message = msgItem;
             }
 
+            // Handle jika message berbentuk object {' t': [cat, msg]}
             if (typeof message === 'object' && message !== null) {
                 const data = message[' t'] || message['t'];
                 if (data && Array.isArray(data)) {
@@ -296,9 +297,10 @@
                 }
             }
 
+            // 3. Eksekusi SweetAlert
             const validIcons = ['success', 'error', 'warning', 'info'];
             Swal.fire({
-                title: 'Informasi',
+                title: 'Berhasil!',
                 text: message,
                 icon: validIcons.includes(category) ? category : 'info',
                 timer: 2500,

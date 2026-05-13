@@ -7,6 +7,7 @@ from routes.web.galeri import galeri_bp
 from routes.web.infromasi import informasi_bp
 from routes.web.video import video_bp
 from routes.web.user_manager import user_bp
+from routes.web.mapping import mapping_bp
 from routes.web.event import event_bp
 from routes.api.galeri_api import galeri_api_bp
 from routes.api.informasi_api import informasi_api_bp
@@ -42,6 +43,7 @@ app.register_blueprint(galeri_bp)
 app.register_blueprint(informasi_bp)
 app.register_blueprint(video_bp)
 app.register_blueprint(event_bp)
+app.register_blueprint(mapping_bp) 
 app.register_blueprint(user_bp)
 
 # 3. Register API Blueprint

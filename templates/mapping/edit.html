@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mapping.css') }}">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <title>AdminHub - Edit Lokasi</title>
+</head>
+
+<body>
+    <script>
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') { document.body.classList.add('dark'); }
+    </script>
+
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">AdminHub</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="{{ url_for('web_dashboard.index') }}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('galeri.index') }}">
+                    <i class='bx bxs-collection'></i>
+                    <span class="text">Katalog Batik</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('informasi.index') }}">
+                    <i class='bx bxs-info-circle'></i>
+                    <span class="text">Konten Artikel</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('event.index') }}">
+                    <i class='bx bxs-calendar'></i>
+                    <span class="text">Event</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('video.index') }}">
+                    <i class='bx bxs-video'></i>
+                    <span class="text">Video</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="{{ url_for('mapping.index') }}">
+                    <i class='bx bxs-map'></i>
+                    <span class="text">Mapping Lokasi</span>
+                </a>
+            </li>
+            {% if session.get('role') == 'superadmin' %}
+            <li>
+                <a href="{{ url_for('user_manager.index') }}">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Users Manager</span>
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="#">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Dataset Chatbot</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <a href="#" class="nav-link">Mapping Lokasi</a>
+            <div class="spacer" style="flex-grow: 1;"></div>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="profile"><img src="{{ url_for('static', filename='img/avatar.png') }}"></a>
+        </nav>
+
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Edit Lokasi: {{ mapping.name }}</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="#">Dashboard</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a href="{{ url_for('mapping.index') }}">Mapping</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="#">Edit Lokasi</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="table-data">
+                <div class="order map-form-container">
+                    <form action="{{ url_for('mapping.edit', mapping_id=mapping._id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
+
+                        <div class="coord-grid">
+                            <div class="map-group">
+                                <label class="map-label">Nama Lokasi / Galeri</label>
+                                <input type="text" name="name" class="map-input" value="{{ mapping.name }}" required>
+                            </div>
+                            <div class="map-group">
+                                <label class="map-label">Kategori</label>
+                                <select name="category" class="map-input" required>
+                                    <option value="Sentra Batik" {% if mapping.category=='Sentra Batik' %}selected{%
+                                        endif %}>Sentra Batik</option>
+                                    <option value="Toko" {% if mapping.category=='Toko' %}selected{% endif %}>Toko /
+                                        Oleh-oleh</option>
+                                    <option value="Museum" {% if mapping.category=='Museum' %}selected{% endif %}>Museum
+                                        / Edukasi</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="map-group">
+                            <label class="map-label">Cari Lokasi Cepat</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="searchAddressInput" class="map-input"
+                                    placeholder="Ketik nama tempat untuk ganti lokasi...">
+                                <button type="button" class="btn-save" id="btnSearchAddress"><i
+                                        class='bx bx-search'></i> Cari</button>
+                            </div>
+                        </div>
+
+                        <div class="map-group">
+                            <label class="map-label">Titik Lokasi (Klik peta untuk ubah posisi)</label>
+                            <div id="map" class="map-widget-container"></div>
+                        </div>
+
+                        <div class="coord-grid">
+                            <div class="map-group">
+                                <label class="map-label">Latitude</label>
+                                <input type="text" id="latitude" name="latitude" class="map-input"
+                                    value="{{ mapping.latitude }}" required>
+                            </div>
+                            <div class="map-group">
+                                <label class="map-label">Longitude</label>
+                                <input type="text" id="longitude" name="longitude" class="map-input"
+                                    value="{{ mapping.longitude }}" required>
+                            </div>
+                        </div>
+
+                        <div class="map-group">
+                            <label class="map-label">Alamat Lengkap (Otomatis terisi saat klik peta)</label>
+                            <textarea id="address_full" name="address_full" class="map-input" rows="3"
+                                required>{{ mapping.address.full }}</textarea>
+                        </div>
+
+                        <div class="map-group">
+                            <label class="map-label">Deskripsi Lokasi</label>
+                            <textarea name="description" class="map-input" rows="4"
+                                required>{{ mapping.description }}</textarea>
+                        </div>
+
+                        <div class="map-group">
+                            <label class="map-label">Foto Lokasi (Opsional)</label>
+                            <input type="file" name="image_url" class="map-input" accept="image/*">
+                            <p style="font-size: 12px; color: #888; margin-top: 5px;">*Biarkan kosong jika tidak ingin
+                                mengganti foto saat ini.</p>
+                        </div>
+
+                        <div class="user-actions"
+                            style="display: flex; justify-content: space-between; align-items: center; margin-top: 35px; padding-top: 24px; border-top: 1px solid var(--grey);">
+
+                            <div class="creator-info"
+                                style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #888;">
+                                <i class='bx bxs-info-circle' style="font-size: 16px;"></i>
+                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
+                                        mapping.admin_data.username if mapping.admin_data else 'System'
+                                        }}</strong></span>
+                            </div>
+
+                            <div style="display: flex; gap: 15px;">
+                                <a href="{{ url_for('mapping.index') }}?page={{ request.args.get('page', 1) }}"
+                                    class="btn-cancel">Batal</a>
+                                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan
+                                    Perubahan</button>
+                            </div>
+
+                        </div>
+
+                       
+                    </form>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+        // Inisialisasi Peta dengan koordinat yang sudah ada
+        var existingLat = parseFloat("{{ mapping.latitude }}") || -6.8797;
+        var existingLng = parseFloat("{{ mapping.longitude }}") || 109.1256;
+
+        var map = L.map('map').setView([existingLat, existingLng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([existingLat, existingLng]).addTo(map);
+
+        var latInput = document.getElementById('latitude');
+        var lngInput = document.getElementById('longitude');
+        var addressInput = document.getElementById('address_full');
+        var btnSearch = document.getElementById('btnSearchAddress');
+
+        function updateLocation(lat, lng, fetchAddress = true) {
+            latInput.value = lat;
+            lngInput.value = lng;
+            var newLatLng = new L.LatLng(lat, lng);
+            marker.setLatLng(newLatLng);
+            map.flyTo(newLatLng, 16);
+
+            if (fetchAddress && addressInput) {
+                addressInput.value = "Mendeteksi alamat...";
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=id`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.display_name) addressInput.value = data.display_name;
+                    });
+            }
+        }
+
+        map.on('click', function (e) {
+            updateLocation(e.latlng.lat, e.latlng.lng, true);
+        });
+
+        // Sinkronisasi input manual
+        latInput.addEventListener('change', () => updateLocation(parseFloat(latInput.value), parseFloat(lngInput.value), true));
+        lngInput.addEventListener('change', () => updateLocation(parseFloat(latInput.value), parseFloat(lngInput.value), true));
+
+        // Pencarian Lokasi
+        btnSearch.addEventListener('click', function () {
+            var query = document.getElementById('searchAddressInput').value;
+            if (!query) return;
+            btnSearch.innerHTML = "Mencari...";
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&accept-language=id`)
+                .then(res => res.json())
+                .then(data => {
+                    btnSearch.innerHTML = "<i class='bx bx-search'></i> Cari";
+                    if (data && data.length > 0) {
+                        updateLocation(parseFloat(data[0].lat), parseFloat(data[0].lon), false);
+                        addressInput.value = data[0].display_name;
+                    } else {
+                        alert("Lokasi tidak ditemukan. Masukkan nama tempat/jalan yang lebih spesifik.");
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>
