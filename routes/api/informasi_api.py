@@ -33,7 +33,7 @@ def get_all_informasi():
                 item['created_at'] = item['created_at'].isoformat()
             # Tambahkan base URL untuk gambar agar Flutter gampang nampilinnya
             # Ganti localhost:5000 dengan IP Server/Digital Ocean kamu nanti
-            item['gambar_url'] = f"{request.host_url}static/img/informasi/{item.get('gambar_url', 'default_info.png')}"
+            item['image_url'] = f"{request.host_url}static/img/informasi/{item.get('image_url', 'default_info.png')}"
             formatted_data.append(item)
 
         return jsonify({
@@ -63,7 +63,7 @@ def get_detail_informasi(info_id):
             return jsonify({"status": "error", "message": "Data tidak ditemukan"}), 404
         
         info['_id'] = str(info['_id'])
-        info['gambar_url'] = f"{request.host_url}static/img/informasi/{info.get('gambar_url', 'default_info.png')}"
+        info['image_url'] = f"{request.host_url}static/img/informasi/{info.get('image_url', 'default_info.png')}"
         
         return jsonify({
             "status": "success",

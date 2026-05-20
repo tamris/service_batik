@@ -19,7 +19,23 @@ class BatikModel:
         return list(self.collection.find(query))
 
     def get_by_id(self, batik_id):
-        return self.collection.find_one({"_id": ObjectId(batik_id)})
+        pipeline = [
+            {"$match": {"_id": ObjectId(batik_id)}},
+            {"$lookup": {
+                "from": "users",          # Nama tabel users
+                "localField": "user_id",  # Field di tabel mapping
+                "foreignField": "_id",    # Field di tabel users
+                "as": "admin_data"
+            }},
+            {"$unwind": {
+                "path": "$admin_data", 
+                "preserveNullAndEmptyArrays": True
+            }}
+        ]
+        hasil = list(self.collection.aggregate(pipeline))
+        if hasil:
+            return hasil[0]
+        return None
 
     def create(self, data):
         return self.collection.insert_one(data)
@@ -31,7 +47,7 @@ class BatikModel:
         return self.collection.delete_one({"_id": ObjectId(batik_id)})
     
     def get_by_nama(self, nama):
-        return self.collection.find_one({"nama": nama})
+        return self.collection.find_one({"name": nama})
 
     @staticmethod
     def serialize(batik):

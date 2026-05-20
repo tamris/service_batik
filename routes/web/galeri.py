@@ -1,6 +1,8 @@
 from datetime import datetime
 import math
 import os
+
+from bson.objectid import ObjectId
 from routes.web.auth import login_required
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash
@@ -57,12 +59,26 @@ def create():
             image_url = filename
         else:
             image_url = 'default_batik.png'
+
+        colors = [
+        request.form.get('dominant_color_1'),
+        request.form.get('dominant_color_2'),
+        request.form.get('dominant_color_3'),
+        request.form.get('dominant_color_4')
+    ]
+    # Filter warna agar tidak ada nilai None atau kosong
+        dominant_colors_array = [c for c in colors if c]
             
         data_baru = {
+            "user_id": ObjectId(session.get('user_id')),
             "name": request.form['name'], # Ubah nama menjadi name[cite: 7]
             "category": request.form['category'], # Tambahan field category[cite: 7]
             "makna": request.form['makna'],
+            "philosophy": request.form['philosophy'], # Tambahan field philosophy[cite: 7]
+            "technique": request.form['technique'], # Tambahan field technique[cite: 7]
+            "history": request.form['history'], # Tambahan field history[cite: 7]
             "image_url": image_url, # Ubah gambar menjadi image_url[cite: 7]
+            "dominant_color": dominant_colors_array, # Tambahan field dominant_color[cite: 7]
             "created_at": datetime.now()
         }
 
@@ -82,20 +98,35 @@ def edit(batik_id):
 
     if request.method == 'POST':
         page = request.form.get('page', 1, type=int)
+        
+        # Tangkap ke-4 input warna dari form edit web
+        colors = [
+            request.form.get('dominant_color_1'),
+            request.form.get('dominant_color_2'),
+            request.form.get('dominant_color_3'),
+            request.form.get('dominant_color_4')
+        ]
+        # Bersihkan dari nilai kosong/None
+        dominant_colors_array = [c for c in colors if c]
+
         data_update = {
-            "name": request.form['name'], # Ubah penangkapan update ke name[cite: 7]
+            "name": request.form['name'], # Ubah penangkapan update ke name
             "category": request.form['category'], # Buka comment ini nanti kalau form edit juga ditambah category
-            "makna": request.form['makna']
+            "makna": request.form['makna'],
+            "philosophy": request.form['philosophy'], # Tambahan field philosophy
+            "technique": request.form['technique'], # Tambahan field technique
+            "history": request.form['history'],     # Field sejarah yang kita tambahkan sebelumnya
+            "dominant_color": dominant_colors_array # Update menjadi array of hex codes baru
         }
         
-        # Ubah gambar menjadi image_url[cite: 7]
+        # Ubah gambar menjadi image_url
         gambar_file = request.files.get('image_url') 
         if gambar_file and gambar_file.filename != '':
             filename = secure_filename(gambar_file.filename)
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             gambar_file.save(os.path.join(UPLOAD_FOLDER, filename))
-            data_update['image_url'] = filename # Update field image_url[cite: 7]
+            data_update['image_url'] = filename # Update field image_url
         
         batik_model.update(batik_id, data_update)
         flash('Data batik berhasil diperbarui!', 'success')

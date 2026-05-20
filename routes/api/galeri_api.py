@@ -11,7 +11,7 @@ def get_all_batik():
         # 1. Parameter Pagination & Pencarian
         page = request.args.get('page', 1, type=int)
         search_query = request.args.get('q', '')
-        per_page = 20 # Kamu bisa sesuaikan jumlah item per halaman
+        per_page = 10
 
         # 2. Ambil data dari MongoDB
         all_data = batik_model.get_all(search_query)
@@ -30,7 +30,7 @@ def get_all_batik():
             b['_id'] = str(b['_id'])
             
             # Konstruksi URL Gambar Lengkap
-            b['gambar_url'] = f"{request.host_url}static/img/galeri/{b.get('gambar', 'default_batik.png')}"
+            b['image_url'] = f"{request.host_url}static/img/galeri/{b.get('image_url', 'default_batik.png')}"
             
             # Format Tanggal jika ada
             if 'created_at' in b and b['created_at']:
@@ -60,7 +60,7 @@ def get_batik_detail(batik_id):
             return jsonify({"status": "error", "message": "Data batik tidak ditemukan"}), 404
         
         batik['_id'] = str(batik['_id'])
-        batik['gambar_url'] = f"{request.host_url}static/img/galeri/{batik.get('gambar', 'default_batik.png')}"
+        batik['image_url'] = f"{request.host_url}static/img/galeri/{batik.get('image_url', 'default_batik.png')}"
         
         if 'created_at' in batik and batik['created_at']:
             batik['created_at'] = batik['created_at'].strftime('%Y-%m-%d %H:%M:%S')

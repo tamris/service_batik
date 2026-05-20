@@ -62,51 +62,100 @@
                 <div class="order batik-form-container">
                     <form action="{{ url_for('galeri.create') }}" method="POST" enctype="multipart/form-data">
 
-                        <div class="batik-group">
-                            <label class="batik-label">Nama Motif Batik</label>
-                            <!-- name diubah dari nama_motif menjadi name -->
-                            <input type="text" name="name" class="batik-input" placeholder="Contoh: Batik Mega Mendung"
-                                required>
-                        </div>
+                        <div class="form-row-split">
 
-                        <!-- FIELD BARU: Kategori -->
-                        <div class="batik-group">
-                            <label class="batik-label">Kategori Motif</label>
-                            <select name="category" class="batik-input" required>
-                                <option value="" disabled selected>Pilih Kategori...</option>
-                                <option value="Klasik">Klasik</option>
-                                <option value="Kontemporer">Kontemporer</option>
-                            </select>
-                        </div>
+                            <div class="form-col">
+                                <div class="batik-group">
+                                    <label class="batik-label">Nama Motif Batik</label>
+                                    <input type="text" name="name" class="batik-input"
+                                        placeholder="Contoh: Batik Mega Mendung" required>
+                                </div>
 
-                        <div class="batik-group">
-                            <label class="batik-label">Gambar Motif Batik</label>
-                            <div class="file-upload-box">
-                                <!-- name diubah dari gambar menjadi image_url -->
-                                <input type="file" name="image_url" accept="image/*" id="fileInput"
-                                    onchange="previewImage(event)" required>
-                                <div class="upload-content">
-                                    <i class='bx bx-cloud-upload upload-icon'></i>
-                                    <p id="uploadText">Klik atau seret gambar batik ke sini</p>
+                                <div class="batik-group">
+                                    <label class="batik-label">Kategori Motif</label>
+                                    <select name="category" class="batik-input" required>
+                                        <option value="" disabled selected>Pilih Kategori...</option>
+                                        <option value="Klasik">Klasik</option>
+                                        <option value="Kontemporer">Kontemporer</option>
+                                    </select>
+                                </div>
+
+                                <div class="batik-group">
+                                    <label class="batik-label">Teknik Pembuatan</label>
+                                    <select name="technique" class="batik-input" required>
+                                        <option value="" disabled selected>Pilih Teknik Pembuatan...</option>
+                                        <option value="Batik Tulis">Batik Tulis</option>
+                                        <option value="Batik Cap">Batik Cap</option>
+                                        <option value="Batik Kombinasi">Batik Kombinasi</option>
+                                    </select>
+                                </div>
+
+                                <div class="batik-group">
+                                    <label class="batik-label">Warna Dominan (Maks. 4 Warna)</label>
+                                    <div style="display: flex; gap: 12px; align-items: center; margin-top: 5px;">
+                                        <input type="color" name="dominant_color_1" class="batik-color-picker"
+                                            value="#8B5A2B">
+                                        <input type="color" name="dominant_color_2" class="batik-color-picker"
+                                            value="#CD853F">
+                                        <input type="color" name="dominant_color_3" class="batik-color-picker"
+                                            value="#F5F5DC">
+                                        <input type="color" name="dominant_color_4" class="batik-color-picker"
+                                            value="#2B1B10">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="preview-container" id="previewContainer"
-                                style="display: none; margin-top: 15px;">
-                                <span class="batik-label" style="font-size:12px; margin-bottom:5px; color:#888;">Preview
-                                    Gambar:</span>
-                                <img id="imagePreview" src="#" alt="Preview Motif">
+                            <div class="form-col">
+                                <div class="batik-group">
+                                    <label class="batik-label">Gambar Motif Batik</label>
+                                    <div class="file-upload-box" style="padding: 25px 20px;">
+                                        <input type="file" name="image_url" accept="image/*" id="fileInput"
+                                            onchange="previewImage(event)" required>
+                                        <div class="upload-content">
+                                            <i class='bx bx-cloud-upload upload-icon' style="font-size: 32px;"></i>
+                                            <p id="uploadText" style="font-size: 13px;">Klik/seret gambar batik ke sini
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="preview-container" id="previewContainer"
+                                        style="display: none; margin-top: 12px; text-align: left;">
+                                        <span class="batik-label"
+                                            style="font-size:12px; margin-bottom:5px; color:#888; display: block;">Preview
+                                            Gambar:</span>
+                                        <img id="imagePreview" src="#" alt="Preview Motif"
+                                            style="max-width: 140px; height: auto; border-radius: 6px;">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row-triple" style="margin-top: 15px;">
+                            <div class="form-col">
+                                <div class="batik-group">
+                                    <label class="batik-label">Makna Batik</label>
+                                    <textarea name="makna" class="batik-input" rows="4"
+                                        placeholder="Tuliskan makna motif..." required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="batik-group">
+                                    <label class="batik-label">Filosofi Batik</label>
+                                    <textarea name="philosophy" class="batik-input" rows="4"
+                                        placeholder="Tuliskan filosofi mendalam..." required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="batik-group">
+                                    <label class="batik-label">Sejarah Batik</label>
+                                    <textarea name="history" class="batik-input" rows="4"
+                                        placeholder="Tuliskan asal-usul/sejarah singkat..." required></textarea>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="batik-group">
-                            <label class="batik-label">Makna & Filosofi</label>
-                            <textarea name="makna" class="batik-input" rows="6"
-                                placeholder="Tuliskan cerita, sejarah, dan filosofi di balik motif batik ini..."
-                                required></textarea>
-                        </div>
-
-                        <div class="batik-actions">
+                        <div class="batik-actions" style="margin-top: 20px;">
                             <a href="{{ url_for('galeri.index') }}" class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Batik</button>
                         </div>
