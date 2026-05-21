@@ -346,6 +346,11 @@ body.dark .pagi-info b { color: #fff; }
     border-top: 1px solid #eee;
 }
 
+.info-actions .creator-info {
+    margin-right: auto;
+}
+
+
 /* =========================================
    ACTION BUTTONS STYLING (BATAL & SIMPAN)
 ========================================= */

@@ -29,8 +29,10 @@
                         class="text">Event</span></a></li>
             <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
             </li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
-            <li><a href="{{ url_for('user_manager.index') }}"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Mapping
+                        Lokasi</span></a></li>
+            <li><a href="{{ url_for('user_manager.index') }}"><i class='bx bxs-user'></i><span class="text">Users
+                        Manager</span></a></li>
             <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
         </ul>
         <ul class="side-menu">
@@ -113,7 +115,16 @@
                         </div>
 
                         <div class="info-actions">
-                           <a href="{{ url_for('informasi.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
+
+                            <div class="creator-info"
+                                style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #888;">
+                                <i class='bx bxs-info-circle' style="font-size: 16px;"></i>
+                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
+                                        info.admin_data.username if info.admin_data else 'System'
+                                        }}</strong></span>
+                            </div>
+                            <a href="{{ url_for('informasi.index') }}?page={{ request.args.get('page', 1) }}"
+                                class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Konten</button>
                         </div>
                     </form>

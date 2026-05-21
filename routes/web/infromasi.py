@@ -1,9 +1,11 @@
 from datetime import datetime
 import math
+from bson.objectid import ObjectId
 import os
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from models.informasi_model import InformasiModel
+from flask import session
 
 
 # 1. Pastikan nama Blueprint adalah 'informasi' agar url_for('informasi.edit') jalan
@@ -57,6 +59,7 @@ def create():
 
         # 2. MASUKKAN created_at DI SINI
         data_baru = {
+            "user_id": ObjectId(session.get('user_id')),
             "title": request.form['title'],
             "description": request.form['description'],
             "category": request.form['category'],

@@ -19,7 +19,7 @@ UPLOAD_FOLDER = 'static/img/galeri'
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
-    per_page = 7
+    per_page = 10
     
     # Ambil data dari MongoDB berdasarkan pencarian
     all_data = batik_model.get_all(search_query)

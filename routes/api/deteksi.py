@@ -1,8 +1,5 @@
 import os
 import numpy as np
-# 1. Tambahkan ini di paling atas untuk membungkam log TensorFlow yang tidak perlu
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
-
 import tensorflow as tf
 from flask import Blueprint, request, jsonify
 from tensorflow.keras.preprocessing import image
@@ -71,11 +68,14 @@ def predict():
 
         # Cari Makna di DB Batik Tegalan
         detail = batik_db.get_by_nama(hasil_label)
+        kategori = batik_db.get_by_category(detail['category']) if detail else None
+      
         
         return jsonify({
             "nama": hasil_label,
             "confidence": f"{confidence:.2f}%",
             "makna": detail['makna'] if detail else "Makna tidak ditemukan di database.",
+            "kategori": kategori['category'] if kategori else "Kategori tidak ditemukan di database.",
             "is_batik_tegalan": True
         }), 200
 

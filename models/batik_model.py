@@ -48,6 +48,9 @@ class BatikModel:
     
     def get_by_nama(self, nama):
         return self.collection.find_one({"name": nama})
+    
+    def get_by_category(self, category):
+        return list(self.collection.find({"category": category}))
 
     @staticmethod
     def serialize(batik):
