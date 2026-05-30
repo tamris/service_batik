@@ -73,15 +73,18 @@
                             </div>
                             <div class="event-group">
                                 <label class="event-label">Kategori</label>
-                                <select name="kategori" class="event-input" required>
-                                    <option value="Workshop" {{ 'selected' if event.kategori=='Workshop' }}>Workshop
-                                    </option>
-                                    <option value="Festival" {{ 'selected' if event.kategori=='Festival' }}>Festival
-                                    </option>
-                                    <option value="Webinar" {{ 'selected' if event.kategori=='Webinar' }}>Webinar
-                                    </option>
-                                    <option value="Pameran" {{ 'selected' if event.kategori=='Pameran' }}>Pameran
-                                    </option>
+                                <select name="category" class="event-input" required>
+                                    <option value="" disabled>Pilih Kategori...</option>
+                                        <option value="Workshop" {% if event.category=='Workshop' %}selected{% endif %}>
+                                            Workshop</option>
+                                        <option value="Festival" {% if event.category=='Festival' %}selected{%
+                                            endif %}>Festival</option>
+                                        <option value="Webinar" {% if event.category=='Webinar' %}selected{%
+                                            endif %}>Webinar</option>
+                                        <option value="Pameran" {% if event.category=='Pameran' %}selected{%
+                                            endif %}>Pameran</option>
+                                        <option value="Lomba" {% if event.category=='Lomba' %}selected{%
+                                            endif %}>Lomba</option>
                                 </select>
                             </div>
                         </div>
@@ -143,6 +146,12 @@
                                         value="{{ event.price }}" {{ 'disabled' if event.is_free }}>
                                 </div>
                             </div>
+                        </div>
+
+                         <div class="event-group">
+                            <label class="event-label">Link Pendaftaran</label>
+                            <input type="url" name="registration_url" class="event-input"
+                                placeholder="https://contoh.com/pendaftaran (opsional)" value="{{ event.registration_url }}">
                         </div>
 
                         <div class="event-group">

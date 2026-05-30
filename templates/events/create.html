@@ -71,12 +71,13 @@
                             </div>
                             <div class="event-group">
                                 <label class="event-label">Kategori</label>
-                                <select name="kategori" class="event-input" required>
+                                <select name="category" class="event-input" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
                                     <option value="Workshop">Workshop</option>
                                     <option value="Festival">Festival</option>
                                     <option value="Webinar">Webinar</option>
                                     <option value="Pameran">Pameran</option>
+                                    <option value="Lomba">Lomba</option>
                                 </select>
                             </div>
                         </div>
@@ -135,6 +136,12 @@
                                         placeholder="Masukkan harga tiket...">
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="event-group">
+                            <label class="event-label">Link Pendaftaran</label>
+                            <input type="url" name="registration_url" class="event-input"
+                                placeholder="https://contoh.com/pendaftaran (opsional)">
                         </div>
 
                         <div class="event-group">

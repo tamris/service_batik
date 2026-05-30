@@ -1,7 +1,7 @@
 import secrets
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, current_app
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
 from models.user_model import create_user, find_user_by_email, update_user_otp, update_user_password, update_verification_status
 from utils.email_utils import generate_otp, send_email_otp, send_reset_password_email
 
@@ -105,12 +105,29 @@ def login():
             return jsonify({"msg": "Silakan verifikasi akun kamu via email"}), 403
             
         access_token = create_access_token(identity=str(user['_id']))
+        refresh_token = create_refresh_token(
+            identity=str(user['_id'])
+        )
         return jsonify({
             "access_token": access_token,
+            "refresh_token": refresh_token,
             "user": {"email": user['email'], "username": user['username']}
         }), 200
     
     return jsonify({"msg": "Email atau password salah"}), 401
+
+@auth_bp.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    identity = get_jwt_identity()
+
+    new_access_token = create_access_token(
+        identity=identity
+    )
+
+    return jsonify({
+        "access_token": new_access_token
+    }), 200
 
 @auth_bp.route('/forgot-password', methods=['POST'])
 def forgot_password():

@@ -65,6 +65,7 @@ def create():
             "address": {"full": request.form.get("address")},
             "is_free": request.form.get("is_free") == "on",
             "price": request.form.get("price") if request.form.get("is_free") != "on" else "0",
+            "registration_url": request.form.get("registration_url"),
             "created_at": datetime.now()
         }
 
@@ -105,6 +106,7 @@ def edit(event_id):
             "address": {"full": request.form.get("address")},
             "is_free": request.form.get("is_free") == "on",
             "price": request.form.get("price") if request.form.get("is_free") != "on" else "0",
+            "registration_url": request.form.get("registration_url"),
             "updated_at": datetime.now()
         }
 
