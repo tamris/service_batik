@@ -12,8 +12,8 @@ class VideoModel:
             # Cari berdasarkan judul atau deskripsi
             query = {
                 "$or": [
-                    {"judul": {"$regex": search_query, "$options": "i"}},
-                    {"deskripsi": {"$regex": search_query, "$options": "i"}}
+                    {"title": {"$regex": search_query, "$options": "i"}},
+                    {"description": {"$regex": search_query, "$options": "i"}}
                 ]
             }
         # Urutkan berdasarkan created_at terbaru

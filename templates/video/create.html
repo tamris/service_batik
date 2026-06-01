@@ -19,18 +19,26 @@
     <section id="sidebar">
         <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminHub</span></a>
         <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
-            <li class="active"><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Mapping Lokasi</span></a></li>
-            <li><a href="{{ url_for('user_manager.index') }}"><i class='bx bxs-user'></i><span class="text">Users Manager</span></a></li>
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
+                        class="text">Dashboard</span></a></li>
+            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog
+                        Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
+                        Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
+                        class="text">Event</span></a></li>
+            <li class="active"><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span
+                        class="text">Video</span></a></li>
+            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Mapping
+                        Lokasi</span></a></li>
+            <li><a href="{{ url_for('user_manager.index') }}"><i class='bx bxs-user'></i><span class="text">Users
+                        Manager</span></a></li>
             <li><a href="#"><i class='bx bxs-message-dots'></i><span class="text">Dataset Chatbot</span></a></li>
         </ul>
         <ul class="side-menu">
             <li><a href="#"><i class='bx bxs-cog'></i><span class="text">Settings</span></a></li>
-            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a></li>
+            <li><a href="#" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a>
+            </li>
         </ul>
     </section>
 
@@ -55,15 +63,21 @@
             <div class="table-data">
                 <div class="order video-form-container">
                     <form action="{{ url_for('video.create') }}" method="POST">
-                        
+
                         <div class="video-grid title-category-grid">
                             <div class="video-group">
-                                <label class="video-label">Judul Video</label>
-                                <input type="text" name="judul" class="video-input" placeholder="Masukkan judul video..." required>
+                                <label for="youtube_url" class="video-label">URL YouTube</label>
+                                <div class="input-with-clear">
+                                    <input type="url" name="youtube_url" id="youtube_url" class="video-input"
+                                        placeholder="Contoh: https://www.youtube.com/watch?v=..." required>
+                                    <button type="button" id="clear-youtube" class="clear-input-btn" aria-label="Hapus URL YouTube" title="Hapus URL YouTube">&times;</button>
+                                </div>
+                                <small class="input-hint">Masukkan link penuh dari YouTube agar sistem dapat mendeteksi
+                                    detail video otomatis.</small>
                             </div>
                             <div class="video-group">
                                 <label class="video-label">Kategori</label>
-                                <select name="kategori" class="video-input" required>
+                                <select name="category" class="video-input" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
                                     <option value="Sejarah">Sejarah</option>
                                     <option value="Event">Event</option>
@@ -73,15 +87,19 @@
                             </div>
                         </div>
 
-                        <div class="video-group">
-                            <label class="video-label">URL YouTube</label>
-                            <input type="url" name="youtube_url" class="video-input" placeholder="Contoh: https://www.youtube.com/watch?v=..." required>
-                            <small class="input-hint">Masukkan link penuh dari YouTube agar sistem dapat men-generate thumbnail otomatis.</small>
-                        </div>
-
-                        <div class="video-group">
-                            <label class="video-label">Deskripsi Video</label>
-                            <textarea name="deskripsi" class="video-input" rows="6" placeholder="Tuliskan detail atau deskripsi mengenai konten video ini..." required></textarea>
+                        <div id="yt-preview" class="video-preview-wrapper" style="display:none;">
+                            <label class="video-label">Live Preview Konten</label>
+                            <div class="video-preview-card">
+                                <div class="preview-thumb-box">
+                                    <img id="yt-thumb" src="" alt="Thumbnail Video">
+                                    <span class="play-badge"><i class='bx bx-play'></i></span>
+                                </div>
+                                <div class="preview-info-box">
+                                    <h3 id="yt-title">Memuat Judul Video...</h3>
+                                    <p id="yt-channel"><i class='bx bx-user-circle'></i> Nama Channel</p>
+                                    <span class="status-badge"><i class='bx bx-check-circle'></i> Link Valid</span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="video-actions">
@@ -107,6 +125,67 @@
                 document.body.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
             }
+        });
+    </script>
+
+    <script>
+        document.getElementById('youtube_url').addEventListener('input', function () {
+            const url = this.value;
+            // Regex support: normal URL, share URL (youtu.be), dan Shorts
+            const match = url.match(/(?:v=|youtu\.be\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+
+            const previewWrapper = document.getElementById('yt-preview');
+            const thumb = document.getElementById('yt-thumb');
+            const title = document.getElementById('yt-title');
+            const channel = document.getElementById('yt-channel');
+            const clearButton = document.getElementById('clear-youtube');
+
+            clearButton.style.display = url.trim() ? 'flex' : 'none';
+
+            if (match) {
+                const videoId = match[1];
+
+                // Set thumbnail fallback dulu biar cepat muncul
+                thumb.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                title.innerText = "Mengambil data video...";
+                channel.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Menghubungkan...`;
+                previewWrapper.style.display = 'block';
+
+                // Fetch data asli (Judul & Creator) lewat oEmbed API YouTube secara asynchronous
+                fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Video tidak ditemukan atau privat');
+                        return response.json();
+                    })
+                    .then(data => {
+                        title.innerText = data.title;
+                        channel.innerHTML = `<i class='bx bx-user-circle'></i> ${data.author_name}`;
+                    })
+                    .catch(err => {
+                        title.innerText = "Video Terdeteksi (Gagal memuat judul otomatis)";
+                        channel.innerHTML = `<i class='bx bx-error-circle' style='color: #fd7238'></i> Detail tidak dapat dijangkau`;
+                    });
+
+            } else {
+                previewWrapper.style.display = 'none';
+            }
+        });
+
+        document.getElementById('clear-youtube').addEventListener('click', function () {
+            const youtubeInput = document.getElementById('youtube_url');
+            const previewWrapper = document.getElementById('yt-preview');
+            const thumb = document.getElementById('yt-thumb');
+            const title = document.getElementById('yt-title');
+            const channel = document.getElementById('yt-channel');
+            const clearButton = document.getElementById('clear-youtube');
+
+            youtubeInput.value = '';
+            youtubeInput.focus();
+            previewWrapper.style.display = 'none';
+            thumb.src = '';
+            title.innerText = 'Memuat Judul Video...';
+            channel.innerHTML = `<i class='bx bx-user-circle'></i> Nama Channel`;
+            clearButton.style.display = 'none';
         });
     </script>
 </body>
