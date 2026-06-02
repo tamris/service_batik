@@ -11,7 +11,7 @@ def get_all_batik():
         # 1. Parameter Pagination & Pencarian
         page = request.args.get('page', 1, type=int)
         search_query = request.args.get('q', '')
-        per_page = 10
+        per_page = 20
 
         # 2. Ambil data dari MongoDB
         all_data = batik_model.get_all(search_query)

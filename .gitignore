@@ -3,3 +3,7 @@ __pycache__
 dataset
 batik_model.h5
 db_chroma
+klasifikasi_model.h5
+batik_model_baru.keras
+batik_model_weights.weights.h5
+model_architecture.json
