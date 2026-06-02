@@ -61,12 +61,15 @@ def create():
             "name": request.form['name'],
             "description": request.form['description'],
             "category": request.form['category'],
-            "latitude": request.form['latitude'],
-            "longitude": request.form['longitude'],
+            "latitude": float(request.form['latitude']), 
+            "longitude": float(request.form['longitude']),
             "address": {
                 "full": request.form['address_full']
             },
             "image_url": image_url,
+            "average_rating": float(0.0),  # Inisialisasi awal 0.0 bertipe Float
+            "total_reviews": int(0),       # Inisialisasi awal 0 bertipe Integer
+            "reviews": [],
             "created_at": datetime.now(),
             "update_at": datetime.now()
         }
@@ -93,11 +96,12 @@ def edit(mapping_id):
             "name": request.form['name'],
             "description": request.form['description'],
             "category": request.form['category'],
-            "latitude": request.form['latitude'],
-            "longitude": request.form['longitude'],
+            "latitude": float(request.form['latitude']), 
+            "longitude": float(request.form['longitude']),
             "address": {
                 "full": request.form['address_full']
             },
+            
             "update_at": datetime.now()
         }
         
