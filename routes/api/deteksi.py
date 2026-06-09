@@ -33,7 +33,7 @@ def init_model():
         x = base_model.output
         x = tf.keras.layers.GlobalAveragePooling2D()(x)
         x = tf.keras.layers.Dense(1024, activation='relu')(x)
-        predictions = tf.keras.layers.Dense(25, activation='softmax')(x)
+        predictions = tf.keras.layers.Dense(26, activation='softmax')(x)
         
         model = tf.keras.models.Model(inputs=base_model.input, outputs=predictions)
         
@@ -57,7 +57,7 @@ if os.path.exists(DATASET_DIR):
     CATEGORIES = sorted([f for f in os.listdir(DATASET_DIR) if os.path.isdir(os.path.join(DATASET_DIR, f))])
 else:
     CATEGORIES = [
-        'Ambringan', 'Beras Mawur', 'Bukan Batik Tegalan', 'Cempaka Putih', 
+        'Ambringan', 'Beras Mawur', 'Bukan Batik', 'Bukan Batik Tegalan', 'Cempaka Putih', 
         'Ciprat', 'Galaran', 'Glondahan', 'Grandilan', 'Gribigan', 
         'Jago Mogok', 'Kacangan', 'Kangkung', 'Kapal Sender', 'Kawung', 
         'Kembang Pacar', 'Mahkota', 'Parang', 'Pasiran', 'Poci', 'Remekan', 
@@ -120,6 +120,9 @@ def predict():
         # --- EVALUASI HASIL PREDIKSI ---
         if hasil_label == "Bukan Batik Tegalan":
             makna_output = "Objek ini bukan merupakan bagian dari motif Batik Tegalan."
+            is_batik = False
+        elif hasil_label == "Bukan Batik":
+            makna_output = "Objek ini bukan merupakan bagian dari motif Batik."
             is_batik = False
         else:
             makna_output = "Makna tidak ditemukan di database."
