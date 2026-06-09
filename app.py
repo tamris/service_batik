@@ -43,7 +43,7 @@ app.register_blueprint(auth_web)
 app.register_blueprint(galeri_bp)
 app.register_blueprint(informasi_bp)
 app.register_blueprint(video_bp)
-app.register_blueprint(event_bp)
+app.register_blueprint(event_bp)    
 app.register_blueprint(mapping_bp) 
 app.register_blueprint(user_bp)
 

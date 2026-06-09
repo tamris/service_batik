@@ -55,27 +55,40 @@ def create():
         else:
             image_url = 'default_map.png'
 
-        # Susun data sesuai skema database kamu
+        # KUNCI BEST PRACTICE MONGODB: 
+        # Ambil kategori tunggal dari dropdown (Pasti valid buat warna PIN)
+        primary_category = request.form.get('category')
+
+        # Ambil list semua kategori yang dicentang
+        selected_categories = request.form.getlist('categories')
+
+        # Jika user lupa mencentang checkbox tapi memilih kategori utama, 
+        # otomatis masukkan kategori utama ke dalam array biar data sinkron
+        if primary_category and primary_category not in selected_categories:
+            selected_categories.append(primary_category)
+
         data_baru = {
-            "user_id": ObjectId(session.get('user_id')), # KUNCI: Track siapa yang buat
+            "user_id": ObjectId(session.get('user_id')), 
             "name": request.form['name'],
             "description": request.form['description'],
-            "category": request.form['category'],
+            "category": primary_category,       # Masuk ke field tunggal (murni buat PIN)
+            "categories": selected_categories,  # Masuk ke array (buat filter & info lengkap)
             "latitude": float(request.form['latitude']), 
             "longitude": float(request.form['longitude']),
             "address": {
                 "full": request.form['address_full']
             },
+            "phone": request.form['phone'],
             "image_url": image_url,
-            "average_rating": float(0.0),  # Inisialisasi awal 0.0 bertipe Float
-            "total_reviews": int(0),       # Inisialisasi awal 0 bertipe Integer
+            "average_rating": float(0.0),  
+            "total_reviews": int(0),       
             "reviews": [],
             "created_at": datetime.now(),
             "update_at": datetime.now()
         }
 
         mapping_model.create(data_baru)
-        flash('Data Lokasi berhasil ditambahkan!', 'success')
+        flash('Data Lokasi berhasil ditambahkan dengan multi-kategori!', 'success')
         return redirect(url_for('mapping.index'))
 
     return render_template('mapping/create.html')
@@ -92,16 +105,25 @@ def edit(mapping_id):
     if request.method == 'POST':
         page = request.form.get('page', 1, type=int)
         
+        # AMBIL DATA EKSPLISIT DARI DROPDOWN DAN CHECKBOX
+        primary_category = request.form.get('category')
+        selected_categories = request.form.getlist('categories')
+        
+        # Sinkronisasi: Jika di dropdown pilih Toko, pastikan Toko juga ada di dalam array
+        if primary_category and primary_category not in selected_categories:
+            selected_categories.append(primary_category)
+        
         data_update = {
             "name": request.form['name'],
             "description": request.form['description'],
-            "category": request.form['category'],
+            "category": primary_category,       # Kategori Utama tunggal
+            "categories": selected_categories,  # Array kategori lengkap
             "latitude": float(request.form['latitude']), 
             "longitude": float(request.form['longitude']),
             "address": {
                 "full": request.form['address_full']
             },
-            
+            "phone": request.form['phone'],
             "update_at": datetime.now()
         }
         

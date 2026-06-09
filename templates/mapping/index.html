@@ -62,7 +62,7 @@
             <li class="active">
                 <a href="{{ url_for('mapping.index') }}">
                     <i class='bx bxs-map'></i>
-                    <span class="text">Mapping Lokasi</span>
+                    <span class="text">Peta Lokasi</span>
                 </a>
             </li>
             {% if session.get('role') == 'superadmin' %}
@@ -123,7 +123,7 @@
         <main>
             <div class="head-title">
                 <div class="left">
-                    <h1>Mapping Lokasi</h1>
+                    <h1>Peta Lokasi</h1>
                     <ul class="breadcrumb">
                         <li><a href="#">Dashboard</a></li>
                         <li><i class='bx bx-chevron-right'></i></li>
@@ -193,6 +193,7 @@
                                 <td
                                     style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
                                     {{ m.address.full }}
+                                    {% if m.phone %}<br><i class='bx bx-phone' style="color: #28a745; margin-right: 4px;"></i> {{ m.phone }}{% endif %}
                                 </td>
 
                                 <td style="vertical-align: middle; padding: 16px 10px;">
@@ -202,14 +203,14 @@
                                             <i class='bx bxs-edit'></i>
                                         </a>
 
-                                        <form action="{{ url_for('mapping.delete', mapping_id=m._id) }}?page={{ page }}"
+                                        <!-- <form action="{{ url_for('mapping.delete', mapping_id=m._id) }}?page={{ page }}"
                                             method="POST" style="display:inline;"
                                             onsubmit="return confirm('Yakin mau menghapus lokasi {{ m.name }} secara permanen?');">
                                             <button type="submit" class="btn-icon btn-delete" title="Hapus Lokasi"
                                                 style="border:none; cursor:pointer;">
                                                 <i class='bx bxs-trash'></i>
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </td>
 

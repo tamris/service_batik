@@ -119,16 +119,52 @@
                                 <label class="map-label">Nama Lokasi / Galeri</label>
                                 <input type="text" name="name" class="map-input" value="{{ mapping.name }}" required>
                             </div>
+
                             <div class="map-group">
-                                <label class="map-label">Kategori</label>
-                                <select name="category" class="map-input" required>
+                                <label class="map-label">Kategori Utama (Warna PIN di Peta)</label>
+                                <select name="category" id="utamaSelect" class="map-input" required>
                                     <option value="Sentra Batik" {% if mapping.category=='Sentra Batik' %}selected{%
                                         endif %}>Sentra Batik</option>
                                     <option value="Toko" {% if mapping.category=='Toko' %}selected{% endif %}>Toko /
-                                        Oleh-oleh</option>
-                                    <option value="Museum" {% if mapping.category=='Museum' %}selected{% endif %}>Museum
-                                        / Edukasi</option>
+                                        Showroom</option>
+                                    <option value="Pengrajin" {% if mapping.category=='Pengrajin' %}selected{% endif %}>
+                                        Workshop Pengrajin</option>
+                                    <option value="Edukasi" {% if mapping.category=='Edukasi' %}selected{% endif %}>
+                                        Wisata Edukasi</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="map-group" style="margin-top: 15px;">
+                            <label class="map-label" style="display: block; margin-bottom: 8px;">Layanan / Kategori
+                                Lengkap (Bisa pilih lebih dari satu)</label>
+                            <div
+                                style="display: flex; gap: 20px; flex-wrap: wrap; background: var(--light); padding: 10px; border-radius: 8px;">
+
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" name="categories" value="Sentra Batik" class="sub-check" {%
+                                        if mapping.categories and 'Sentra Batik' in mapping.categories %}checked{% endif
+                                        %}> Sentra Batik
+                                </label>
+
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" name="categories" value="Toko" class="sub-check" {% if
+                                        mapping.categories and 'Toko' in mapping.categories %}checked{% endif %}> Toko /
+                                    Showroom
+                                </label>
+
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" name="categories" value="Pengrajin" class="sub-check" {% if
+                                        mapping.categories and 'Pengrajin' in mapping.categories %}checked{% endif %}>
+                                    Workshop Pengrajin
+                                </label>
+
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" name="categories" value="Edukasi" class="sub-check" {% if
+                                        mapping.categories and 'Edukasi' in mapping.categories %}checked{% endif %}>
+                                    Wisata Edukasi
+                                </label>
+
                             </div>
                         </div>
 
@@ -174,6 +210,12 @@
                                 required>{{ mapping.description }}</textarea>
                         </div>
 
+                         <div class="map-group">
+                            <label class="map-label">Nomor Telepon</label>
+                            <input name="phone" type="tel" class="map-input" required
+                                placeholder="Masukkan nomor telepon lokasi ini..." value="{{ mapping.phone or '' }}">
+                        </div>
+
                         <div class="map-group">
                             <label class="map-label">Foto Lokasi (Opsional)</label>
                             <input type="file" name="image_url" class="map-input" accept="image/*">
@@ -201,7 +243,7 @@
 
                         </div>
 
-                       
+
                     </form>
                 </div>
             </div>
@@ -270,6 +312,32 @@
                         alert("Lokasi tidak ditemukan. Masukkan nama tempat/jalan yang lebih spesifik.");
                     }
                 });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const utamaSelect = document.getElementById('utamaSelect');
+            const subCheckboxes = document.querySelectorAll('.sub-check');
+
+            function handleCheckboxDisabling() {
+                const nilaiUtama = utamaSelect.value;
+
+                subCheckboxes.forEach(checkbox => {
+                    if (checkbox.value === nilaiUtama) {
+                        checkbox.checked = false; // Supaya tidak dobel kirim data
+                        checkbox.disabled = true;
+                        checkbox.parentElement.style.opacity = '0.4'; // Efek visual buram
+                    } else {
+                        checkbox.disabled = false;
+                        checkbox.parentElement.style.opacity = '1';
+                    }
+                });
+            }
+
+            // 1. Jalankan langsung saat halaman pertama kali dimuat (Edit Mode Init)
+            handleCheckboxDisabling();
+
+            // 2. Jalankan ulang setiap kali admin mengubah pilihan dropdown
+            utamaSelect.addEventListener('change', handleCheckboxDisabling);
         });
     </script>
 </body>

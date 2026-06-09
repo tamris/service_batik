@@ -8,33 +8,31 @@ mapping_api_bp = Blueprint('mapping_api', __name__)
 mapping_model = MappingModel()
 
 def serialize_doc(doc):
-    """Helper untuk mengubah ObjectId dan datetime menjadi string agar bisa di-JSON-kan"""
-    if not doc:
+    """Fungsi serialisasi yang super aman untuk membersihkan data BSON MongoDB ke JSON"""
+    if doc is None:
         return None
-    doc['_id'] = str(doc['_id'])
-    if 'user_id' in doc:
-        doc['user_id'] = str(doc['user_id'])
-    if 'created_at' in doc and isinstance(doc['created_at'], datetime):
-        doc['created_at'] = doc['created_at'].isoformat()
-    if 'update_at' in doc and isinstance(doc['update_at'], datetime):
-        doc['update_at'] = doc['update_at'].isoformat()
-    
-    # Bersihkan data di dalam array reviews jika ada
-    if 'reviews' in doc and isinstance(doc['reviews'], list):
-        for r in doc['reviews']:
-            if 'review_id' in r:
-                r['review_id'] = str(r['review_id'])
-            if 'user_id' in r:
-                r['user_id'] = str(r['user_id'])
-            if 'created_at' in r and isinstance(r['created_at'], datetime):
-                r['created_at'] = r['created_at'].isoformat()
-                
-    # Bersihkan field join admin_data dari aggregation jika ada
-    if 'admin_data' in doc and isinstance(doc['admin_data'], dict):
-        if '_id' in doc['admin_data']:
-            doc['admin_data']['_id'] = str(doc['admin_data']['_id'])
-        # Hilangkan password demi keamanan agar tidak terkirim ke API
-        doc['admin_data'].pop('password', None) 
+        
+    if isinstance(doc, list):
+        return [serialize_doc(item) for item in doc]
+        
+    if isinstance(doc, dict):
+        new_doc = {}
+        for key, value in doc.items():
+            # Cegah password admin ikut terkirim
+            if key == 'password':
+                continue
+            # Konversi ObjectId ke string
+            if isinstance(value, ObjectId):
+                new_doc[key] = str(value)
+            # Konversi Datetime ke ISO String
+            elif isinstance(value, datetime):
+                new_doc[key] = value.isoformat()
+            # Rekursif jika ada nested object/list
+            elif isinstance(value, (dict, list)):
+                new_doc[key] = serialize_doc(value)
+            else:
+                new_doc[key] = value
+        return new_doc
         
     return doc
 

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <title>AdminHub - Tambah Mapping Lokasi</title>
+    <title>AdminHub - Tambah Peta Lokasi</title>
 </head>
 
 <body>
@@ -59,7 +59,7 @@
             <li class="active">
                 <a href="{{ url_for('mapping.index') }}">
                     <i class='bx bxs-map'></i>
-                    <span class="text">Mapping Lokasi</span>
+                    <span class="text">Peta Lokasi</span>
                 </a>
             </li>
             {% if session.get('role') == 'superadmin' %}
@@ -137,13 +137,42 @@
                                     required>
                             </div>
                             <div class="map-group">
-                                <label class="map-label">Kategori</label>
-                                <select name="category" class="map-input" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
+                                <label class="map-label">Kategori Utama (Warna PIN di Peta)</label>
+                                <select name="category" id="utamaSelect" class="map-input" required>
+                                    <option value="" disabled selected>Pilih Kategori Utama</option>
                                     <option value="Sentra Batik">Sentra Batik</option>
-                                    <option value="Toko">Toko / Oleh-oleh</option>
-                                    <option value="Museum">Museum / Edukasi</option>
+                                    <option value="Toko">Toko / Showroom</option>
+                                    <option value="Pengrajin">Workshop Pengrajin</option>
+                                    <option value="Edukasi">Wisata Edukasi</option>
                                 </select>
+                            </div>
+
+                            <div class="map-group" style="margin-top: 15px;">
+                                <label class="map-label" style="display: block; margin-bottom: 8px;">Layanan / Kategori
+                                    Lengkap</label>
+                                <div
+                                    style="display: flex; gap: 20px; flex-wrap: wrap; background: var(--light); padding: 10px; border-radius: 8px;">
+                                    <label class="check-label" id="label-Sentra-Batik"
+                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" name="categories" value="Sentra Batik" class="sub-check">
+                                        Sentra Batik
+                                    </label>
+                                    <label class="check-label" id="label-Toko"
+                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" name="categories" value="Toko" class="sub-check"> Toko /
+                                        Showroom
+                                    </label>
+                                    <label class="check-label" id="label-Pengrajin"
+                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" name="categories" value="Pengrajin" class="sub-check">
+                                        Workshop Pengrajin
+                                    </label>
+                                    <label class="check-label" id="label-Edukasi"
+                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" name="categories" value="Edukasi" class="sub-check">
+                                        Wisata Edukasi
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -164,14 +193,14 @@
 
                         <div class="coord-grid">
                             <div class="map-group">
-                                <label class="map-label" type="number"step="any">Latitude</label>
+                                <label class="map-label" type="number" step="any">Latitude</label>
                                 <input type="number" id="latitude" name="latitude" class="map-input" step="any"
                                     placeholder="Misal: -6.8797" required>
                             </div>
                             <div class="map-group">
                                 <label class="map-label" type="number" step="any">Longitude</label>
-                                <input type="number" step="any" id="longitude" name="longitude" class="map-input" step="any"
-                                    placeholder="Misal: 109.1256" required>
+                                <input type="number" step="any" id="longitude" name="longitude" class="map-input"
+                                    step="any" placeholder="Misal: 109.1256" required>
                             </div>
                         </div>
 
@@ -186,7 +215,11 @@
                             <textarea name="description" class="map-input" rows="4" required
                                 placeholder="Jelaskan sedikit tentang lokasi ini..."></textarea>
                         </div>
-
+                        <div class="map-group">
+                            <label class="map-label">Nomor Telepon</label>
+                            <input name="phone" type="tel" class="map-input" required
+                                placeholder="Masukkan nomor telepon lokasi ini...">
+                        </div>
                         <div class="map-group">
                             <label class="map-label">Foto Lokasi</label>
                             <input type="file" name="image_url" class="map-input" accept="image/*" required>
@@ -302,6 +335,28 @@
                     btnSearch.innerHTML = "<i class='bx bx-search'></i> Cari";
                     alert("Gagal terhubung ke pencarian lokasi.");
                 });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const utamaSelect = document.getElementById('utamaSelect');
+            const subCheckboxes = document.querySelectorAll('.sub-check');
+
+            utamaSelect.addEventListener('change', function () {
+                const nilaiUtama = this.value;
+
+                subCheckboxes.forEach(checkbox => {
+                    // Jika nilai checkbox sama dengan Kategori Utama yang dipilih
+                    if (checkbox.value === nilaiUtama) {
+                        checkbox.checked = false; // Uncheck otomatis kalau tadinya dicentang
+                        checkbox.disabled = true; // Matikan fungsinya biar gak bisa diklik
+                        checkbox.parentElement.style.opacity = '0.4'; // Bikin tampilannya agak buram (opsional)
+                    } else {
+                        // Kembalikan ke normal untuk nilai yang berbeda
+                        checkbox.disabled = false;
+                        checkbox.parentElement.style.opacity = '1';
+                    }
+                });
+            });
         });
     </script>
 </body>
