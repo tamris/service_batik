@@ -21,8 +21,9 @@ def index():
     search_query = request.args.get('q', '')
     per_page = 10
     
-    # Ambil data dari MongoDB berdasarkan pencarian
-    all_data = batik_model.get_all(search_query)
+    # 💡 KITA PAKAI METHOD UTAMA LU: Ambil semua data (aktif & nonaktif)
+   # Di dalam file routes/web/galeri.py bagian def index()
+    all_data = batik_model.get_all(search_query, include_deleted=True) # 💡 Tambahkan parameter True
 
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -33,8 +34,6 @@ def index():
     
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
-
-    print("SESSION FLASH:", session.get('_flashes'))
 
     return render_template('galeri/index.html', 
                            batiks=data_tampil, 
@@ -49,7 +48,7 @@ def index():
 @login_required
 def create():
     if request.method == 'POST':
-        # Ubah gambar menjadi image_url[cite: 7]
+        # Kembali menggunakan image_url sesuai database kamu
         file = request.files.get('image_url') 
         if file and file.filename != '':
             filename = secure_filename(file.filename)
@@ -61,25 +60,25 @@ def create():
             image_url = 'default_batik.png'
 
         colors = [
-        request.form.get('dominant_color_1'),
-        request.form.get('dominant_color_2'),
-        request.form.get('dominant_color_3'),
-        request.form.get('dominant_color_4')
-    ]
-    # Filter warna agar tidak ada nilai None atau kosong
+            request.form.get('dominant_color_1'),
+            request.form.get('dominant_color_2'),
+            request.form.get('dominant_color_3'),
+            request.form.get('dominant_color_4')
+        ]
         dominant_colors_array = [c for c in colors if c]
             
         data_baru = {
             "user_id": ObjectId(session.get('user_id')),
-            "name": request.form['name'], # Ubah nama menjadi name[cite: 7]
-            "category": request.form['category'], # Tambahan field category[cite: 7]
+            "name": request.form['name'],
+            "category": request.form['category'],
             "makna": request.form['makna'],
-            "philosophy": request.form['philosophy'], # Tambahan field philosophy[cite: 7]
-            "technique": request.form['technique'], # Tambahan field technique[cite: 7]
-            "history": request.form['history'], # Tambahan field history[cite: 7]
-            "image_url": image_url, # Ubah gambar menjadi image_url[cite: 7]
-            "dominant_color": dominant_colors_array, # Tambahan field dominant_color[cite: 7]
-            "created_at": datetime.now()
+            "philosophy": request.form['philosophy'],
+            "technique": request.form['technique'],
+            "history": request.form['history'],
+            "image_url": image_url,  # Tetap image_url
+            "dominant_color": dominant_colors_array,
+            "created_at": datetime.now(),
+            "is_deleted": False
         }
 
         batik_model.create(data_baru)
@@ -89,6 +88,7 @@ def create():
     return render_template('galeri/create.html')
 
 @galeri_bp.route('/data-batik/edit/<string:batik_id>', methods=['GET', 'POST'])
+@login_required
 def edit(batik_id):
     batik_terpilih = batik_model.get_by_id(batik_id)
 
@@ -99,34 +99,31 @@ def edit(batik_id):
     if request.method == 'POST':
         page = request.form.get('page', 1, type=int)
         
-        # Tangkap ke-4 input warna dari form edit web
         colors = [
             request.form.get('dominant_color_1'),
             request.form.get('dominant_color_2'),
             request.form.get('dominant_color_3'),
             request.form.get('dominant_color_4')
         ]
-        # Bersihkan dari nilai kosong/None
         dominant_colors_array = [c for c in colors if c]
 
         data_update = {
-            "name": request.form['name'], # Ubah penangkapan update ke name
-            "category": request.form['category'], # Buka comment ini nanti kalau form edit juga ditambah category
+            "name": request.form['name'],
+            "category": request.form['category'],
             "makna": request.form['makna'],
-            "philosophy": request.form['philosophy'], # Tambahan field philosophy
-            "technique": request.form['technique'], # Tambahan field technique
-            "history": request.form['history'],     # Field sejarah yang kita tambahkan sebelumnya
-            "dominant_color": dominant_colors_array # Update menjadi array of hex codes baru
+            "philosophy": request.form['philosophy'],
+            "technique": request.form['technique'],
+            "history": request.form['history'],
+            "dominant_color": dominant_colors_array
         }
         
-        # Ubah gambar menjadi image_url
         gambar_file = request.files.get('image_url') 
         if gambar_file and gambar_file.filename != '':
             filename = secure_filename(gambar_file.filename)
             if not os.path.exists(UPLOAD_FOLDER):
                 os.makedirs(UPLOAD_FOLDER)
             gambar_file.save(os.path.join(UPLOAD_FOLDER, filename))
-            data_update['image_url'] = filename # Update field image_url
+            data_update['image_url'] = filename  # Tetap image_url
         
         batik_model.update(batik_id, data_update)
         flash('Data batik berhasil diperbarui!', 'success')
@@ -135,7 +132,15 @@ def edit(batik_id):
     return render_template('galeri/edit.html', batik=batik_terpilih)
 
 @galeri_bp.route('/data-batik/hapus/<string:batik_id>')
+@login_required
 def delete(batik_id):
     batik_model.delete(batik_id)
-    flash('Data batik berhasil dihapus!', 'success')
+    flash('Data batik berhasil dinonaktifkan!', 'success')
+    return redirect(url_for('galeri.index'))
+
+@galeri_bp.route('/data-batik/restore/<string:batik_id>')
+@login_required
+def restore(batik_id):
+    batik_model.restore(batik_id)
+    flash('Data batik berhasil diaktifkan kembali!', 'success')
     return redirect(url_for('galeri.index'))

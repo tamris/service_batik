@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('tableBody');
     const paginationContainer = document.getElementById('paginationContainer');
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.addEventListener('input', function () {
             const query = this.value;
             // Ambil URL endpoint yang dititipkan di atribut data-url HTML
-            const endpointUrl = this.getAttribute('data-url'); 
+            const endpointUrl = this.getAttribute('data-url');
 
             clearTimeout(timeout);
             timeout = setTimeout(() => {
@@ -41,24 +41,46 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // FUNGSI DELETE (Ditaruh di luar DOMContentLoaded agar bisa dipanggil lewat onclick di HTML)
-function galeriDelete(id) {
+function confirmDelete(batikId, batikName) {
+    const isDark = document.body.classList.contains('dark');
+
     Swal.fire({
-        title: 'Hapus Data?',
-        text: "Data batik akan dihapus permanen!",
+        title: 'Apakah Anda yakin?',
+        text: `Motif "${batikName}" akan dinonaktifkan dari katalog publik.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, Hapus!',
+        confirmButtonText: 'Ya, Nonaktifkan!',
         cancelButtonText: 'Batal',
-        background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
-        color: document.body.classList.contains('dark') ? '#fff' : '#000'
+        background: isDark ? '#0C0C1E' : '#fff',
+        color: isDark ? '#fff' : '#000'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/data-batik/hapus/" + id;
+            // Alihkan langsung ke route soft delete Flask
+            window.location.href = `/data-batik/hapus/${batikId}`;
         }
-    })
-    
+    });
+}
+
+function confirmRestore(batikId, batikName) {
+    const isDark = document.body.classList.contains('dark');
+    Swal.fire({
+        title: 'Aktifkan Kembali?',
+        text: `Motif "${batikName}" akan diaktifkan penuh seperti semula.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Aktifkan!',
+        cancelButtonText: 'Batal',
+        background: isDark ? '#0C0C1E' : '#fff',
+        color: isDark ? '#fff' : '#000'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `/data-batik/restore/${batikId}`;
+        }
+    });
 }
 
 function artikelDelete(id) {

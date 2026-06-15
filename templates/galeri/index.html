@@ -135,6 +135,8 @@
 					<i class='bx bxs-plus-circle'></i>
 					<span class="text">Tambah Batik</span>
 				</a>
+
+			
 			</div>
 
 			<div class="table-data">
@@ -165,7 +167,8 @@
 						</thead>
 						<tbody id="tableBody">
 							{% for b in batiks %}
-							<tr style="border-bottom: 1px solid #eee;">
+							<tr
+								style="border-bottom: 1px solid #eee; {% if b.is_deleted %} opacity: 0.5; background-color: rgba(0,0,0,0.03); {% endif %}">
 								<td style="vertical-align: middle; padding: 12px 0;">
 									<div class="batik-thumb">
 										<img src="{{ url_for('static', filename='img/galeri/' + b.image_url) }}"
@@ -175,9 +178,12 @@
 
 								<td style="vertical-align: middle; padding: 12px 10px 12px 0;">
 									<span class="batik-title">{{ b.name }}</span>
+									{% if b.is_deleted %}
+									<span
+										style="font-size: 10px; background: #e74c3c; color: white; padding: 1px 5px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px;">Nonaktif</span>
+									{% endif %}
 								</td>
 
-								<!-- KOLOM KATEGORI BARU -->
 								<td style="vertical-align: middle; padding: 12px 10px 12px 0;">
 									<span class="badge-category">{{ b.category if b.category else 'Belum Diatur'
 										}}</span>
@@ -191,14 +197,22 @@
 
 								<td style="vertical-align: middle; padding: 12px 0;">
 									<div class="action-btn">
+										{% if b.is_deleted %}
+										<a href="#" onclick="confirmRestore('{{ b._id|string }}', '{{ b.name }}')"
+											class="btn-icon" title="Aktifkan Kembali"
+											style="background: #28a745; color: white; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+											<i class='bx bx-refresh' style="font-size: 20px;"></i>
+										</a>
+										{% else %}
 										<a href="{{ url_for('galeri.edit', batik_id=b._id) }}?page={{ page }}"
 											class="btn-icon btn-edit" title="Edit">
 											<i class='bx bxs-edit'></i>
 										</a>
-										<!-- <a href="#" onclick="galeriDelete('{{ b._id|string }}')"
+										<a href="#" onclick="confirmDelete('{{ b._id|string }}', '{{ b.name }}')"
 											class="btn-icon btn-delete" title="Hapus">
 											<i class='bx bxs-trash'></i>
-										</a> -->
+										</a>
+										{% endif %}
 									</div>
 								</td>
 							</tr>
