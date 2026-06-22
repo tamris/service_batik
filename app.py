@@ -18,6 +18,7 @@ from routes.api.chatbot_api import chatbot_bp
 from routes.api.video_api import video_api_bp
 from routes.api.event_api import event_api_bp
 from routes.api.maping_api import mapping_api_bp
+from routes.api.studio_api import studio_api_bp
 from utils.rag_utils import initialize_rag
 
 app = Flask(__name__)
@@ -57,6 +58,7 @@ app.register_blueprint(informasi_api_bp, url_prefix='/api')
 app.register_blueprint(video_api_bp, url_prefix='/api')
 app.register_blueprint(event_api_bp, url_prefix='/api')
 app.register_blueprint(mapping_api_bp, url_prefix='/api')
+app.register_blueprint(studio_api_bp, url_prefix='/api')
 
 
 if __name__ == '__main__':

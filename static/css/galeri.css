@@ -226,7 +226,7 @@ body.dark .pagi-info b { color: #fff; }
     box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
 }
 
-/* Custom File Upload Box */
+/* Custom File Upload Box Bawaan */
 .file-upload-box {
     position: relative;
     width: 100%;
@@ -391,29 +391,6 @@ body.dark .badge-category {
     color: #6eb4f7;
 }
 
-/* =========================================
-   LAYOUT UTAMA FORM GRID (ANTI-MULUR)
-========================================= */
-.form-row-triple {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-/* Sedikit penyesuaian agar upload box tingginya ideal saat berdampingan */
-.file-upload-box {
-    margin-bottom: 0;
-}
-
-/* Responsif untuk layar HP / Tablet kecil */
-@media (max-width: 992px) {
-    .form-row-triple {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-}
-
 .batik-color-picker {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -431,4 +408,210 @@ body.dark .badge-category {
 .batik-color-picker::-moz-color-swatch {
     border-radius: 50%;
     border: 2px solid #ddd;
+}
+
+
+/* ========================================================================
+   🛠️ REVISI GRID FINAL LINIER: LAYOUT BARIS UNTUK KEAMANAN WARNA PIPET
+   ======================================================================== */
+
+/* Baris 1: Grid Atas 2 Kolom Seimbang */
+.form-grid-upper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Baris 2: Media Section Lebar Penuh (Vertikal) */
+.form-row-media-full {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Optimasi 1: Boks Upload File Dibuat Tipis Menyamping */
+.form-row-media-full .file-upload-box {
+    width: 100%;
+    padding: 16px 20px !important;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    text-align: center;
+    background: #fafafa;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+}
+
+body.dark .form-row-media-full .file-upload-box {
+    background: #25282b;
+    border-color: #3f444a;
+}
+
+.form-row-media-full .upload-content {
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.form-row-media-full .upload-icon {
+    font-size: 24px !important;
+    color: #3C91E6;
+}
+
+/* Optimasi 2: Boks Gambar Preview Raksasa Lebar Penuh Tanpa Batasan Tinggi */
+.image-preview-wrapper-full {
+    width: 100%;
+    max-height: none !important;
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+    overflow: hidden;
+    background: #1a1c1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+}
+
+body.dark .image-preview-wrapper-full {
+    border-color: #3f444a;
+    background: #25282b;
+}
+
+.image-preview-wrapper-full img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+    display: block;
+}
+
+/* Container Box Pembungkus Checkbox Sketsa Otomatis */
+.sketch-toggle-container {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+body.dark .sketch-toggle-container {
+    background: #25282b;
+    border-color: #3f444a;
+}
+
+.checkbox-premium-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.checkbox-premium-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-custom {
+    min-width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    margin-top: 2px;
+}
+
+body.dark .checkbox-custom {
+    background-color: #1a1c1e;
+    border-color: #555;
+}
+
+.checkbox-premium-label input:checked ~ .checkbox-custom {
+    background-color: #3C91E6;
+    border-color: #3C91E6;
+}
+
+.checkbox-custom::after {
+    content: "";
+    display: none;
+    position: absolute;
+}
+
+.checkbox-premium-label input:checked ~ .checkbox-custom::after {
+    display: block;
+}
+
+.checkbox-premium-label .checkbox-custom::after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.checkbox-text .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+body.dark .checkbox-text .title {
+    color: #fff;
+}
+
+.checkbox-text .desc {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+body.dark .checkbox-text .desc {
+    color: #aaa;
+}
+
+/* Baris 3: Grid Deskripsi Teks Panjang Dipecah Samping-Sampingan */
+.form-grid-narration-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+/* Baris 4: Lokasi Aman Color Picker di Paling Bawah */
+.form-row-color-picker-safe {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 12px 0;
+}
+
+.color-picker-container {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+/* Responsif untuk resolusi layar gawai kecil */
+@media (max-width: 858px) {
+    .form-grid-upper, .form-grid-narration-split {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 }
