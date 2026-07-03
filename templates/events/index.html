@@ -7,7 +7,7 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
-	<title>AdminHub - Data Event</title>
+	<title>AdminBatik - Data Event</title>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 	<section id="sidebar">
 		<a href="#" class="brand">
 			<i class='bx bxs-smile'></i>
-			<span class="text">AdminHub</span>
+			<span class="text">AdminBatik</span>
 		</a>
 		<ul class="side-menu top">
 			<li>
@@ -53,7 +53,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="{{ url_for('mapping.index') }}">
 					<i class='bx bxs-map'></i>
 					<span class="text">Peta Lokasi</span>
 				</a>
@@ -66,20 +66,14 @@
 				</a>
 			</li>
 			{% endif %}
-			<li>
-				<a href="#">
-					<i class='bx bxs-message-dots'></i>
-					<span class="text">Dataset Chatbot</span>
-				</a>
-			</li>
 		</ul>
 		<ul class="side-menu">
-			<li>
+			<!-- <li>
 				<a href="#">
 					<i class='bx bxs-cog'></i>
 					<span class="text">Settings</span>
 				</a>
-			</li>
+			</li> -->
 			<li>
 				<a href="#" class="logout">
 					<i class='bx bxs-log-out-circle'></i>

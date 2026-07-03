@@ -216,7 +216,7 @@ body.dark .event-banner-thumb {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Tambahkan !important untuk mengalahkan CSS bawaan template AdminHub */
+/* Tambahkan !important untuk mengalahkan CSS bawaan template AdminBatik */
 .event-banner-thumb img {
     width: 100% !important;
     height: 100% !important;

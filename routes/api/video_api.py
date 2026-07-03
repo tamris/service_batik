@@ -47,20 +47,20 @@ def get_all_videos():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-@video_api_bp.route('/video/<string:video_id>', methods=['GET'])
-def get_video_detail(video_id):
-    try:
-        video = video_model.get_by_id(video_id)
-        if not video:
-            return jsonify({"status": "error", "message": "Video tidak ditemukan"}), 404
+# @video_api_bp.route('/video/<string:video_id>', methods=['GET'])
+# def get_video_detail(video_id):
+#     try:
+#         video = video_model.get_by_id(video_id)
+#         if not video:
+#             return jsonify({"status": "error", "message": "Video tidak ditemukan"}), 404
         
-        video['_id'] = str(video['_id'])
-        if 'created_at' in video and video['created_at']:
-            video['created_at'] = video['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+#         video['_id'] = str(video['_id'])
+#         if 'created_at' in video and video['created_at']:
+#             video['created_at'] = video['created_at'].strftime('%Y-%m-%d %H:%M:%S')
 
-        return jsonify({
-            "status": "success",
-            "data": video
-        }), 200
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+#         return jsonify({
+#             "status": "success",
+#             "data": video
+#         }), 200
+#     except Exception as e:
+#         return jsonify({"status": "error", "message": str(e)}), 500

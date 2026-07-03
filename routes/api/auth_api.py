@@ -97,24 +97,29 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
+    # 1. Cari user berdasarkan email
     user = find_user_by_email(email)
 
-    if user and current_app.bcrypt.check_password_hash(user['password'], password):
-        # Cek status verifikasi sebelum login
-        if not user.get('is_verified', False):
-            return jsonify({"msg": "Silakan verifikasi akun kamu via email"}), 403
-            
-        access_token = create_access_token(identity=str(user['_id']))
-        refresh_token = create_refresh_token(
-            identity=str(user['_id'])
-        )
-        return jsonify({
-            "access_token": access_token,
-            "refresh_token": refresh_token,
-            "user": {"email": user['email'], "username": user['username']}
-        }), 200
+    # 2. Validasi keberadaan user dan kecocokan password hash
+    if not user or not current_app.bcrypt.check_password_hash(user['password'], password):
+        return jsonify({"msg": "Email atau password salah"}), 401
+
+    # 3. Validasi status verifikasi akun (OTP) sebelum memberikan token
+    if not user.get('is_verified', False):
+        return jsonify({"msg": "Silakan verifikasi akun kamu via email"}), 403
+        
+    # 4. Pembuatan JWT Access Token dan Refresh Token jika semua validasi lolos
+    access_token = create_access_token(identity=str(user['_id']))
+    refresh_token = create_refresh_token(identity=str(user['_id']))
     
-    return jsonify({"msg": "Email atau password salah"}), 401
+    return jsonify({
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "user": {
+            "email": user['email'], 
+            "username": user['username']
+        }
+    }), 200
 
 @auth_bp.route('/refresh', methods=['POST'])
 @jwt_required(refresh=True)
