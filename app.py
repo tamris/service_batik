@@ -19,6 +19,7 @@ from routes.api.video_api import video_api_bp
 from routes.api.event_api import event_api_bp
 from routes.api.maping_api import mapping_api_bp
 from routes.api.studio_api import studio_api_bp
+from routes.api.user_api import user_api_bp
 from utils.rag_utils import initialize_rag
 
 app = Flask(__name__)
@@ -51,6 +52,7 @@ app.register_blueprint(user_bp)
 # 3. Register API Blueprint
 app.register_blueprint(galeri_api_bp, url_prefix='/api')
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(user_api_bp, url_prefix='/api/user')
 app.register_blueprint(chatbot_bp, url_prefix='/api/chatbot')
 app.register_blueprint(deteksi_bp, url_prefix='/api/deteksi')
 app.register_blueprint(google_oauth_bp, url_prefix='/api/oauth')

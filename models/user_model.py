@@ -86,3 +86,10 @@ def update_admin(user_id, data_update):
         {"_id": ObjectId(user_id)},
         {"$set": data_update}
     )
+
+def update_user_profile(user_id, data_update):
+    """Mengupdate data profile user berdasarkan ObjectId."""
+    return current_app.mongo.db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": data_update}
+    )
