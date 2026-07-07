@@ -2,7 +2,7 @@ import os
 import numpy as np
 import tensorflow as tf
 from datetime import datetime
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from tensorflow.keras.preprocessing import image
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
@@ -174,3 +174,34 @@ def get_history():
         }), 200
     except Exception as e:
         return jsonify({"msg": "Terjadi kesalahan pada sistem saat mengambil history", "error": str(e)}), 500
+
+@deteksi_bp.route('/history/<string:history_id>', methods=['DELETE'])
+@jwt_required()
+def delete_history(history_id):
+    try:
+        user_id = get_jwt_identity()
+        history_data = history_db.get_by_id(history_id)
+
+        if not history_data:
+            return jsonify({"msg": "Riwayat tidak ditemukan"}), 404
+
+        if str(history_data.get("user_id")) != str(user_id):
+            return jsonify({"msg": "Anda tidak memiliki akses untuk menghapus riwayat ini"}), 403
+
+        deleted = history_db.delete_history(history_id, user_id=user_id)
+        if not deleted:
+            return jsonify({"msg": "Gagal menghapus riwayat"}), 500
+
+        banner_image_url = history_data.get("banner_image_url", "")
+        if banner_image_url:
+            image_path = os.path.join(current_app.root_path, banner_image_url.lstrip('/'))
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+        return jsonify({
+            "msg": "Riwayat berhasil dihapus",
+            "status": "success",
+            "deleted_id": history_id
+        }), 200
+    except Exception as e:
+        return jsonify({"msg": "Terjadi kesalahan pada sistem saat menghapus history", "error": str(e)}), 500

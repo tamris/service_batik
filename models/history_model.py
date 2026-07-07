@@ -1,4 +1,5 @@
 from datetime import datetime
+from bson import ObjectId
 from extensions import mongo
 
 class HistoryModel:
@@ -62,3 +63,46 @@ class HistoryModel:
         except Exception as e:
             print(f"Gagal mengambil data dari MongoDB: {e}")
             return []
+
+    def get_by_id(self, history_id):
+        """
+        Mengambil satu riwayat berdasarkan ID
+        """
+        db_collection = self.collection
+        if db_collection is None:
+            print("Gagal mengambil history: Koneksi database tidak tersedia.")
+            return None
+
+        try:
+            doc = db_collection.find_one({"_id": ObjectId(history_id)})
+            if not doc:
+                return None
+
+            doc['_id'] = str(doc['_id'])
+            if 'created_at' in doc and doc['created_at']:
+                doc['created_at'] = doc['created_at'].isoformat()
+
+            return doc
+        except Exception as e:
+            print(f"Gagal mengambil history by id: {e}")
+            return None
+
+    def delete_history(self, history_id, user_id=None):
+        """
+        Menghapus riwayat berdasarkan ID dan, jika diberikan, user pemiliknya
+        """
+        db_collection = self.collection
+        if db_collection is None:
+            print("Gagal menghapus history: Koneksi database tidak tersedia.")
+            return False
+
+        try:
+            query = {"_id": ObjectId(history_id)}
+            if user_id is not None:
+                query["user_id"] = user_id
+
+            result = db_collection.delete_one(query)
+            return result.deleted_count > 0
+        except Exception as e:
+            print(f"Gagal menghapus history: {e}")
+            return False

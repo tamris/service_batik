@@ -3,7 +3,7 @@ import secrets
 from flask import Blueprint, request, jsonify
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 from models.user_model import create_user, find_user_by_email
 
@@ -59,16 +59,21 @@ def google_login():
         # 4. Generate JWT Access Token
         # Pastikan user["_id"] dikonversi ke string untuk payload JWT
         access_token = create_access_token(identity=str(user["_id"]))
+        refresh_token = create_refresh_token(identity=str(user["_id"]))
+
+        db_photo = user.get("profile_picture", "")
+        full_photo_url = f"{request.host_url}{db_photo}" if db_photo else ""
 
         return jsonify({
             "status": "success",
             "message": "Login successful",
             "access_token": access_token,
+            "refresh_token": refresh_token,
             "user": {
                 "name": user.get("username"),
                 "email": email,
                 "api_key": user.get("api_key"),
-                "photo": picture
+                "profile_picture": full_photo_url
             }
         }), 200
 

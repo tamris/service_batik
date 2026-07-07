@@ -111,13 +111,17 @@ def login():
     # 4. Pembuatan JWT Access Token dan Refresh Token jika semua validasi lolos
     access_token = create_access_token(identity=str(user['_id']))
     refresh_token = create_refresh_token(identity=str(user['_id']))
+
+    db_photo = user.get("profile_picture", "")
+    full_photo_url = f"{request.host_url}{db_photo}" if db_photo else ""
     
     return jsonify({
         "access_token": access_token,
         "refresh_token": refresh_token,
         "user": {
             "email": user['email'], 
-            "username": user['username']
+            "username": user['username'],
+            "profile_picture": full_photo_url
         }
     }), 200
 

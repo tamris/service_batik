@@ -93,3 +93,45 @@ def update_user_profile(user_id, data_update):
         {"_id": ObjectId(user_id)},
         {"$set": data_update}
     )
+
+def toggle_like_batik(user_id, batik_id):
+    user_ref = current_app.mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    if not user_ref:
+        return None
+        
+    saved_items = user_ref.get("saved_items", [])
+    batik_obj_id = ObjectId(batik_id)
+    
+    if batik_obj_id in saved_items:
+        # PULL: Hapus dari list jika sudah disukai (Unlike)
+        current_app.mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$pull": {"saved_items": batik_obj_id}}
+        )
+        return "unliked"
+    else:
+        # ADD TO SET: Tambahkan ke list secara unik jika belum disukai (Like)
+        current_app.mongo.db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$addToSet": {"saved_items": batik_obj_id}}
+        )
+        return "liked"
+    
+def get_user_saved_items(user_id):
+    pipeline = [
+        {"$match": {"_id": ObjectId(user_id)}},
+        {
+            "$lookup": {
+                "from": "batiks", # <--- SINKRON: Menggunakan nama koleksi batiks milikmu
+                "localField": "saved_items",
+                "foreignField": "_id",
+                "as": "liked_batiks"
+            }
+        },
+        {"$project": {"liked_batiks": 1, "_id": 0}}
+    ]
+    
+    result = list(current_app.mongo.db.users.aggregate(pipeline))
+    if result and "liked_batiks" in result[0]:
+        return result[0]["liked_batiks"]
+    return []
