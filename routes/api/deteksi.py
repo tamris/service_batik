@@ -185,23 +185,31 @@ def delete_history(history_id):
         if not history_data:
             return jsonify({"msg": "Riwayat tidak ditemukan"}), 404
 
+        # Validasi kepemilikan data secara aman
         if str(history_data.get("user_id")) != str(user_id):
             return jsonify({"msg": "Anda tidak memiliki akses untuk menghapus riwayat ini"}), 403
 
+        # Eksekusi hapus data di MongoDB
         deleted = history_db.delete_history(history_id, user_id=user_id)
         if not deleted:
             return jsonify({"msg": "Gagal menghapus riwayat"}), 500
 
+        # --- PERBAIKAN: Pembersihan File Gambar dari Disk Server ---
         banner_image_url = history_data.get("banner_image_url", "")
         if banner_image_url:
-            image_path = os.path.join(current_app.root_path, banner_image_url.lstrip('/'))
+            # Menggunakan normpath untuk menyelaraskan backslash/slash sesuai OS (Windows/Linux)
+            relative_image_path = banner_image_url.lstrip('/')
+            image_path = os.path.normpath(os.path.join(current_app.root_path, relative_image_path))
+            
             if os.path.exists(image_path):
                 os.remove(image_path)
+                print(f"DEBUG: File gambar {image_path} berhasil dibersihkan dari server.")
 
         return jsonify({
             "msg": "Riwayat berhasil dihapus",
             "status": "success",
             "deleted_id": history_id
         }), 200
+        
     except Exception as e:
         return jsonify({"msg": "Terjadi kesalahan pada sistem saat menghapus history", "error": str(e)}), 500

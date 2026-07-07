@@ -128,3 +128,56 @@ def edit_profile():
 
     except Exception as e:
         return jsonify({"status": False, "msg": f"Server error: {str(e)}"}), 500
+
+
+# ==========================================
+# 3. ENDPOINT UBAH SANDI USER
+# ==========================================
+@user_api_bp.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    try:
+        current_user_id = get_jwt_identity()
+        user = get_user_by_id(current_user_id)
+
+        if not user:
+            return jsonify({"status": False, "msg": "User tidak ditemukan"}), 404
+
+        data = request.get_json() or {}
+        current_password = data.get('current_password')
+        new_password = data.get('new_password')
+        confirm_password = data.get('confirm_password')
+
+        # 1. Validasi Keberadaan Input
+        if not current_password or not new_password or not confirm_password:
+            return jsonify({"status": False, "msg": "Semua field password wajib diisi!"}), 400
+
+        # 2. Validasi Batas Minimal Karakter (Best Practice Keamanan)
+        if len(new_password) < 6:
+            return jsonify({"status": False, "msg": "Password baru minimal harus 6 karakter!"}), 400
+
+        # 3. Validasi Kesamaan Password Baru & Konfirmasi
+        if new_password != confirm_password:
+            return jsonify({"status": False, "msg": "Konfirmasi password baru tidak cocok!"}), 400
+
+        # 4. Validasi Autentikasi Password Lama (Bcrypt Check)
+        if not current_app.bcrypt.check_password_hash(user['password'], current_password):
+            return jsonify({"status": False, "msg": "Password lama yang Anda masukkan salah!"}), 401
+
+        # 5. Jaminan Keamanan: Password baru tidak boleh sama dengan password lama
+        if current_app.bcrypt.check_password_hash(user['password'], new_password):
+            return jsonify({"status": False, "msg": "Password baru tidak boleh sama dengan password lama Anda!"}), 400
+
+        # 6. Proses Hashing Ulang Password Baru
+        hashed_password = current_app.bcrypt.generate_password_hash(new_password).decode('utf-8')
+
+        # Eksekusi pembaruan sandi ke database MongoDB
+        update_user_profile(current_user_id, {"password": hashed_password})
+
+        return jsonify({
+            "status": True, 
+            "msg": "Password Anda berhasil diperbarui"
+        }), 200
+
+    except Exception as e:
+        return jsonify({"status": False, "msg": f"Server error: {str(e)}"}), 500
