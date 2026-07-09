@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
     <!-- Judul sudah diperbaiki -->
-    <title>AdminBatik - Users Manager</title>
+    <title>AdminBatik - Manajemen User</title>
 </head>
 
 <body>
@@ -63,7 +63,7 @@
             <li class="active">
                 <a href="{{ url_for('user_manager.index') }}">
                     <i class='bx bxs-user'></i>
-                    <span class="text">Users Manager</span>
+                    <span class="text">Manajemen User</span>
                 </a>
             </li>
             {% endif %}
@@ -88,25 +88,24 @@
         <nav>
             <i class='bx bx-menu'></i>
             <!-- Navbar title sudah diperbaiki -->
-            <a href="#" class="nav-link">Users Manager</a>
+            <a href="#" class="nav-link">Manajemen User</a>
 
             <div class="spacer" style="flex-grow: 1;"></div>
 
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
 
-            <a href="#" class="notification">
-                <i class='bx bxs-bell'></i>
-                <span class="num">8</span>
-            </a>
-            <a href="#" class="profile">
-                <img src="{{ url_for('static', filename='img/avatar.png') }}">
+         
+         <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
+                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
+                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
+                     onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
         <main>
             <div class="head-title">
                 <div class="left">
-                    <h1>Users Manager</h1>
+                    <h1>Manajemen User</h1>
                     <ul class="breadcrumb">
                         <li><a href="#">Dashboard</a></li>
                         <li><i class='bx bx-chevron-right'></i></li>

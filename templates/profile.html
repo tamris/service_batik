@@ -1,0 +1,57 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Pengaturan Akun</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Profile</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="table-data">
+    <!-- KOTAK KIRI: GANTI AVATAR -->
+    <div class="order">
+        <div class="head">
+            <h3>Foto Profile Admin</h3>
+        </div>
+        <div style="text-align: center; padding: 20px;">
+            <!-- Menggunakan user.profile_picture agar pas dengan model DB NoSQL kamu -->
+            <img src="{{ url_for('static', filename='img/avatars/' + user.profile_picture) if user.profile_picture else url_for('static', filename='img/avatar.png') }}" 
+                 onerror="this.src='/static/img/avatar.png';" 
+                 style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); margin-bottom: 20px;">
+            
+            <form action="{{ url_for('web_dashboard.profile') }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="update_avatar">
+                <input type="file" name="avatar" accept="image/*" required style="margin-bottom: 15px; display: block; width: 100%;">
+                <button type="submit" class="status completed" style="border: none; cursor: pointer; padding: 10px 20px;">Upload Foto Baru</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- KOTAK KANAN: GANTI PASSWORD -->
+    <div class="todo">
+        <div class="head">
+            <h3>Ubah Password</h3>
+        </div>
+        <form action="{{ url_for('web_dashboard.profile') }}" method="POST" style="padding: 10px;">
+            <input type="hidden" name="action" value="update_password">
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password Baru</label>
+                <input type="password" name="new_password" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--grey); background: var(--grey); color: var(--dark);">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Konfirmasi Password Baru</label>
+                <input type="password" name="confirm_password" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--grey); background: var(--grey); color: var(--dark);">
+            </div>
+
+            <button type="submit" class="status pending" style="border: none; cursor: pointer; padding: 10px 20px; background: var(--orange); color: white; border-radius: 20px; font-weight: 700;">Simpan Password</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

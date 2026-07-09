@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 	<title>Dashboard</title>
 </head>
@@ -72,18 +75,12 @@
 			<li>
 				<a href="{{ url_for('user_manager.index') }}">
 					<i class='bx bxs-user'></i>
-					<span class="text">Users Manager</span>
+					<span class="text">Manajemen User</span>
 				</a>
 			</li>
 			{% endif %}
 		</ul>
 		<ul class="side-menu">
-			<!-- <li>
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li> -->
 			<li>
 				<a href=" {{ url_for('auth.logout') }}" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
@@ -101,21 +98,20 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu'></i>
-			<a href="#" class="nav-link">Categories</a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
+			<a href="#" class="nav-link">Dashboard</a>
+
+			<div class="spacer" style="flex-grow: 1;"></div>
+
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
+
+			<!-- <a href="#" class="notification">
 				<i class='bx bxs-bell'></i>
 				<span class="num">8</span>
-			</a>
-			<a href="#" class="profile">
-				<img src="{{ url_for('static', filename='img/avatar.png') }}">
+			</a> -->
+			<a href="{{ url_for('web_dashboard.profile') }}" class="profile">
+				<img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
+					 onerror="this.src='/static/img/avatar.png';">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
@@ -136,10 +132,10 @@
 						</li>
 					</ul>
 				</div>
-				<a href="#" class="btn-download">
+				<!-- <a href="#" class="btn-download">
 					<i class='bx bxs-cloud-download'></i>
 					<span class="text">Download PDF</span>
-				</a>
+				</a> -->
 			</div>
 
 			<!-- Row 1 -->
@@ -194,91 +190,70 @@
 
 
 			<div class="table-data">
+				<!-- KOLOM KIRI: KATALOG BATIK TERBARU -->
 				<div class="order">
 					<div class="head">
-						<h3>Recent Orders</h3>
-						<i class='bx bx-search'></i>
-						<i class='bx bx-filter'></i>
+						<h3>Katalog Batik Terbaru</h3>
 					</div>
 					<table>
 						<thead>
 							<tr>
-								<th>User</th>
-								<th>Date Order</th>
-								<th>Status</th>
+								<th>Gambar</th>
+								<th>Nama Batik</th>
+								<th>Kategori</th>
 							</tr>
 						</thead>
 						<tbody>
+							{% for batik in batik_terbaru|default([]) %}
 							<tr>
 								<td>
-									<img src="{{ url_for('static', filename='img/avatar.png') }}">
-									<p>John Doe</p>
+									<!-- Penarikan gambar sesuai path direktori dan field milikmu -->
+									<img src="{{ url_for('static', filename='img/galeri/' + batik.image_url) if batik.image_url else url_for('static', filename='img/batik-default.jpg') }}"
+										alt="{{ batik.name }}" onerror="this.src='/static/img/batik-default.jpg';">
 								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
+								<td style="vertical-align: middle;">
+									<p style="font-weight: 500; color: var(--dark);">{{ batik.name }}</p>
+								</td>
+								<td style="vertical-align: middle;">
+									<!-- Menampilkan kategori (misal: Tulis / Cap) dengan style badge bawaan template -->
+									<span class="status process" style="background: var(--blue); color: #fff;">
+										{{ batik.category|default('Tulis') }}
+									</span>
+								</td>
 							</tr>
+							{% else %}
 							<tr>
-								<td>
-									<img src="{{ url_for('static', filename='img/avatar.png') }}">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
+								<td colspan="3" style="text-align: center; padding: 20px; color: var(--dark-grey);">
+									Belum ada data batik terbaru.</td>
 							</tr>
-							<tr>
-								<td>
-									<img src="{{ url_for('static', filename='img/avatar.png') }}">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status process">Process</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="{{ url_for('static', filename='img/avatar.png') }}">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="{{ url_for('static', filename='img/avatar.png') }}">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-							</tr>
+							{% endfor %}
 						</tbody>
 					</table>
 				</div>
+
+				
+				<!-- KOLOM KANAN: AGENDA EVENT TERDEKAT -->
 				<div class="todo">
 					<div class="head">
-						<h3>Todos</h3>
-						<i class='bx bx-plus'></i>
-						<i class='bx bx-filter'></i>
+						<h3>Agenda Event Terdekat</h3>
 					</div>
 					<ul class="todo-list">
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded'></i>
+						{% for ev in event_terbaru|default([]) %}
+						<li class="completed" style="border-left: 10px solid var(--orange);">
+							<div class="event-info">
+								<p style="font-weight: 600; color: var(--dark); margin-bottom: 4px;">{{ ev.title }}</p>
+								<small style="color: var(--dark-grey); font-size: 12px; display: flex; align-items: center; gap: 4px;">
+									<i class='bx bx-calendar' style="font-size: 14px;"></i>
+									<!-- Memanggil filter tgl_indo yang sudah dibuat -->
+									{{ ev.event_date | tgl_indo }}
+								</small>
+							</div>
 						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded'></i>
-						</li>
+						{% else %}
 						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded'></i>
+							<p>Belum ada agenda event terdekat.</p>
 						</li>
-						<li class="completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded'></i>
-						</li>
-						<li class="not-completed">
-							<p>Todo List</p>
-							<i class='bx bx-dots-vertical-rounded'></i>
-						</li>
+						{% endfor %}
 					</ul>
 				</div>
 			</div>

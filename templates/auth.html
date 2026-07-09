@@ -240,18 +240,43 @@
 
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    {% for category, message in messages %}
     <script>
-        Swal.fire({
-            icon: '{{ "error" if category == "danger" else "success" }}',
-            title: '{{ "Akses Ditolak" if category == "danger" else "Berhasil" }}',
-            text: '{{ message }}',
-            confirmButtonColor: '#3C91E6',
-            timer: 3000,
-            timerProgressBar: true
+        // Mengubah data pesan dari Flask menjadi JSON agar aman diproses oleh JavaScript
+        const flashMessages = {{ messages | tojson | safe }};
+
+        flashMessages.forEach(msgItem => {
+            let category = 'info';
+            let message = '';
+
+            // Cek jika format datanya sepasang (kategori & pesan)
+            if (Array.isArray(msgItem) && msgItem.length === 2) {
+                category = msgItem[0];
+                message = msgItem[1];
+            } else {
+                message = msgItem;
+            }
+
+            // Antisipasi jika data bertipe objek bentukan sistem
+            if (typeof message === 'object' && message !== null) {
+                const data = message[' t'] || message['t'];
+                if (data && Array.isArray(data)) {
+                    category = data[0];
+                    message = data[1];
+                }
+            }
+
+            // Eksekusi SweetAlert secara dinamis dan aman
+            const isDanger = (category === 'danger' || category === 'error');
+            Swal.fire({
+                icon: isDanger ? 'error' : 'success',
+                title: isDanger ? 'Akses Ditolak' : 'Berhasil',
+                text: message,
+                confirmButtonColor: '#3C91E6',
+                timer: 3000,
+                timerProgressBar: true
+            });
         });
     </script>
-    {% endfor %}
     {% endif %}
     {% endwith %}
 </body>
