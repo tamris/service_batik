@@ -17,9 +17,11 @@ UPLOAD_FOLDER = 'static/img/mapping'
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
+    selected_category = request.args.get('c', '') # 1. Tangkap parameter filter kategori baru
     per_page = 5
     
-    all_data = mapping_model.get_all(search_query)
+    # 2. Kirim parameter search_query dan selected_category ke model data
+    all_data = mapping_model.get_all(search_query=search_query, category=selected_category)
 
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -38,7 +40,8 @@ def index():
                            total_items=total_items,
                            start_index=start_index,
                            end_index=end_index,
-                           search_query=search_query)
+                           search_query=search_query,
+                           selected_category=selected_category) # 3. Sertakan ke HTML template
 
 @mapping_bp.route('/mapping-lokasi/tambah', methods=['GET', 'POST'])
 @login_required

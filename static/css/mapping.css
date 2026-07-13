@@ -1,21 +1,31 @@
 /* ==========================================================================
-   STYLING KHUSUS MAPPING LOKASI (CLEAN & MODULAR)
+   STYLING KHUSUS MAPPING LOKASI (CLEAN, BALANCED & MODULAR)
    ========================================================================== */
 
-/* 1. BADGE KATEGORI LOKASI */
+/* ==========================================================================
+   FIX BADGE KATEGORI LOKASI: 100% SAMA KAPSUL BULAT DENGAN MODUL LAINNYA
+   ========================================================================== */
 .badge-map {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
+    justify-content: center;
+    border-radius: 20px !important; /* Paksa jadi bentuk kapsul membulat penuh */
+    padding: 4px 12px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    box-shadow: none !important;
+    min-width: 85px; /* Lebar minimum disamakan agar rapi sejajar */
+    text-align: center;
 }
-.cat-sentra { background: rgba(60, 145, 230, 0.1); color: #3C91E6; }
-.cat-toko   { background: rgba(63, 195, 128, 0.1); color: #3FC380; }
-.cat-edukasi { background: rgba(155, 89, 182, 0.1); color: #9B59B6; }
+
+/* Penyelarasan Warna Pastel Transparan Khas Dashboard */
+.cat-sentra { background: rgba(60, 145, 230, 0.1) !important; color: #3C91E6 !important; }
+.cat-toko   { background: rgba(63, 195, 128, 0.1) !important; color: #3FC380 !important; }
+.cat-edukasi { background: rgba(155, 89, 182, 0.1) !important; color: #9B59B6 !important; }
+.cat-pengrajin { background: rgba(255, 165, 0, 0.1) !important; color: #FFA500 !important; }
 
 /* Responsive Table Wrapper Fix */
 .table-responsive-wrapper {
@@ -23,6 +33,29 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     margin-bottom: 20px;
+}
+
+/* Penataan Struktur Kolom Desktop Rata Kiri & Balanced Space */
+.table-responsive-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-responsive-wrapper table th {
+    padding: 12px 10px 16px 10px;
+    color: var(--dark);
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+    border-bottom: 2px solid var(--grey);
+}
+
+/* Hilangkan border-bottom agar tidak ada garis kaku di sela baris */
+.table-responsive-wrapper table td {
+    vertical-align: middle;
+    padding: 18px 10px;
+    text-align: left;
+    border-bottom: none !important; /* Murni polos tanpa garis pembatas cell */
 }
 
 /* 2. FORM & INPUT MAPPING */
@@ -95,8 +128,57 @@
     box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
-/* 5. SEARCH BOX & HEAD BUTTONS */
-.map-search-box .form-input {
+/* ==========================================================================
+   FIX SEARCH BOX & CATEGORY FILTER KUSTOM (SINKRONISASI TOTAL DENGAN VIDEO)
+   ========================================================================== */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Jarak antara dropdown filter dengan kolom search teks */
+}
+
+/* Dropdown Filter Kategori Kustom Berbentuk Kapsul Modern */
+.search-box select#categoryFilter {
+    appearance: none !important; /* Mematikan panah bawaan browser */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: #f1f1f1 !important;
+    
+    /* Panah kustom SVG modern */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 14px !important;
+    
+    /* Padding dan line-height presisi di tengah */
+    padding: 6px 36px 6px 16px !important; 
+    height: 38px !important; /* Selaras tingginya dengan search box input */
+    line-height: 26px !important; 
+    border-radius: 36px !important;
+    border: 1px solid transparent !important;
+    color: var(--dark) !important;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+.search-box select#categoryFilter:hover {
+    background-color: #e2e2e2 !important;
+}
+
+.search-box select#categoryFilter:focus {
+    border-color: #3C91E6 !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+/* Kolom Input Search Teks */
+.search-box .form-input {
     display: flex;
     align-items: center;
     background: #f1f1f1;
@@ -105,16 +187,18 @@
     border: 1px solid transparent;
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 300px; /* Ukuran pas standar dashboard */
+    max-width: 260px; /* Ukuran kompak berdampingan seimbang */
+    height: 38px;
+    box-sizing: border-box !important;
 }
 
-.map-search-box .form-input:focus-within {
+.search-box .form-input:focus-within {
     border-color: #3C91E6;
     background: #fff;
     box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
 }
 
-.map-search-box .form-input input {
+.search-box .form-input input {
     padding: 10px 16px;
     border: none;
     background: transparent;
@@ -126,25 +210,24 @@
     color: var(--dark);
 }
 
-.map-search-box .form-input button,
-.map-search-box .form-input .search-btn {
+.search-box .form-input button,
+.search-box .form-input .search-btn {
     padding: 10px 16px !important;
     background: #3C91E6 !important;
     color: #fff !important;
     border: none !important;
-    border-radius: 0 !important; /* Mematikan circle bawaan lama biar motong rapi di kanan */
+    border-radius: 0 !important; /* Mematikan border-radius sisi dalam agar nempel lurus kapsul */
     cursor: pointer;
     font-size: 16px;
-    width: auto !important;
-    height: auto !important;
+    height: 100% !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     transition: background 0.3s;
 }
 
-.map-search-box .form-input button:hover,
-.map-search-box .form-input .search-btn:hover {
+.search-box .form-input button:hover,
+.search-box .form-input .search-btn:hover {
     background: #2b7bc6 !important;
 }
 
@@ -194,7 +277,7 @@
 .btn-icon.btn-delete { background: #FF4B4B !important; color: #fff !important; }
 .btn-icon.btn-delete:hover { background: #e63939 !important; transform: translateY(-2px); }
 
-/* 6. TOMBOL AKSI BAWAH (Batal & Simpan) */
+/* TOMBOL AKSI BAWAH (Batal & Simpan) */
 .user-actions {
     display: flex;
     justify-content: flex-end;
@@ -236,7 +319,7 @@
 }
 .btn-save:hover { background: #2b7bc9; transform: translateY(-1px); }
 
-/* 7. PAGINATION */
+/* 7. GLOBAL PAGINATION STYLING BASES */
 .pagination-wrapper {
     display: flex;
     justify-content: space-between;
@@ -266,15 +349,26 @@
 }
 .pagi-btn:hover { background: #f0f0f0; }
 
+.pagi-btn.number { padding: 0; width: 36px; height: 36px; }
+
 .pagi-btn.active {
     background: #3C91E6 !important;
     color: #fff !important;
     border-color: #3C91E6 !important;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.15);
 }
 
 /* ==========================================================================
    DARK MODE OVERRIDES (SINKRONISASI TOTAL)
    ========================================================================== */
+body.dark .search-box select#categoryFilter {
+    background-color: #25282b !important;
+    color: #fff !important;
+    /* border-color: #3f444a !important; */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23aaa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+}
+body.dark .search-box select#categoryFilter option { background: #1a1c1e; color: #fff; }
+
 body.dark .map-form-container { background: #1a1c1e !important; }
 body.dark .map-label { color: #e0e0e0; }
 body.dark .map-input { background: #25282b; color: #fff; border-color: #3f444a; }
@@ -284,11 +378,18 @@ body.dark .map-widget-container { border-color: #3f444a; filter: brightness(0.8)
 body.dark .user-actions { border-top-color: #2b2e33; }
 body.dark .btn-cancel { background: #333; color: #bbb; }
 body.dark .btn-cancel:hover { background: #444; color: #fff; }
-body.dark .map-search-box .form-input { background: #25282b; }
-body.dark .map-search-box .form-input input { color: #fff; }
-body.dark .map-search-box .form-input:focus-within { background: #1e2124; }
+body.dark .search-box .form-input { background: #25282b; }
+body.dark .search-box .form-input input { color: #fff; }
+body.dark .search-box .form-input:focus-within { background: #1e2124; }
+body.dark .table-responsive-wrapper td { border-bottom: none !important; }
+
+/* Dark Mode Badge Map Capsule Sync */
+body.dark .badge-map.cat-sentra { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; }
+body.dark .badge-map.cat-toko { background-color: rgba(63, 195, 128, 0.25) !important; color: #6bf1ab !important; }
+body.dark .badge-map.cat-edukasi { background-color: rgba(155, 89, 182, 0.25) !important; color: #d49aee !important; }
 
 /* Dark Mode Navigation Glow */
+body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
 body.dark .pagi-btn.active {
     background-color: #3C91E6 !important;
     border-color: #3C91E6 !important;
@@ -326,7 +427,21 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
         gap: 12px;
     }
     .table-data .head h3 { font-size: 20px; }
-    .map-search-box, .map-search-box .form-input { width: 100% !important; max-width: 100% !important; }
+    
+    /* Paksa form & seluruh komponen isinya melebar penuh di HP */
+    .search-box {
+        flex-direction: column;
+        align-items: stretch !important;
+        width: 100% !important;
+        gap: 10px;
+    }
+    
+    .search-box select#categoryFilter,
+    .search-box .form-input {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
     .btn-add-map { width: 100%; margin-top: 10px; height: 42px; font-size: 14px; }
 
     /* Ubah Tabel ke Sistem Blok Card Vertikal */
@@ -357,6 +472,8 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
         text-align: left;
     }
 
+    .table-responsive-wrapper td::before { content: none !important; }
+
     .table-responsive-wrapper td:first-child {
         display: flex;
         justify-content: center;
@@ -373,8 +490,34 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     body.dark .table-responsive-wrapper td:last-child { border-top-color: rgba(255,255,255,0.06); }
 
-    .pagi-buttons { flex-direction: column; width: 100%; }
-    .pagi-numbers { flex-wrap: wrap; justify-content: center; }
-    .pagi-btn { width: 100%; }
-    .pagi-btn.number { width: 36px; }
+    /* Pagination Mobile Berjejer Horizontal */
+    .pagination-wrapper {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    .pagi-buttons {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .pagi-numbers {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .pagi-btn {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .pagi-btn.number {
+        width: 36px !important;
+    }
 }

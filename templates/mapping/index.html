@@ -135,11 +135,23 @@
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <h3 style="margin: 0;">Daftar Persebaran Batik</h3>
 
-                        <form class="map-search-box" onsubmit="event.preventDefault(); applyFilters();">
+                        <form class="search-box" id="searchFilterForm" method="GET"
+                            action="{{ url_for('mapping.index') }}" style="display: flex; gap: 10px;">
+                            <!-- Dropdown Filter Kategori Lokasi Pemetaan -->
+                            <select name="c" id="categoryFilter" onchange="this.form.submit()"
+                                style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+                                <option value="">Semua Lokasi</option>
+                                <option value="Sentra Batik" {% if selected_category=='Sentra Batik' %}selected{% endif
+                                    %}>Sentra Batik</option>
+                                <option value="Toko" {% if selected_category=='Toko' %}selected{% endif %}>Toko</option>
+                                <option value="Pengrajin" {% if selected_category=='Pengrajin' %}selected{% endif %}>Pengrajin</option>
+                                <option value="Edukasi" {% if selected_category=='Edukasi' %}selected{% endif %}>Edukasi
+                                </option>
+                            </select>
+
                             <div class="form-input">
-                                <input type="search" id="searchInput" placeholder="Cari lokasi..."
-                                    value="{{ search_query }}" autocomplete="off"
-                                    data-url="{{ url_for('mapping.index') }}">
+                                <input type="search" id="searchInput" placeholder="Cari motif batik..."
+                                    autocomplete="off" data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
                                 <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
                             </div>
                         </form>
@@ -175,7 +187,7 @@
                                             style="display:block; color:var(--dark); font-size: 15px; margin-bottom: 6px;">{{
                                             m.name }}</strong>
                                         <span
-                                            class="badge-map {% if m.category == 'Sentra Batik' %}cat-sentra{% elif m.category == 'Toko' %}cat-toko{% else %}cat-edukasi{% endif %}">
+                                            class="badge-map {% if m.category == 'Sentra Batik' %}cat-sentra{% elif m.category == 'Toko' %}cat-toko{% elif m.category == 'Pengrajin' %}cat-pengrajin{% else %}cat-edukasi{% endif %}">
                                             {{ m.category }}
                                         </span>
                                     </td>
@@ -238,8 +250,7 @@
 
                             <div class="pagi-buttons">
                                 {% if page > 1 %}
-                                <!-- Tambahkan parameter role dan q di setiap url_for -->
-                                <a href="{{ url_for('mapping.index', page=page-1, q=search_query, role=role_filter) }}"
+                                <a href="{{ url_for('mapping.index', page=page-1, q=search_query, c=selected_category) }}"
                                     class="pagi-btn prev">
                                     <i class='bx bx-chevron-left'></i> Prev
                                 </a>
@@ -247,7 +258,7 @@
 
                                 <div class="pagi-numbers">
                                     {% for p in range(1, total_pages + 1) %}
-                                    <a href="{{ url_for('mapping.index', page=p, q=search_query, role=role_filter) }}"
+                                    <a href="{{ url_for('mapping.index', page=p, q=search_query, c=selected_category) }}"
                                         class="pagi-btn number {{ 'active' if p == page else '' }}">
                                         {{ p }}
                                     </a>
@@ -255,7 +266,7 @@
                                 </div>
 
                                 {% if page < total_pages %} <a
-                                    href="{{ url_for('mapping.index', page=page+1, q=search_query, role=role_filter) }}"
+                                    href="{{ url_for('mapping.index', page=page+1, q=search_query, c=selected_category) }}"
                                     class="pagi-btn next">
                                     Next <i class='bx bx-chevron-right'></i>
                                     </a>

@@ -10,30 +10,42 @@ class MappingModel:
     def collection(self):
         return current_app.mongo.db.mappings
 
-    def get_all(self, search_query=""):
-        query = {}
+    def get_all(self, search_query="", category=""):
+        conditions = []
+        
+        # 1. Tambahkan filter kategori jika dipilih oleh user
+        if category:
+            conditions.append({"category": {"$regex": f"^{category}$", "$options": "i"}})
+            
+        # 2. Pertahankan logika pencarian multi-field text bawaan kamu (name, category, address.full)
         if search_query:
-            query = {
+            conditions.append({
                 "$or": [
                     {"name": {"$regex": search_query, "$options": "i"}},
                     {"category": {"$regex": search_query, "$options": "i"}},
                     {"address.full": {"$regex": search_query, "$options": "i"}}
                 ]
-            }
+            })
             
-        # Menggunakan Aggregation ($lookup) untuk nge-JOIN dengan tabel 'users'
+        # Tentukan objek query berdasarkan kondisi array
+        if conditions:
+            query = {"$and": conditions}
+        else:
+            query = {}
+            
+        # Menggunakan Aggregation ($lookup) untuk nge-JOIN dengan tabel 'users'[cite: 14]
         pipeline = [
             {"$match": query},
             {"$sort": {"created_at": -1}},
             {"$lookup": {
-                "from": "users",          # Pastikan ini adalah nama collection user kamu di MongoDB
-                "localField": "user_id",  # ID yang ada di tabel mapping
-                "foreignField": "_id",    # ID utama di tabel users
-                "as": "admin_data"        # Hasil gabungannya disimpan di variabel ini
+                "from": "users",          
+                "localField": "user_id",  
+                "foreignField": "_id",    
+                "as": "admin_data"        
             }},
             {"$unwind": {
                 "path": "$admin_data", 
-                "preserveNullAndEmptyArrays": True # Kalau adminnya udah dihapus, data mapping gak ikut hilang
+                "preserveNullAndEmptyArrays": True 
             }}
         ]
         
