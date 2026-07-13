@@ -2,7 +2,54 @@
    MODERN STYLING FOR KATALOG BATIK (CLEAN & MODULAR)
    ========================================================================== */
 
-/* Search Box Customization */
+/* Search Box & Category Filter Layout */
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Jarak antara dropdown filter dengan kolom search teks */
+}
+
+/* Dropdown Filter Kategori Kustom (FIX TEXT KEPOTONG & PANAH) */
+.search-box select#categoryFilter {
+    appearance: none !important; /* Mematikan panah bawaan browser */
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: #f1f1f1 !important;
+    
+    /* Panah kustom SVG modern */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23666%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 14px !important;
+    
+    /* Pad vertical kecil + line-height seimbang biar teks pas di tengah */
+    padding: 6px 36px 6px 16px !important; 
+    height: 38px !important; /* Selaras dengan search box */
+    line-height: 26px !important; /* Memaksa baseline teks tegak di tengah */
+    border-radius: 36px !important;
+    border: 1px solid transparent !important;
+    color: var(--dark) !important;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+.search-box select#categoryFilter:hover {
+    background-color: #e2e2e2 !important;
+}
+
+.search-box select#categoryFilter:focus {
+    border-color: #3C91E6 !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+/* Kolom Input Search Teks */
 .search-box .form-input {
     display: flex;
     align-items: center;
@@ -12,7 +59,9 @@
     border: 1px solid transparent;
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 300px;
+    max-width: 260px; /* Ukuran seimbang berdampingan dengan select */
+    height: 38px;
+    box-sizing: border-box !important;
 }
 
 .search-box .form-input:focus-within {
@@ -33,18 +82,25 @@
     color: var(--dark);
 }
 
-.search-box .form-input button {
-    padding: 10px 16px;
-    background: #3C91E6;
-    color: #fff;
-    border: none;
+.search-box .form-input button,
+.search-box .form-input .search-btn {
+    padding: 10px 16px !important;
+    background: #3C91E6 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 !important; /* Memotong lurus sempurna menempel kapsul */
     cursor: pointer;
     font-size: 16px;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
     transition: background 0.3s;
 }
 
-.search-box .form-input button:hover {
-    background: #2b7bc6;
+.search-box .form-input button:hover,
+.search-box .form-input .search-btn:hover {
+    background: #2b7bc6 !important;
 }
 
 /* Responsive Table Wrapper Fix */
@@ -394,7 +450,15 @@
 /* ==========================================================================
    GLOBAL DESIGN SYSTEMS: DARK MODE OVERRIDES
    ========================================================================== */
-   
+body.dark .search-box select#categoryFilter {
+    background-color: #25282b !important;
+    color: #fff !important;
+    /* Panah kustom berubah warna cerah di dark mode */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23aaa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+}
+body.dark .search-box select#categoryFilter:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
+body.dark .search-box select#categoryFilter option { background: #1a1c1e; color: #fff; }
+
 body.dark .search-box .form-input { background: #25282b; }
 body.dark .search-box .form-input input { color: #fff; }
 body.dark .search-box .form-input:focus-within { background: #1e2124; }
@@ -424,27 +488,17 @@ body.dark .batik-actions { border-top-color: #3f444a; }
 body.dark .btn-cancel { background: #333; color: #bbb; }
 body.dark .btn-cancel:hover { background: #444; color: #fff; }
 
+/* Indikator Halaman Aktif Menyala Neon di Dark Mode */
 body.dark .pagi-btn.active {
-    background-color: #3C91E6 !important; /* Warna biru khas proyek */
+    background-color: #3C91E6 !important;
     border-color: #3C91E6 !important;
-    color: #ffffff !important; /* Teks putih solid biar kontras tajam */
-    box-shadow: 0 0 12px rgba(60, 145, 230, 0.6) !important; /* Efek neon/glow biar langsung eye-catching */
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(60, 145, 230, 0.6) !important;
     font-weight: 700 !important;
 }
+body.dark .pagi-btn.number:not(.active) { color: #ffffff !important; background-color: #25282b !important; border-color: #3f444a !important; }
+body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; color: #ffffff !important; border-color: #3C91E6 !important; }
 
-/* Biar tombol angka yang TIDAK aktif teksnya lebih putih/terang di mode dark */
-body.dark .pagi-btn.number:not(.active) {
-    color: #ffffff !important;
-    background-color: #25282b !important;
-    border-color: #3f444a !important;
-}
-
-/* Efek hover pas mode dark biar interaktif */
-body.dark .pagi-btn:hover:not(.active) {
-    background-color: #3C91E6 !important;
-    color: #ffffff !important;
-    border-color: #3C91E6 !important;
-}
 /* ==========================================================================
    RESPONSIVE DESIGN INTERCEPTORS (TABLET BREAKPOINTS)
    ========================================================================== */
@@ -467,15 +521,34 @@ body.dark .pagi-btn:hover:not(.active) {
    MOBILE SCREEN CONTEXT INTERCEPTOR (MENGUBAH TABEL BATIK JADI CARD VERTIKAL)
    ========================================================================== */
 @media (max-width: 576px) {
-    /* Perbaikan Form Search & Title di HP */
+    /* Perbaikan Baris Judul & Form Pencarian Komplet di HP */
     .table-data .head {
         flex-direction: column;
         align-items: flex-start !important;
         gap: 12px;
     }
     .table-data .head h3 { font-size: 20px; }
-    .search-box, .search-box .form-input { width: 100% !important; max-width: 100% !important; }
-    .btn-add-batik { width: 100%; margin-top: 10px; height: 42px; font-size: 14px; }
+    
+    /* Paksa form & seluruh komponen isinya melebar penuh di HP */
+    .search-box {
+        flex-direction: column;
+        align-items: stretch !important;
+        width: 100% !important;
+        gap: 10px;
+    }
+    
+    .search-box select#categoryFilter,
+    .search-box .form-input {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .btn-add-batik {
+        width: 100%;
+        margin-top: 10px;
+        height: 42px;
+        font-size: 14px;
+    }
 
     /* Transformasi Linier Struktur Tabel -> Blok Grid */
     .table-responsive-wrapper table, 

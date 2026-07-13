@@ -7,30 +7,37 @@ class BatikModel:
     def collection(self):
         return mongo.db.batiks
 
-    def get_all(self, search_query=None, include_deleted=False):
-        # Default awal: sembunyikan yang terhapus
-        query = {} if include_deleted else {"is_deleted": {"$ne": True}}
+    def get_all(self, search_query=None, category=None, include_deleted=False):
+        # Array untuk menampung semua kondisi query
+        conditions = []
         
+        # 1. Logika soft delete lama (tetap dipertahankan)
+        if not include_deleted:
+            conditions.append({"is_deleted": {"$ne": True}})
+            
+        # 2. Tambahkan filter kategori jika ada yang dipilih
+        if category:
+            conditions.append({"category": {"$regex": f"^{category}$", "$options": "i"}})
+            
+        # 3. Logika pencarian text/makna lama (tetap dipertahankan)[cite: 4]
         if search_query:
-            if include_deleted:
-                query = {
-                    "$or": [
-                        {"name": {"$regex": search_query, "$options": "i"}},
-                        {"makna": {"$regex": search_query, "$options": "i"}}
-                    ]
-                }
+            conditions.append({
+                "$or": [
+                    {"name": {"$regex": search_query, "$options": "i"}},
+                    {"makna": {"$regex": search_query, "$options": "i"}}
+                ]
+            })
+            
+        # Bentuk query akhir dari kondisi-kondisi di atas
+        if conditions:
+            # Jika include_deleted=True dan ada search_query, kita pastikan struktur query-nya valid
+            if len(conditions) == 1:
+                query = conditions[0]
             else:
-                query = {
-                    "$and": [
-                        {"is_deleted": {"$ne": True}},
-                        {
-                            "$or": [
-                                {"name": {"$regex": search_query, "$options": "i"}},
-                                {"makna": {"$regex": search_query, "$options": "i"}}
-                            ]
-                        }
-                    ]
-                }
+                query = {"$and": conditions}
+        else:
+            query = {}
+            
         return list(self.collection.find(query))
 
     def get_active(self, search_query=None):

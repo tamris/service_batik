@@ -139,6 +139,20 @@
 						<h3>List Motif Batik</h3>
 
 						<form class="search-box" onsubmit="return false;">
+
+							<select name="c" id="categoryFilter" onchange="this.form.submit()"
+								style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+								<option value="">Semua Kategori</option>
+								<option value="KLASIK" {% if selected_category=='KLASIK' %}selected{% endif %}>Klasik
+								</option>
+								<option value="KONTEMPORER" {% if selected_category=='KONTEMPORER' %}selected{% endif
+									%}>Kontemporer</option>
+								<option value="BAHARI" {% if selected_category=='BAHARI' %}selected{% endif %}>Bahari
+								</option>
+								<option value="FLORA & FAUNA" {% if selected_category=='FLORAL & FAUNA' %}selected{%
+									endif %}>Flora & Fauna</option>
+								</option>
+							</select>
 							<div class="form-input">
 								<input type="search" id="searchInput" placeholder="Cari motif batik..."
 									autocomplete="off" data-url="{{ url_for('galeri.index') }}">
@@ -221,22 +235,27 @@
 
 						<div class="pagi-buttons">
 
+							<!-- Tombol PREV -->
 							{% if page > 1 %}
-							<a href="{{ url_for('galeri.index', page=page-1) }}" class="pagi-btn prev">
+							<a href="{{ url_for('galeri.index', page=page-1, q=search_query, c=selected_category) }}"
+								class="pagi-btn prev">
 								<i class='bx bx-chevron-left'></i> Prev
 							</a>
 							{% endif %}
 
+							<!-- Tombol NOMOR HALAMAN -->
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('galeri.index', page=p, q=search_query) }}"
+								<a href="{{ url_for('galeri.index', page=p, q=search_query, c=selected_category) }}"
 									class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
 								{% endfor %}
 							</div>
 
-							{% if page < total_pages %} <a href="{{ url_for('galeri.index', page=page+1) }}"
+							<!-- Tombol NEXT -->
+							{% if page < total_pages %} <a
+								href="{{ url_for('galeri.index', page=page+1, q=search_query, c=selected_category) }}"
 								class="pagi-btn next">
 								Next <i class='bx bx-chevron-right'></i>
 								</a>

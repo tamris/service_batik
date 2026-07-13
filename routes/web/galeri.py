@@ -48,9 +48,11 @@ def generate_premium_sketch(input_path, output_filename):
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
+    selected_category = request.args.get('c', '') # Ambil dari dropdown filter
     per_page = 10
     
-    all_data = batik_model.get_all(search_query, include_deleted=True)
+    # Memanggil fungsi get_all dengan parameter category baru yang sudah ditambahkan di model
+    all_data = batik_model.get_all(search_query=search_query, category=selected_category, include_deleted=True)
 
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -69,7 +71,8 @@ def index():
                            total_items=total_items,
                            start_index=start_index,
                            end_index=end_index,
-                           search_query=search_query)
+                           search_query=search_query,
+                           selected_category=selected_category) # Jangan lupa lempar ke template
 
 
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
