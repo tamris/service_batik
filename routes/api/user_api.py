@@ -162,7 +162,7 @@ def change_password():
 
         # 4. Validasi Autentikasi Password Lama (Bcrypt Check)
         if not current_app.bcrypt.check_password_hash(user['password'], current_password):
-            return jsonify({"status": False, "msg": "Password lama yang Anda masukkan salah!"}), 401
+            return jsonify({"status": False, "msg": "Password lama yang Anda masukkan salah!"}), 422
 
         # 5. Jaminan Keamanan: Password baru tidak boleh sama dengan password lama
         if current_app.bcrypt.check_password_hash(user['password'], new_password):
