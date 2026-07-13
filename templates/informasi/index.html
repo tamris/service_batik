@@ -123,11 +123,28 @@
 				<div class="order">
 					<div class="head">
 						<h3>List Konten Informasi</h3>
-						<form class="search-box" onsubmit="return false;">
+						<form class="search-box" id="searchFilterForm" method="GET"
+							action="{{ url_for('informasi.index') }}" style="display: flex; gap: 10px;">
+							<!-- Dropdown Filter Kategori Informasi -->
+							<select name="c" id="categoryFilter" onchange="this.form.submit()"
+								style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+								<option value="">Semua Kategori</option>
+								<option value="BERITA TERKINI" {% if selected_category=='BERITA TERKINI' %}selected{% endif %}>Berita Terkini
+								</option>
+								<option value="EDUKASI" {% if selected_category=='EDUKASI' %}selected{% endif %}>Edukasi
+								</option>
+								<option value="SEJARAH" {% if selected_category=='SEJARAH' %}selected{% endif %}>Sejarah
+								</option>
+								<option value="SOSOK & INSPIRASI" {% if selected_category=='SOSOK & INSPIRASI' %}selected{% endif %}>Sosok & Inspirasi
+								</option>
+								<option value="EVENT" {% if selected_category=='EVENT' %}selected{% endif %}>Event
+								</option>
+							</select>
+
 							<div class="form-input">
-								<input type="search" id="searchInput" placeholder="Cari artikel..." autocomplete="off"
-									data-url="{{ url_for('informasi.index') }}">
-								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+								<input type="search" name="q" id="searchInput" placeholder="Cari artikel..."
+									autocomplete="off" value="{{ search_query }}">
+								<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</form>
 					</div>
@@ -137,10 +154,10 @@
 						<table>
 							<thead>
 								<tr>
-									<th width="10%">Gambar</th>
-									<th width="30%">Judul & Kategori</th>
-									<th width="50%">Isi Artikel</th>
-									<th width="15%">Aksi</th>
+									<th >Gambar</th>
+									<th >Judul & Kategori</th>
+									<th >Isi Artikel</th>
+									<th >Aksi</th>
 								</tr>
 							</thead>
 							<tbody id="tableBody">
@@ -154,13 +171,13 @@
 										</div>
 									</td>
 									<td>
-										<span class="article-title">{{ item.title }}</span>
+										<span class="article-title">{{ item.title | truncate(80) }}</span>
 										<span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
 											item.category }}</span>
 									</td>
 									<td>
 										<div class="limit-text" title="{{ item.description }}">
-											{{ item.description }}
+											{{ item.description  }}
 										</div>
 									</td>
 									<td>
@@ -169,13 +186,13 @@
 												class="btn-icon btn-edit" title="Edit">
 												<i class='bx bxs-edit'></i>
 											</a>
-												<!-- <a href="#" onclick="artikelDelete('{{ item._id|string }}')"
+											<!-- <a href="#" onclick="artikelDelete('{{ item._id|string }}')"
 											class="btn-icon btn-delete" title="Hapus">
 											<i class='bx bxs-trash'></i>
 										</a> -->
 										</div>
 									</td>
-									
+
 								</tr>
 								{% endfor %}
 							</tbody>
@@ -190,21 +207,23 @@
 						<div class="pagi-buttons">
 
 							{% if page > 1 %}
-							<a href="{{ url_for('informasi.index', page=page-1) }}" class="pagi-btn prev">
+							<a href="{{ url_for('informasi.index', page=page-1, q=search_query, c=selected_category) }}"
+								class="pagi-btn prev">
 								<i class='bx bx-chevron-left'></i> Prev
 							</a>
 							{% endif %}
 
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('informasi.index', page=p, q=search_query) }}"
+								<a href="{{ url_for('informasi.index', page=p, q=search_query, c=selected_category) }}"
 									class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
 								{% endfor %}
 							</div>
 
-							{% if page < total_pages %} <a href="{{ url_for('informasi.index', page=page+1) }}"
+							{% if page < total_pages %} <a
+								href="{{ url_for('informasi.index', page=page+1, q=search_query, c=selected_category) }}"
 								class="pagi-btn next">
 								Next <i class='bx bx-chevron-right'></i>
 								</a>

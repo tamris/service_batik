@@ -7,19 +7,31 @@ class InformasiModel:
         return mongo.db.informasi
 
     # 1. PERBAIKAN DI GET_ALL: Tambahkan Aggregation Pipeline supaya List Card juga dapat nama Admin
-    def get_all(self, search_query=None):
-        query = {}
+    def get_all(self, search_query=None, category=None):
+        conditions = []
+        
+        # 1. Tambahkan filter kategori jika dipilih
+        if category:
+            conditions.append({"category": {"$regex": f"^{category}$", "$options": "i"}})
+            
+        # 2. Pertahankan logika pencarian bawaan (title & description)[cite: 7]
         if search_query:
-            query = {
+            conditions.append({
                 "$or": [
                     {"title": {"$regex": search_query, "$options": "i"}},
                     {"description": {"$regex": search_query, "$options": "i"}}
                 ]
-            }
+            })
+            
+        # Tentukan objek query berdasarkan kondisi array yang terisi
+        if conditions:
+            query = {"$and": conditions}
+        else:
+            query = {}
             
         pipeline = [
-            {"$match": query},
-            {"$sort": {"created_at": -1}},
+            {"$match": query}, # Menggunakan kombinasi filter baru kita
+            {"$sort": {"created_at": -1}}, # Sorting bawaan tetap dipertahankan[cite: 7]
             {"$lookup": {
                 "from": "users",
                 "localField": "user_id",

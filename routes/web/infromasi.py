@@ -18,12 +18,11 @@ UPLOAD_FOLDER = 'static/img/informasi'
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
-    per_page = 5 
+    selected_category = request.args.get('c', '') # 1. Tangkap parameter kategori baru
+    per_page = 5
 
-    all_data = info_model.get_all(search_query)
-
-    # TIPS: Agar data yang baru dibuat muncul paling atas, 
-    # pastikan di Model kamu melakukan sorting berdasarkan 'created_at': -1
+    # 2. Kirim parameter search_query dan selected_category ke model
+    all_data = info_model.get_all(search_query=search_query, category=selected_category)
     
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -35,6 +34,7 @@ def index():
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
+    # 3. Sertakan selected_category ke render_template
     return render_template('informasi/index.html', 
                            informasi=data_tampil, 
                            page=page, 
@@ -42,7 +42,8 @@ def index():
                            total_items=total_items,
                            start_index=start_index,
                            end_index=end_index,
-                           search_query=search_query)
+                           search_query=search_query,
+                           selected_category=selected_category)
 
 @informasi_bp.route('/data-informasi/tambah', methods=['GET', 'POST'])
 def create():
