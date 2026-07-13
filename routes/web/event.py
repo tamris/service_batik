@@ -16,9 +16,11 @@ UPLOAD_FOLDER = 'static/img/events'
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
+    selected_category = request.args.get('c', '') # 1. Tangkap parameter filter kategori baru
     per_page = 7
 
-    all_data = event_model.get_all(search_query)
+    # 2. Kirim parameter search_query dan selected_category ke model
+    all_data = event_model.get_all(search_query=search_query, category=selected_category)
 
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -30,6 +32,7 @@ def index():
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
+    # 3. Lempar data selected_category ke template HTML
     return render_template('events/index.html', 
                            events=data_tampil, 
                            page=page, 
@@ -37,7 +40,8 @@ def index():
                            total_items=total_items,
                            start_index=start_index,
                            end_index=end_index,
-                           search_query=search_query)
+                           search_query=search_query,
+                           selected_category=selected_category)
 
 @event_bp.route('/data-events/tambah', methods=['GET', 'POST'])
 @login_required

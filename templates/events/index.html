@@ -121,13 +121,30 @@
 				<div class="order">
 					<div class="head">
 						<h3>List Agenda Event</h3>
-						<div class="search-box">
+						<form class="search-box" id="searchFilterForm" method="GET"
+							action="{{ url_for('event.index') }}" style="display: flex; gap: 10px;">
+							<!-- Dropdown Filter Kategori Event -->
+							<select name="c" id="categoryFilter" onchange="this.form.submit()"
+								style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+								<option value="">Semua Kategori</option>
+								<option value="PAMERAN" {% if selected_category=='PAMERAN' %}selected{% endif %}>Pameran
+								</option>
+								<option value="WORKSHOP" {% if selected_category=='WORKSHOP' %}selected{% endif %}>
+									Workshop</option>
+								<option value="FESTIVAL" {% if selected_category=='FESTIVAL' %}selected{% endif %}>
+									Festival</option>
+								<option value="LOMBA" {% if selected_category=='LOMBA' %}selected{% endif %}>
+									Lomba</option>
+								<option value="WEBINAR" {% if selected_category=='WEBINAR' %}selected{% endif %}>
+									Webinar</option>
+							</select>
+
 							<div class="form-input">
-								<input type="search" id="searchInput" placeholder="Cari nama event..."
-									autocomplete="off" data-url="{{ url_for('event.index') }}">
-								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+								<input type="search" name="q" id="searchInput" placeholder="Cari nama event..."
+									autocomplete="off" value="{{ search_query }}">
+								<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
-						</div>
+						</form>
 					</div>
 
 					<!-- BUNGKUSAN RESPONSIVE WRAPPER BARU -->
@@ -153,7 +170,8 @@
 										</div>
 									</td>
 									<td>
-										<span style="font-weight: 600; display: block;">{{ item.title | truncate(60)}}</span>
+										<span style="font-weight: 600; display: block;">{{ item.title |
+											truncate(60)}}</span>
 										<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
 									</td>
 
@@ -190,14 +208,15 @@
 
 						<div class="pagi-buttons">
 							{% if page > 1 %}
-							<a href="{{ url_for('event.index', page=page-1, q=search_query) }}" class="pagi-btn prev">
+							<a href="{{ url_for('event.index', page=page-1, q=search_query, c=selected_category) }}"
+								class="pagi-btn prev">
 								<i class='bx bx-chevron-left'></i> Prev
 							</a>
 							{% endif %}
 
 							<div class="pagi-numbers">
 								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('event.index', page=p, q=search_query) }}"
+								<a href="{{ url_for('event.index', page=p, q=search_query, c=selected_category) }}"
 									class="pagi-btn number {{ 'active' if p == page else '' }}">
 									{{ p }}
 								</a>
@@ -205,7 +224,8 @@
 							</div>
 
 							{% if page < total_pages %} <a
-								href="{{ url_for('event.index', page=page+1, q=search_query) }}" class="pagi-btn next">
+								href="{{ url_for('event.index', page=page+1, q=search_query, c=selected_category) }}"
+								class="pagi-btn next">
 								Next <i class='bx bx-chevron-right'></i>
 								</a>
 								{% endif %}
