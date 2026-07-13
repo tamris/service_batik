@@ -95,11 +95,11 @@
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
 
-         
-         <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
+
+            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
                 <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
+                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+                    onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
         <main>
@@ -112,7 +112,8 @@
                         <li><a class="active" href="#">Users</a></li>
                     </ul>
                 </div>
-                <a href="{{ url_for('user_manager.create') }}" class="btn-download">
+                <!-- REFACTOR CLASS KAKU GLOBAL JADI ADD-USER -->
+                <a href="{{ url_for('user_manager.create') }}" class="btn-add-user">
                     <i class='bx bxs-user-plus'></i>
                     <span class="text">Tambah Admin</span>
                 </a>
@@ -127,8 +128,6 @@
 
                         <!-- WRAPPER UNTUK FILTER DAN SEARCH -->
                         <div style="display: flex; gap: 12px; align-items: center;">
-
-                            <!-- DROPDOWN FILTER ROLE -->
                             <select id="roleFilter" class="user-filter" onchange="applyFilters()">
                                 <option value="all" {% if role_filter=='all' %}selected{% endif %}>Semua Role</option>
                                 <option value="superadmin" {% if role_filter=='superadmin' %}selected{% endif %}>
@@ -138,7 +137,6 @@
                                 </option>
                             </select>
 
-                            <!-- SEARCH BOX -->
                             <form class="search-box" onsubmit="event.preventDefault(); applyFilters();">
                                 <div class="form-input">
                                     <input type="search" id="searchInput" placeholder="Cari nama atau email..."
@@ -149,104 +147,106 @@
                         </div>
                     </div>
 
-                    <!-- Tabel Data -->
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                        <thead>
-                            <tr style="border-bottom: 2px solid var(--grey);">
-                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Username
-                                </th>
-                                <th style="width: 30%; padding: 0 10px 15px 10px; color: var(--dark);">Email</th>
-                                <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak Akses
-                                </th>
-                                <th style="width: 20%; padding: 0 10px 15px 10px; color: var(--dark);">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            {% for u in users %}
-                            <tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
-                                <td style="vertical-align: middle; padding: 18px 10px;">
-                                    <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{
-                                        u.username }}</span>
-                                </td>
-                                <td style="vertical-align: middle; padding: 18px 10px; color: #666;">
-                                    {{ u.email }}
-                                </td>
-                                <td style="vertical-align: middle; padding: 18px 10px;">
-                                    {% if u.role == 'superadmin' %}
-                                    <span class="badge-role superadmin">Superadmin</span>
-                                    {% elif u.role == 'admin' %}
-                                    <span class="badge-role admin">Admin</span>
-                                    {% else %}
-                                    <span class="badge-role user">User Biasa</span>
-                                    {% endif %}
-                                </td>
-                                <td style="vertical-align: middle; padding: 18px 10px;">
-                                    <div class="action-btn">
+                    <!-- BUNGKUSAN RESPONSIVE WRAPPER MAUT -->
+                    <div class="table-responsive-wrapper">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 2px solid var(--grey);">
+                                    <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Username</th>
+                                    <th style="width: 30%; padding: 0 10px 15px 10px; color: var(--dark);">Email</th>
+                                    <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak
+                                        Akses</th>
+                                    <th style="width: 20%; padding: 0 10px 15px 10px; color: var(--dark);">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Loop Data Jinja Kamu -->
+                                {% for u in users %}
+                                <tr
+                                    style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
+                                    <td style="vertical-align: middle; padding: 18px 10px;">
+                                        <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{
+                                            u.username }}</span>
+                                    </td>
+                                    <td style="vertical-align: middle; padding: 18px 10px; color: #666;">
+                                        {{ u.email }}
+                                    </td>
+                                    <td style="vertical-align: middle; padding: 18px 10px;">
                                         {% if u.role == 'superadmin' %}
-                                        <span class="status-text status-owner">Pemilik Sistem</span>
+                                        <span class="badge-role superadmin">Superadmin</span>
                                         {% elif u.role == 'admin' %}
-                                        <a href="{{ url_for('user_manager.edit', user_id=u._id) }}?page={{ page }}"
-                                            class="btn-icon btn-edit" title="Edit Admin">
-                                            <i class='bx bxs-edit'></i>
-                                        </a>
+                                        <span class="badge-role admin">Admin</span>
                                         {% else %}
-                                        <span class="status-text status-view">View Only</span>
+                                        <span class="badge-role user">User Biasa</span>
                                         {% endif %}
-                                    </div>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <!-- Empty State -->
-                            <tr>
-                                <td colspan="4" style="text-align: center; padding: 60px 20px;">
-                                    <div class="empty-state">
-                                        <i class='bx bx-group empty-icon'
-                                            style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                                        <p class="empty-title"
-                                            style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada
-                                            data pengguna.</p>
-                                        <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru
-                                            akan muncul di sini.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="pagination-wrapper" id="paginationContainer">
-                        <span class="pagi-info">
-                            Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
-                            results
-                        </span>
-
-                        <div class="pagi-buttons">
-                            {% if page > 1 %}
-                            <!-- Tambahkan parameter role dan q di setiap url_for -->
-                            <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}"
-                                class="pagi-btn prev">
-                                <i class='bx bx-chevron-left'></i> Prev
-                            </a>
-                            {% endif %}
-
-                            <div class="pagi-numbers">
-                                {% for p in range(1, total_pages + 1) %}
-                                <a href="{{ url_for('user_manager.index', page=p, q=search_query, role=role_filter) }}"
-                                    class="pagi-btn number {{ 'active' if p == page else '' }}">
-                                    {{ p }}
-                                </a>
+                                    </td>
+                                    <td style="vertical-align: middle; padding: 18px 10px;">
+                                        <div class="action-btn">
+                                            {% if u.role == 'superadmin' %}
+                                            <span class="status-text status-owner">Pemilik Sistem</span>
+                                            {% elif u.role == 'admin' %}
+                                            <a href="{{ url_for('user_manager.edit', user_id=u._id) }}?page={{ page }}"
+                                                class="btn-icon btn-edit" title="Edit Admin">
+                                                <i class='bx bxs-edit'></i>
+                                            </a>
+                                            {% else %}
+                                            <span class="status-text status-view">View Only</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <!-- Empty State -->
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 60px 20px;">
+                                        <div class="empty-state">
+                                            <i class='bx bx-group empty-icon'
+                                                style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                                            <p class="empty-title"
+                                                style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada
+                                                data pengguna.</p>
+                                            <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru
+                                                akan muncul di sini.</p>
+                                        </div>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                            </div>
+                            </tbody>
+                        </table>
+                        <div class="pagination-wrapper" id="paginationContainer">
+                            <span class="pagi-info">
+                                Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
+                                results
+                            </span>
 
-                            {% if page < total_pages %} <a
-                                href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}"
-                                class="pagi-btn next">
-                                Next <i class='bx bx-chevron-right'></i>
+                            <div class="pagi-buttons">
+                                {% if page > 1 %}
+                                <!-- Tambahkan parameter role dan q di setiap url_for -->
+                                <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}"
+                                    class="pagi-btn prev">
+                                    <i class='bx bx-chevron-left'></i> Prev
                                 </a>
                                 {% endif %}
+
+                                <div class="pagi-numbers">
+                                    {% for p in range(1, total_pages + 1) %}
+                                    <a href="{{ url_for('user_manager.index', page=p, q=search_query, role=role_filter) }}"
+                                        class="pagi-btn number {{ 'active' if p == page else '' }}">
+                                        {{ p }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+
+                                {% if page < total_pages %} <a
+                                    href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}"
+                                    class="pagi-btn next">
+                                    Next <i class='bx bx-chevron-right'></i>
+                                    </a>
+                                    {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </main>
     </section>
 

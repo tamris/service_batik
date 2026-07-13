@@ -95,10 +95,10 @@
 
 
 			<a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
-            </a>
+				<!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
+				<img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+					onerror="this.src='/static/img/avatar.png';">
+			</a>
 		</nav>
 
 		<main>
@@ -111,7 +111,8 @@
 						<li><a class="active" href="#">Video</a></li>
 					</ul>
 				</div>
-				<a href="{{ url_for('video.create') }}" class="btn-download">
+				<!-- REFACTOR CLASS KAKU GLOBAL JADI ADD-VIDEO -->
+				<a href="{{ url_for('video.create') }}" class="btn-add-video">
 					<i class='bx bxs-plus-circle'></i><span class="text">Tambah Video</span>
 				</a>
 			</div>
@@ -121,99 +122,105 @@
 					<div class="head">
 						<h3>List Konten Video</h3>
 						<div class="search-box">
-							<div class="form-input" style="position: relative;">
+							<div class="form-input">
 								<input type="search" id="searchInput" placeholder="Cari Judul Video..."
 									autocomplete="off" data-url="{{ url_for('video.index') }}">
 								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</div>
 					</div>
-					<table>
-						<thead>
-							<tr>
-								<th width="15%">Thumbnail</th>
-								<th width="35%">Judul & Tanggal</th>
-								<th width="15%">Kategori</th>
-								<th width="20%">Link YouTube</th>
-								<th width="15%">Aksi</th>
-							</tr>
-						</thead>
-						<tbody id="tableBody">
-							{% for item in videos %}
-							<tr>
-								<td>
-									<div class="video-thumb">
-										{% if 'v=' in item.youtube_url %}
-										{% set video_id = item.youtube_url.split('v=')[1].split('&')[0] %}
-										<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg"
-											alt="Thumbnail">
-										{% elif 'youtu.be/' in item.youtube_url %}
-										{% set video_id = item.youtube_url.split('youtu.be/')[1].split('?')[0] %}
-										<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg"
-											alt="Thumbnail">
-										{% else %}
-										<img src="{{ url_for('static', filename='img/default_video.png') }}"
-											alt="Default Thumbnail">
-										{% endif %}
-									</div>
-								</td>
-								<td>
-									<span style="font-weight: 600; font-size: 14px; display: block;">{{ item.title
-										}}</span>
-									<small style="color: #888;">{{ item.created_at.strftime('%d %b %Y') if
-										item.created_at else '-' }}</small>
-								</td>
-								<td><span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
-										item.category }}</span></td>
-								<td><a href="{{ item.youtube_url }}" target="_blank"
-										style="color: #3C91E6; font-size: 12px;">Buka di YouTube <i
-											class='bx bx-link-external'></i></a></td>
-								<td>
-									<div class="action-btn">
-										<a href="{{ url_for('video.edit', video_id=item._id) }}?page={{ page }}"
-											class="btn-icon btn-edit" title="Edit">
-											<i class='bx bxs-edit'></i>
-										</a>
-										<!-- <a href="#" onclick="videoDelete('{{ item._id }}')" class="btn-icon btn-delete"
+
+					<!-- BUNGKUSAN RESPONSIVE WRAPPER MAUT -->
+					<div class="table-responsive-wrapper">
+						<table>
+							<thead>
+								<tr>
+									<th width="15%">Thumbnail</th>
+									<th width="35%">Judul & Tanggal</th>
+									<th width="15%">Kategori</th>
+									<th width="20%">Link YouTube</th>
+									<th width="15%">Aksi</th>
+								</tr>
+							</thead>
+							<tbody id="tableBody">
+								{% for item in videos %}
+								<tr>
+									<td>
+										<div class="video-thumb">
+											{% if 'v=' in item.youtube_url %}
+											{% set video_id = item.youtube_url.split('v=')[1].split('&')[0] %}
+											<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg"
+												alt="Thumbnail">
+											{% elif 'youtu.be/' in item.youtube_url %}
+											{% set video_id = item.youtube_url.split('youtu.be/')[1].split('?')[0] %}
+											<img src="https://img.youtube.com/vi/{{ video_id }}/mqdefault.jpg"
+												alt="Thumbnail">
+											{% else %}
+											<img src="{{ url_for('static', filename='img/default_video.png') }}"
+												alt="Default Thumbnail">
+											{% endif %}
+										</div>
+									</td>
+									<td>
+										<span style="font-weight: 600; font-size: 14px; display: block;">{{ item.title
+											}}</span>
+										<small style="color: #888;">{{ item.created_at.strftime('%d %b %Y') if
+											item.created_at else '-' }}</small>
+									</td>
+									<td><span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
+											item.category }}</span></td>
+									<td><a href="{{ item.youtube_url }}" target="_blank"
+											style="color: #3C91E6; font-size: 12px;">Buka di YouTube <i
+												class='bx bx-link-external'></i></a></td>
+									<td>
+										<div class="action-btn">
+											<a href="{{ url_for('video.edit', video_id=item._id) }}?page={{ page }}"
+												class="btn-icon btn-edit" title="Edit">
+												<i class='bx bxs-edit'></i>
+											</a>
+											<!-- <a href="#" onclick="videoDelete('{{ item._id }}')" class="btn-icon btn-delete"
 											title="Hapus"><i class='bx bxs-trash'></i></a> -->
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-
-					<div class="pagination-wrapper" id="paginationContainer">
-						<span class="pagi-info">
-							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
-							results
-						</span>
-
-						<div class="pagi-buttons">
-							{% if page > 1 %}
-							<a href="{{ url_for('video.index', page=page-1, q=search_query) }}" class="pagi-btn prev">
-								<i class='bx bx-chevron-left'></i> Prev
-							</a>
-							{% endif %}
-
-							<div class="pagi-numbers">
-								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('video.index', page=p, q=search_query) }}"
-									class="pagi-btn number {{ 'active' if p == page else '' }}">
-									{{ p }}
-								</a>
+										</div>
+									</td>
+								</tr>
 								{% endfor %}
-							</div>
+							</tbody>
+						</table>
+					</div>
 
-							{% if page < total_pages %} <a
-								href="{{ url_for('video.index', page=page+1, q=search_query) }}" class="pagi-btn next">
-								Next <i class='bx bx-chevron-right'></i>
+						<div class="pagination-wrapper" id="paginationContainer">
+							<span class="pagi-info">
+								Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
+								results
+							</span>
+
+							<div class="pagi-buttons">
+								{% if page > 1 %}
+								<a href="{{ url_for('video.index', page=page-1, q=search_query) }}"
+									class="pagi-btn prev">
+									<i class='bx bx-chevron-left'></i> Prev
 								</a>
 								{% endif %}
+
+								<div class="pagi-numbers">
+									{% for p in range(1, total_pages + 1) %}
+									<a href="{{ url_for('video.index', page=p, q=search_query) }}"
+										class="pagi-btn number {{ 'active' if p == page else '' }}">
+										{{ p }}
+									</a>
+									{% endfor %}
+								</div>
+
+								{% if page < total_pages %} <a
+									href="{{ url_for('video.index', page=page+1, q=search_query) }}"
+									class="pagi-btn next">
+									Next <i class='bx bx-chevron-right'></i>
+									</a>
+									{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 		</main>
 	</section>
 

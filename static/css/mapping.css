@@ -1,6 +1,6 @@
-/* =========================================
-   STYLING KHUSUS MAPPING LOKASI
-========================================= */
+/* ==========================================================================
+   STYLING KHUSUS MAPPING LOKASI (CLEAN & MODULAR)
+   ========================================================================== */
 
 /* 1. BADGE KATEGORI LOKASI */
 .badge-map {
@@ -17,26 +17,33 @@
 .cat-toko   { background: rgba(63, 195, 128, 0.1); color: #3FC380; }
 .cat-edukasi { background: rgba(155, 89, 182, 0.1); color: #9B59B6; }
 
+/* Responsive Table Wrapper Fix */
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
 /* 2. FORM & INPUT MAPPING */
 .map-form-container {
-    padding: 36px;
+    padding: 30px !important;
     background: var(--light);
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     width: 100%;
     box-sizing: border-box;
 }
 
-.map-group { margin-bottom: 24px; }
-.map-label { display: block; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 10px; }
+.map-group { margin-bottom: 20px; }
+.map-label { display: block; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
 
 .map-input {
     width: 100%;
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-size: 14px;
     color: var(--dark);
-    background: #ffffff; /* <-- Latar belakang jadi putih bersih */
-    border: 1px solid #ddd; /* <-- Tambahan garis tepi abu-abu tipis biar rapi */
+    background: #ffffff;
+    border: 1px solid #ddd;
     border-radius: 8px;
     outline: none;
     transition: all 0.3s ease;
@@ -45,156 +52,129 @@
 }
 .map-input:focus { 
     border-color: #3C91E6; 
-    background: transparent; 
     box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15); 
+}
+
+/* Checkbox Multi-Select Area Component */
+.map-checkbox-wrapper {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
 }
 
 /* 3. COORDINATE GRID (Lat/Long Sejajar) */
 .coord-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-/* 4. SEARCH & FILTER */
-.map-filter-wrapper {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-/* =========================================
-   5. WIDGET PETA INTERAKTIF (PENTING!)
-========================================= */
+/* 4. WIDGET PETA INTERAKTIF */
 .map-widget-container {
     width: 100%;
-    height: 380px; /* Tinggi ideal agar peta terlihat lega */
+    height: 380px;
     border-radius: 12px;
     margin-bottom: 10px; 
     border: 2px solid var(--grey);
     overflow: hidden;
-    z-index: 1; /* Mencegah Leaflet bentrok dengan elemen lain */
+    z-index: 1;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
 }
 
-/* =========================================
-   6. TOMBOL AKSI BAWAH (Batal & Simpan)
-========================================= */
-.user-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 15px;
-    margin-top: 35px;
-    padding-top: 24px;
-    border-top: 1px solid var(--grey);
-}
-
-.btn-cancel {
-    padding: 12px 20px;
-    background: var(--grey);
-    color: var(--dark);
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.btn-cancel:hover { background: #d0d0d0; }
-
-.btn-save {
-    padding: 12px 20px;
-    background: #3C91E6;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-save:hover { background: #2b7bc9; transform: translateY(-2px); }
-
-
-/* =========================================
-   7. DARK MODE OVERRIDES
-========================================= */
-body.dark .map-form-container { background: #1a1c1e; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
-body.dark .map-input { background: #25282b; color: #fff; border-color: #3f444a; }
-body.dark .map-input:focus { background: transparent; border-color: #3C91E6; }
-body.dark .badge-map.cat-sentra { background: rgba(60, 145, 230, 0.2); }
-
-/* Penyesuaian Peta & Tombol saat mode gelap */
-body.dark .map-widget-container { 
-    border-color: #3f444a; 
-    filter: brightness(0.8) contrast(1.2); /* Bikin peta gak terlalu silau */
-}
-body.dark .user-actions { border-top-color: #2b2e33; }
-body.dark .btn-cancel { background: #25282b; color: #ccc; }
-body.dark .btn-cancel:hover { background: #333; color: #fff; }
-
-/* =========================================
-   8. TABEL, SEARCH BOX & TOMBOL AKSI
-========================================= */
-
-/* Search Box Estetik */
+/* 5. SEARCH BOX & HEAD BUTTONS */
 .map-search-box .form-input {
     display: flex;
     align-items: center;
-    background: var(--grey);
+    background: #f1f1f1;
     border-radius: 36px;
-    padding: 2px 4px;
-    width: 280px;
+    overflow: hidden;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px; /* Ukuran pas standar dashboard */
 }
 
 .map-search-box .form-input:focus-within {
-    background: transparent;
     border-color: #3C91E6;
+    background: #fff;
     box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
 }
 
 .map-search-box .form-input input {
-    flex-grow: 1;
-    background: transparent;
+    padding: 10px 16px;
     border: none;
+    background: transparent;
     outline: none;
-    padding: 8px 16px;
+    flex-grow: 1;
+    width: 100%;
+    font-family: inherit;
     font-size: 14px;
     color: var(--dark);
-    font-family: inherit;
 }
 
-.map-search-box .form-input button {
-    width: 36px;
+.map-search-box .form-input button,
+.map-search-box .form-input .search-btn {
+    padding: 10px 16px !important;
+    background: #3C91E6 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 !important; /* Mematikan circle bawaan lama biar motong rapi di kanan */
+    cursor: pointer;
+    font-size: 16px;
+    width: auto !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.map-search-box .form-input button:hover,
+.map-search-box .form-input .search-btn:hover {
+    background: #2b7bc6 !important;
+}
+
+/* Tombol Tambah Lokasi (Kanan Atas) */
+.btn-add-map {
     height: 36px;
-    display: flex;
+    padding: 0 16px;
+    border-radius: 36px;
+    background-color: #3C91E6 !important;
+    color: #fff !important;
+    display: inline-flex !important;
     justify-content: center;
     align-items: center;
-    background: transparent;
-    color: var(--dark);
-    font-size: 18px;
-    border: none;
-    outline: none;
-    border-radius: 50%;
-    cursor: pointer;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.15);
+}
+
+.btn-add-map:hover {
+    background-color: #2b7bc6 !important;
+    transform: translateY(-1px);
 }
 
 /* Tombol Aksi Tabel */
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
+.action-btn { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .btn-icon {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
     width: 34px;
@@ -204,24 +184,59 @@ body.dark .btn-cancel:hover { background: #333; color: #fff; }
     text-decoration: none;
     font-size: 16px;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+.btn-icon .bx { font-size: 18px !important; line-height: 1 !important; display: block !important; }
 
-.btn-icon.btn-edit { background: #FFCE26; box-shadow: 0 2px 6px rgba(255, 206, 38, 0.3); }
-.btn-icon.btn-edit:hover { background: #e6b822; transform: translateY(-2px); }
+.btn-icon.btn-edit { background: #FFCE26 !important; color: #342E37 !important; }
+.btn-icon.btn-edit:hover { background: #e6b822 !important; transform: translateY(-2px); }
 
-.btn-icon.btn-delete { background: #FF4B4B; box-shadow: 0 2px 6px rgba(255, 75, 75, 0.3); }
-.btn-icon.btn-delete:hover { background: #e63939; transform: translateY(-2px); }
+.btn-icon.btn-delete { background: #FF4B4B !important; color: #fff !important; }
+.btn-icon.btn-delete:hover { background: #e63939 !important; transform: translateY(-2px); }
 
-/* Penyesuaian Dark Mode Tabel */
-body.dark .map-search-box .form-input { background: rgba(255, 255, 255, 0.05); }
-body.dark .map-search-box .form-input:focus-within { background: transparent; }
-body.dark .map-search-box .form-input input { color: #fff; }
-body.dark .map-search-box .form-input button { color: #888; }
+/* 6. TOMBOL AKSI BAWAH (Batal & Simpan) */
+.user-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--grey);
+    flex-wrap: wrap;
+}
+.user-actions .creator-info { margin-right: auto; }
 
+.btn-cancel {
+    padding: 10px 24px;
+    background: var(--grey);
+    color: var(--dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+.btn-cancel:hover { background: #d0d0d0; }
 
-/* =========================================
-   --- 6. PAGINATION --- 
-========================================= */
+.btn-save {
+    padding: 10px 24px;
+    background: #3C91E6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+.btn-save:hover { background: #2b7bc9; transform: translateY(-1px); }
+
+/* 7. PAGINATION */
 .pagination-wrapper {
     display: flex;
     justify-content: space-between;
@@ -229,23 +244,11 @@ body.dark .map-search-box .form-input button { color: #888; }
     margin-top: 24px;
     padding-top: 16px;
     border-top: 1px solid var(--grey);
+    gap: 16px;
 }
-
-.pagi-info {
-    font-size: 13px;
-    color: #888;
-}
-
-.pagi-info b {
-    color: var(--dark);
-    font-weight: 600;
-}
-
-.pagi-buttons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.pagi-info { font-size: 13px; color: #888; }
+.pagi-info b { color: var(--dark); font-weight: 600; }
+.pagi-buttons, .pagi-numbers { display: flex; align-items: center; gap: 8px; }
 
 .pagi-btn {
     display: inline-flex;
@@ -261,21 +264,117 @@ body.dark .map-search-box .form-input button { color: #888; }
     border: 1px solid #ddd;
     transition: all 0.3s ease;
 }
-
 .pagi-btn:hover { background: #f0f0f0; }
 
 .pagi-btn.active {
-    background: #3C91E6;
-    color: #fff;
-    border-color: #3C91E6;
+    background: #3C91E6 !important;
+    color: #fff !important;
+    border-color: #3C91E6 !important;
 }
 
-/* Penyesuaian Dark Mode */
-body.dark .pagination-wrapper { border-top-color: #2b2e33; }
-body.dark .pagi-info { color: #888; }
-body.dark .pagi-info b { color: #fff; }
-body.dark .pagi-btn { background: #25282b; color: #fff; border-color: #3f444a; }
-body.dark .pagi-btn:hover { background: #333; }
-body.dark .pagi-btn.active { background: #3C91E6; border-color: #3C91E6; }
+/* ==========================================================================
+   DARK MODE OVERRIDES (SINKRONISASI TOTAL)
+   ========================================================================== */
+body.dark .map-form-container { background: #1a1c1e !important; }
+body.dark .map-label { color: #e0e0e0; }
+body.dark .map-input { background: #25282b; color: #fff; border-color: #3f444a; }
+body.dark .map-checkbox-wrapper { background: #25282b; border-color: #3f444a; }
+body.dark .check-label { color: #e0e0e0; }
+body.dark .map-widget-container { border-color: #3f444a; filter: brightness(0.8) contrast(1.2); }
+body.dark .user-actions { border-top-color: #2b2e33; }
+body.dark .btn-cancel { background: #333; color: #bbb; }
+body.dark .btn-cancel:hover { background: #444; color: #fff; }
+body.dark .map-search-box .form-input { background: #25282b; }
+body.dark .map-search-box .form-input input { color: #fff; }
+body.dark .map-search-box .form-input:focus-within { background: #1e2124; }
 
+/* Dark Mode Navigation Glow */
+body.dark .pagi-btn.active {
+    background-color: #3C91E6 !important;
+    border-color: #3C91E6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(60, 145, 230, 0.6) !important;
+    font-weight: 700 !important;
+}
+body.dark .pagi-btn.number:not(.active) { color: #ffffff !important; background-color: #25282b !important; border-color: #3f444a !important; }
+body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; color: #ffffff !important; border-color: #3C91E6 !important; }
 
+/* ==========================================================================
+   RESPONSIVE DESIGN INTERCEPTORS
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .coord-grid { grid-template-columns: 1fr; gap: 16px; }
+    .map-form-container { padding: 20px !important; }
+    .pagination-wrapper { flex-direction: column; text-align: center; }
+    .user-actions { flex-direction: column; align-items: stretch; width: 100%; }
+    .user-actions .creator-info { margin-right: 0; margin-bottom: 10px; justify-content: center; }
+    .btn-cancel, .btn-save { width: 100%; justify-content: center; text-align: center; }
+}
+
+@media (max-width: 900px) and (min-width: 577px) {
+    .table-responsive-wrapper table th:nth-child(2),
+    .table-responsive-wrapper table td:nth-child(2) { min-width: 180px; }
+}
+
+/* ==========================================================================
+   MOBILE SCREEN CONTEXT INTERCEPTOR (TRICK MAUT TABEL JADI CARD VERTIKAL)
+   ========================================================================== */
+@media screen and (max-width: 576px) {
+    .table-data .head {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+    .table-data .head h3 { font-size: 20px; }
+    .map-search-box, .map-search-box .form-input { width: 100% !important; max-width: 100% !important; }
+    .btn-add-map { width: 100%; margin-top: 10px; height: 42px; font-size: 14px; }
+
+    /* Ubah Tabel ke Sistem Blok Card Vertikal */
+    .table-responsive-wrapper table, 
+    .table-responsive-wrapper thead, 
+    .table-responsive-wrapper tbody, 
+    .table-responsive-wrapper th, 
+    .table-responsive-wrapper td, 
+    .table-responsive-wrapper tr { 
+        display: block; 
+    }
+    
+    .table-responsive-wrapper thead { display: none; }
+    
+    .table-responsive-wrapper tr {
+        margin-bottom: 20px;
+        padding: 16px;
+        background: var(--grey); 
+        border-radius: 12px;
+        border-bottom: none !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    body.dark .table-responsive-wrapper tr { background: #1a1c1e !important; }
+
+    .table-responsive-wrapper td {
+        width: 100% !important;
+        padding: 6px 0 !important;
+        text-align: left;
+    }
+
+    .table-responsive-wrapper td:first-child {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    .table-responsive-wrapper td:first-child img { width: 100% !important; height: 150px; }
+
+    .table-responsive-wrapper td:last-child {
+        display: flex;
+        justify-content: flex-end;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        padding-top: 12px !important;
+        margin-top: 8px;
+    }
+    body.dark .table-responsive-wrapper td:last-child { border-top-color: rgba(255,255,255,0.06); }
+
+    .pagi-buttons { flex-direction: column; width: 100%; }
+    .pagi-numbers { flex-wrap: wrap; justify-content: center; }
+    .pagi-btn { width: 100%; }
+    .pagi-btn.number { width: 36px; }
+}

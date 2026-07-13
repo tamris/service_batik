@@ -1,6 +1,6 @@
-/* =========================================
-   MODERN STYLING FOR VIDEO INDEX (LIST)
-========================================= */
+/* ==========================================================================
+   MODERN STYLING FOR VIDEO INDEX (CLEAN & MODULAR)
+   ========================================================================== */
 
 /* Search Box Customization */
 .search-box .form-input {
@@ -11,6 +11,8 @@
     overflow: hidden;
     border: 1px solid transparent;
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
 }
 
 .search-box .form-input:focus-within {
@@ -24,7 +26,8 @@
     border: none;
     background: transparent;
     outline: none;
-    width: 250px;
+    flex-grow: 1;
+    width: 100%;
     font-family: inherit;
     font-size: 14px;
     color: var(--dark);
@@ -37,16 +40,24 @@
     border: none;
     cursor: pointer;
     font-size: 16px;
-    transition: 0.3s;
+    transition: background 0.3s;
 }
 
 .search-box .form-input button:hover {
     background: #2b7bc6;
 }
 
-/* Video Thumbnail Styling (Spesial 16:9 & Clean) */
+/* Responsive Table Wrapper Fix */
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
+/* Video Thumbnail Styling (16:9 Aspect Ratio) */
 .video-thumb {
-    width: 120px; /* Sedikit lebih lebar agar YouTube tumbnail terlihat jelas */
+    width: 100px; 
     aspect-ratio: 16 / 9;
     border-radius: 8px;
     overflow: hidden;
@@ -65,55 +76,82 @@
 }
 
 .video-thumb:hover img {
-    transform: scale(1.1); /* Efek zoom saat di-hover */
+    transform: scale(1.1);
 }
 
-/* Action Buttons (Edit & Delete) */
+/* Badge Kategori Kontras */
+.table-responsive-wrapper td .status.completed {
+    display: inline-block !important;
+    background-color: rgba(60, 145, 230, 0.1) !important;
+    color: #3C91E6 !important;
+    border-radius: 20px !important;
+    padding: 4px 12px !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: none !important;
+}
+
+/* Action Buttons Fix (Centering & Precise Dimensions) */
 .action-btn {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .btn-icon {
-    width: 32px;
-    height: 32px;
-    display: flex;
+    width: 34px;
+    height: 34px;
+    display: inline-flex !important; 
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    color: #fff;
     text-decoration: none;
-    font-size: 16px;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.btn-edit {
-    background: #FFCE26;
-    color: #333;
+.btn-icon .bx, 
+.btn-icon i {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    display: block !important;
 }
 
-.btn-edit:hover {
-    background: #e5b822;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(255, 206, 38, 0.3);
+.btn-edit { background-color: #FFCE26 !important; color: #342E37 !important; }
+.btn-edit:hover { background-color: #e5b822 !important; transform: translateY(-2px); }
+
+.btn-delete { background-color: #FD7238 !important; color: #fff !important; }
+.btn-delete:hover { background-color: #e06532 !important; transform: translateY(-2px); }
+
+/* Tombol Tambah Video Semantic Fix */
+.btn-add-video {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 36px;
+    background-color: #3C91E6 !important;
+    color: #fff !important;
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.15);
 }
 
-.btn-delete {
-    background: #FD7238;
-    color: #fff;
+.btn-add-video:hover {
+    background-color: #2b7bc6 !important;
+    transform: translateY(-1px);
 }
 
-.btn-delete:hover {
-    background: #e06532;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(253, 114, 56, 0.3);
-}
-
-/* =========================================
-   PAGINATION STYLING (MODERN & RAPI)
-========================================= */
-
+/* ==========================================================================
+   PAGINATION STYLING
+   ========================================================================== */
 .pagination-wrapper {
     display: flex;
     justify-content: space-between;
@@ -121,38 +159,19 @@
     margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid #eee;
+    gap: 16px;
 }
 
-.pagi-info {
-    font-size: 14px;
-    color: #888;
-}
+.pagi-info { font-size: 14px; color: #888; }
+.pagi-info b { color: var(--dark); }
+.pagi-buttons, .pagi-numbers { display: flex; align-items: center; gap: 8px; }
 
-.pagi-info b {
-    color: var(--dark);
-}
-
-/* Membungkus semua tombol (Prev, Numbers, Next) */
-.pagi-buttons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Membungkus khusus angka agar sejajar */
-.pagi-numbers {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* Tombol Umum (Prev & Next) */
 .pagi-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    height: 36px; /* Tinggi diseragamkan */
+    height: 36px;
     padding: 0 14px;
     background: #fff;
     border: 1px solid #ccc;
@@ -164,13 +183,7 @@
     transition: all 0.3s ease;
 }
 
-/* Khusus untuk tombol angka (biar kotak presisi) */
-.pagi-btn.number {
-    padding: 0;
-    width: 36px; /* Lebar disamakan dengan tinggi */
-}
-
-/* Efek Hover & Active */
+.pagi-btn.number { padding: 0; width: 36px; }
 .pagi-btn:hover, .pagi-btn.active {
     background: #3C91E6;
     color: #fff;
@@ -178,109 +191,32 @@
     box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
 }
 
-/* =========================================
-   DARK MODE OVERRIDES (PAGINATION)
-========================================= */
-
-body.dark .pagination-wrapper {
-    border-top-color: #3f444a;
-}
-
-body.dark .pagi-info {
-    color: #aaa;
-}
-
-body.dark .pagi-info b {
-    color: #fff;
-}
-
-body.dark .pagi-btn {
-    background: #25282b;
-    border-color: #3f444a;
-    color: #e0e0e0;
-}
-
-body.dark .pagi-btn:hover, 
-body.dark .pagi-btn.active {
-    background: #3C91E6;
-    border-color: #3C91E6;
-    color: #fff;
-    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.3);
-}
-
-/* =========================================
-   DARK MODE OVERRIDES
-========================================= */
-
-body.dark .search-box .form-input {
-    background: #25282b;
-}
-
-body.dark .search-box .form-input input {
-    color: #fff;
-}
-
-body.dark .search-box .form-input:focus-within {
-    background: #1e2124;
-}
-
-body.dark .video-thumb {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-body.dark .pagination-wrapper {
-    border-top-color: #3f444a;
-}
-
-body.dark .pagi-btn {
-    background: #25282b;
-    border-color: #3f444a;
-    color: #e0e0e0;
-}
-
-body.dark .pagi-btn:hover {
-    background: #3C91E6;
-    border-color: #3C91E6;
-    color: #fff;
-}
-
-body.dark .pagi-info {
-    color: #aaa;
-}
-
-body.dark .pagi-info b {
-    color: #fff;
-}
-
-/* =========================================
-   MODERN FORM STYLING FOR VIDEO CREATION
-========================================= */
-
+/* ==========================================================================
+   FORM STYLING FOR VIDEO CREATION & EDIT
+   ========================================================================== */
 .video-form-container {
     padding: 30px !important;
     background: var(--light);
     border-radius: 16px;
+    width: 100%;
 }
 
 .video-grid {
     display: grid;
     gap: 20px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .title-category-grid {
     grid-template-columns: 2fr 1fr;
 }
 
-.video-group {
-    margin-bottom: 24px;
-}
-
+.video-group { margin-bottom: 20px; }
 .video-label {
     display: block;
     font-weight: 600;
     color: var(--dark);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
@@ -297,13 +233,8 @@ body.dark .pagi-info b {
     box-sizing: border-box;
 }
 
-.input-with-clear {
-    position: relative;
-}
-
-.input-with-clear .video-input {
-    padding-right: 48px;
-}
+.input-with-clear { position: relative; }
+.input-with-clear .video-input { padding-right: 48px; }
 
 .clear-input-btn {
     position: absolute;
@@ -325,11 +256,9 @@ body.dark .pagi-info b {
     transition: all 0.2s ease;
 }
 
-.clear-input-btn:hover,
-.clear-input-btn:focus-visible {
+.clear-input-btn:hover {
     background: rgba(60, 145, 230, 0.12);
     color: #3C91E6;
-    outline: none;
 }
 
 .video-input:focus {
@@ -346,101 +275,9 @@ body.dark .pagi-info b {
     font-style: italic;
 }
 
-.video-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 15px;
-    margin-top: 35px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-/* =========================================
-   ACTION BUTTONS STYLING (BATAL & SIMPAN)
-========================================= */
-
-.btn-cancel {
-    padding: 10px 24px;
-    background: #f1f1f1;
-    color: var(--dark);
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.btn-cancel:hover {
-    background: #e0e0e0;
-}
-
-.btn-save {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 24px;
-    background: #3C91E6;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
-}
-
-.btn-save:hover {
-    background: #2b7bc6;
-    box-shadow: 0 6px 12px rgba(60, 145, 230, 0.3);
-    transform: translateY(-1px); /* Efek naik dikit pas di-hover */
-}
-
-/* =========================================
-   DARK MODE OVERRIDES FOR VIDEO FORM
-========================================= */
-
-body.dark .video-form-container {
-    background: #1a1c1e !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-body.dark .video-label {
-    color: #e0e0e0;
-}
-
-body.dark .video-input {
-    background: #25282b;
-    border-color: #3f444a;
-    color: #ffffff;
-}
-
-body.dark .video-input:focus {
-    border-color: #3C91E6;
-    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.25);
-}
-
-body.dark .input-hint {
-    color: #aaa;
-}
-
-body.dark .btn-cancel {
-    background: #333;
-    color: #bbb;
-}
-
-body.dark .btn-cancel:hover {
-    background: #444;
-    color: #fff;
-}
-
-
-/* =========================================
-   ADVANCED LIVE VIDEO PREVIEW CARD
-========================================= */
+/* Live Video Preview Card Layout */
 .video-preview-wrapper {
-    margin-top: 28px;
+    margin-top: 20px;
     animation: fadeIn 0.4s ease forwards;
 }
 
@@ -456,7 +293,6 @@ body.dark .btn-cancel:hover {
     box-sizing: border-box;
 }
 
-/* Kotak Thumbnail & Badge Play */
 .preview-thumb-box {
     position: relative;
     width: 200px;
@@ -468,122 +304,179 @@ body.dark .btn-cancel:hover {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.preview-thumb-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
+.preview-thumb-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .preview-thumb-box .play-badge {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(253, 114, 56, 0.9); /* Aksen warna oranye/merah */
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    background: rgba(253, 114, 56, 0.9); 
+    color: #fff; width: 40px; height: 40px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-/* Detail Info Konten */
-.preview-info-box {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    overflow: hidden;
-}
-
+.preview-info-box { display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
 .preview-info-box h3 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--dark);
-    margin: 0;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Maksimal 2 baris teks biar ga ngerusak layout */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size: 16px; font-weight: 600; color: var(--dark); margin: 0; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
+.preview-info-box p { font-size: 13px; color: #64748b; margin: 0; display: flex; align-items: center; gap: 5px; }
 
-.preview-info-box p {
-    font-size: 13px;
-    color: #64748b;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.preview-info-box p i {
-    font-size: 16px;
-}
-
-/* Badge Valid Sukses */
 .status-badge {
-    align-self: flex-start;
-    margin-top: 4px;
-    padding: 4px 10px;
-    background: #dcfce7;
-    color: #15803d;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: 20px;
+    align-self: flex-start; margin-top: 4px; padding: 4px 10px;
+    background: #dcfce7; color: #15803d; font-size: 11px; font-weight: 600; border-radius: 20px;
+    display: flex; align-items: center; gap: 4px;
+}
+
+.video-actions {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 4px;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
 }
 
-/* =========================================
-   DARK MODE FOR ADVANCED PREVIEW
-========================================= */
-body.dark .video-preview-card {
-    background: #25282b;
-    border-color: #3f444a;
+.btn-cancel {
+    padding: 10px 24px; background: #f1f1f1; color: var(--dark);
+    text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; transition: all 0.3s ease;
+}
+.btn-cancel:hover { background: #e0e0e0; }
+
+.btn-save {
+    display: flex; align-items: center; gap: 8px; padding: 10px 24px;
+    background: #3C91E6; color: #fff; border: none; border-radius: 8px;
+    font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+.btn-save:hover { background: #2b7bc6; transform: translateY(-1px); }
+
+/* ==========================================================================
+   GLOBAL DESIGN SYSTEMS: DARK MODE OVERRIDES
+   ========================================================================== */
+body.dark .search-box .form-input { background: #25282b; }
+body.dark .search-box .form-input input { color: #fff; }
+body.dark .search-box .form-input:focus-within { background: #1e2124; }
+body.dark .video-thumb { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); }
+body.dark .pagination-wrapper { border-top-color: #3f444a; }
+body.dark .pagi-info b { color: #fff; }
+body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
+
+body.dark .table-responsive-wrapper td .status.completed {
+    background-color: rgba(60, 145, 230, 0.25) !important;
+    color: #6eb4f7 !important;
 }
 
-body.dark .preview-info-box h3 {
-    color: #fff;
+/* Dark Mode Navigation Glow Engine */
+body.dark .pagi-btn.active {
+    background-color: #3C91E6 !important;
+    border-color: #3C91E6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(60, 145, 230, 0.6) !important;
+    font-weight: 700 !important;
 }
+body.dark .pagi-btn.number:not(.active) { color: #ffffff !important; background-color: #25282b !important; border-color: #3f444a !important; }
+body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; color: #ffffff !important; border-color: #3C91E6 !important; }
 
-body.dark .preview-info-box p {
-    color: #94a3b8;
-}
+body.dark .video-form-container { background: #1a1c1e !important; }
+body.dark .video-label { color: #e0e0e0; }
+body.dark .video-input { background: #25282b; border-color: #3f444a; color: #ffffff; }
+body.dark .input-hint { color: #aaa; }
+body.dark .btn-cancel { background: #333; color: #bbb; }
+body.dark .btn-cancel:hover { background: #444; color: #fff; }
+body.dark .video-preview-card { background: #25282b; border-color: #3f444a; }
+body.dark .preview-info-box h3 { color: #fff; }
+body.dark .preview-info-box p { color: #94a3b8; }
+body.dark .status-badge { background: rgba(21, 128, 61, 0.2); color: #4caf50; }
 
-body.dark .status-badge {
-    background: rgba(21, 128, 61, 0.2);
-    color: #4caf50;
-}
-
-/* Animasi Halus saat Tampil */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive saat Layar HP / Kecil */
-@media screen and (max-width: 576px) {
-    .video-preview-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .preview-thumb-box {
-        width: 100%;
-    }
+/* ==========================================================================
+   RESPONSIVE LAYOUT CONTEXT INTERCEPTORS
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .title-category-grid { grid-template-columns: 1fr; gap: 16px; }
+    .video-form-container { padding: 20px !important; }
+    .pagination-wrapper { flex-direction: column; text-align: center; }
+    .video-actions { flex-direction: column; align-items: stretch; width: 100%; }
+    .btn-cancel, .btn-save { width: 100%; justify-content: center; text-align: center; }
+    .input-with-clear .video-input { padding-right: 42px; }
+    .clear-input-btn { right: 8px; }
 }
 
-@media screen and (max-width: 768px) {
-    .input-with-clear .video-input {
-        padding-right: 42px;
+@media (max-width: 900px) and (min-width: 577px) {
+    .table-responsive-wrapper table th:nth-child(2),
+    .table-responsive-wrapper table td:nth-child(2) { min-width: 220px; }
+}
+
+/* ==========================================================================
+   MOBILE SCREEN CONTEXT INTERCEPTOR (TRICK MAUT TABEL JADI CARD VERTIKAL)
+   ========================================================================== */
+@media screen and (max-width: 576px) {
+    .table-data .head {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+    .table-data .head h3 { font-size: 20px; }
+    .search-box, .search-box .form-input { width: 100% !important; max-width: 100% !important; }
+    .btn-add-video { width: 100%; margin-top: 10px; height: 42px; font-size: 14px; }
+    
+    .video-preview-card { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .preview-thumb-box { width: 100%; }
+
+    /* Rombak Tabel jadi Mode Card Tumpuk */
+    .table-responsive-wrapper table, 
+    .table-responsive-wrapper thead, 
+    .table-responsive-wrapper tbody, 
+    .table-responsive-wrapper th, 
+    .table-responsive-wrapper td, 
+    .table-responsive-wrapper tr { 
+        display: block; 
+    }
+    
+    .table-responsive-wrapper thead { display: none; }
+    
+    .table-responsive-wrapper tr {
+        margin-bottom: 20px;
+        padding: 16px;
+        background: var(--grey); 
+        border-radius: 12px;
+        border-bottom: none !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    body.dark .table-responsive-wrapper tr { background: #1a1c1e !important; }
+
+    .table-responsive-wrapper td {
+        width: 100% !important;
+        padding: 6px 0 !important;
+        text-align: left;
     }
 
-    .clear-input-btn {
-        right: 8px;
+    .table-responsive-wrapper td:first-child {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
     }
+    .video-thumb { width: 100% !important; height: 150px; }
+
+    .table-responsive-wrapper td:last-child {
+        display: flex;
+        justify-content: flex-end;
+        border-top: 1px solid rgba(0,0,0,0.06);
+        padding-top: 12px !important;
+        margin-top: 8px;
+    }
+    body.dark .table-responsive-wrapper td:last-child { border-top-color: rgba(255,255,255,0.06); }
+
+    .pagi-buttons { flex-direction: column; width: 100%; }
+    .pagi-numbers { flex-wrap: wrap; justify-content: center; }
+    .pagi-btn { width: 100%; }
+    .pagi-btn.number { width: 36px; }
 }

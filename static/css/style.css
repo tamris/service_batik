@@ -46,10 +46,6 @@ body {
 	overflow-x: hidden;
 }
 
-
-
-
-
 /* SIDEBAR */
 #sidebar {
 	position: fixed;
@@ -64,7 +60,7 @@ body {
 	overflow-x: hidden;
 	scrollbar-width: none;
 }
-#sidebar::--webkit-scrollbar {
+#sidebar::-webkit-scrollbar {
 	display: none;
 }
 #sidebar.hide {
@@ -157,13 +153,8 @@ body {
 	display: flex;
 	justify-content: center;
 }
-/* SIDEBAR */
 
-
-
-
-
-/* CONTENT */
+/* CONTENT CONTAINER */
 #content {
 	position: relative;
 	width: calc(100% - 280px);
@@ -174,9 +165,6 @@ body {
 	width: calc(100% - 60px);
 	left: 60px;
 }
-
-
-
 
 /* NAVBAR */
 #content nav {
@@ -216,61 +204,6 @@ body {
 #content nav .nav-link:hover {
 	color: var(--blue);
 }
-#content nav form {
-	max-width: 400px;
-	width: 100%;
-	margin-right: auto;
-}
-#content nav form .form-input {
-	display: flex;
-	align-items: center;
-	height: 36px;
-}
-#content nav form .form-input input {
-	flex-grow: 1;
-	padding: 0 16px;
-	height: 100%;
-	border: none;
-	background: var(--grey);
-	border-radius: 36px 0 0 36px;
-	outline: none;
-	width: 100%;
-	color: var(--dark);
-}
-#content nav form .form-input button {
-	width: 36px;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: var(--blue);
-	color: var(--light);
-	font-size: 18px;
-	border: none;
-	outline: none;
-	border-radius: 0 36px 36px 0;
-	cursor: pointer;
-}
-#content nav .notification {
-	font-size: 20px;
-	position: relative;
-}
-#content nav .notification .num {
-	position: absolute;
-	top: -6px;
-	right: -6px;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
-	border: 2px solid var(--light);
-	background: var(--red);
-	color: var(--light);
-	font-weight: 700;
-	font-size: 12px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 #content nav .profile img {
 	width: 36px;
 	height: 36px;
@@ -300,19 +233,15 @@ body {
 #content nav #switch-mode:checked + .switch-mode::before {
 	left: calc(100% - (25px - 4px) - 2px);
 }
-/* NAVBAR */
 
-
-
-
-
-/* MAIN */
+/* MAIN AREA */
 #content main {
 	width: 100%;
 	padding: 36px 24px;
 	font-family: var(--poppins);
-	max-height: calc(100vh - 56px);
-	overflow-y: auto;
+	height: auto !important; 
+	max-height: unset !important;
+	overflow-y: visible !important;
 }
 #content main .head-title {
 	display: flex;
@@ -343,22 +272,8 @@ body {
 	color: var(--blue);
 	pointer-events: unset;
 }
-#content main .head-title .btn-download {
-	height: 36px;
-	padding: 0 16px;
-	border-radius: 36px;
-	background: var(--blue);
-	color: var(--light);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	grid-gap: 10px;
-	font-weight: 500;
-}
 
-
-
-
+/* KOTAK INFORMASI DATA (BOX STATS) */
 #content main .box-info {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -382,15 +297,18 @@ body {
 	justify-content: center;
 	align-items: center;
 }
-#content main .box-info li:nth-child(1) .bx {
+#content main .box-info li:nth-child(1) .bx, 
+#content main .box-info li:nth-child(4) .bx {
 	background: var(--light-blue);
 	color: var(--blue);
 }
-#content main .box-info li:nth-child(2) .bx {
+#content main .box-info li:nth-child(2) .bx,
+#content main .box-info li:nth-child(5) .bx {
 	background: var(--light-yellow);
 	color: var(--yellow);
 }
-#content main .box-info li:nth-child(3) .bx {
+#content main .box-info li:nth-child(3) .bx,
+#content main .box-info li:nth-child(6) .bx {
 	background: var(--light-orange);
 	color: var(--orange);
 }
@@ -403,10 +321,7 @@ body {
 	color: var(--dark);	
 }
 
-
-
-
-
+/* DATA WRAPPER SECTION */
 #content main .table-data {
 	display: flex;
 	flex-wrap: wrap;
@@ -432,10 +347,8 @@ body {
 	font-size: 24px;
 	font-weight: 600;
 }
-#content main .table-data .head .bx {
-	cursor: pointer;
-}
 
+/* KATALOG TABLE */
 #content main .table-data .order {
 	flex-grow: 1;
 	flex-basis: 500px;
@@ -452,6 +365,7 @@ body {
 }
 #content main .table-data .order table td {
 	padding: 16px 0;
+	vertical-align: middle;
 }
 #content main .table-data .order table tr td:first-child {
 	display: flex;
@@ -460,10 +374,11 @@ body {
 	padding-left: 6px;
 }
 #content main .table-data .order table td img {
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	object-fit: cover;
+	width: 60px;         
+	height: 60px;
+	border-radius: 10px;  
+	object-fit: cover;   
+	border: 1px solid var(--grey); 
 }
 #content main .table-data .order table tbody tr:hover {
 	background: var(--grey);
@@ -475,17 +390,8 @@ body {
 	border-radius: 20px;
 	font-weight: 700;
 }
-#content main .table-data .order table tr td .status.completed {
-	background: var(--blue);
-}
-#content main .table-data .order table tr td .status.process {
-	background: var(--yellow);
-}
-#content main .table-data .order table tr td .status.pending {
-	background: var(--orange);
-}
 
-
+/* TODO LIST / AGENDA */
 #content main .table-data .todo {
 	flex-grow: 1;
 	flex-basis: 300px;
@@ -503,135 +409,58 @@ body {
 	justify-content: space-between;
 	align-items: center;
 }
-#content main .table-data .todo .todo-list li .bx {
-	cursor: pointer;
-}
 #content main .table-data .todo .todo-list li.completed {
 	border-left: 10px solid var(--blue);
-}
-#content main .table-data .todo .todo-list li.not-completed {
-	border-left: 10px solid var(--orange);
 }
 #content main .table-data .todo .todo-list li:last-child {
 	margin-bottom: 0;
 }
-/* MAIN */
-/* CONTENT */
 
-
-
-
-
-
-
-
+/* ==========================================================================
+   BEST PRACTICE MEDIA QUERIES
+   ========================================================================== */
 
 @media screen and (max-width: 768px) {
 	#sidebar {
-		width: 200px;
+		width: 280px;
+		left: -280px; /* Sembunyikan sidebar ke kiri luar screen default mobile */
 	}
-
+	#sidebar.show {
+		left: 0;
+	}
 	#content {
-		width: calc(100% - 60px);
-		left: 200px;
+		width: 100%;
+		left: 0;
 	}
-
+	#sidebar.show ~ #content {
+		opacity: 0.4;
+		pointer-events: none; /* Mencegah user klik konten pas sidebar mobile kebuka */
+	}
 	#content nav .nav-link {
 		display: none;
 	}
+	#content main .box-info {
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	}
 }
-
-
-
-
-.limit-text {
-    display: block;        
-    overflow: hidden;     
-	line-height: 1.5em;     
-    max-height: 4.5em;       
-} 
-
-
-.table-data table td {
-    vertical-align: top;  
-    padding-top: 20px;  
-    padding-bottom: 20px; 
-} 
-
-
-.table-data table td img {
-    width: 80px;         
-    height: 80px;
-    border-radius: 10px;  
-    object-fit: cover;   
-    border: 1px solid #eee; 
-}
-
 
 @media screen and (max-width: 576px) {
-	#content nav form .form-input input {
-		display: none;
-	}
-
-	#content nav form .form-input button {
-		width: auto;
-		height: auto;
-		background: transparent;
-		border-radius: none;
-		color: var(--dark);
-	}
-
-	#content nav form.show .form-input input {
-		display: block;
-		width: 100%;
-	}
-	#content nav form.show .form-input button {
-		width: 36px;
-		height: 100%;
-		border-radius: 0 36px 36px 0;
-		color: var(--light);
-		background: var(--red);
-	}
-
-	#content nav form.show ~ .notification,
-	#content nav form.show ~ .profile {
-		display: none;
-	}
-
 	#content main .box-info {
 		grid-template-columns: 1fr;
 	}
-
-	#content main .table-data .head {
-		min-width: 420px;
-	}
-	#content main .table-data .order table {
-		min-width: 420px;
-	}
+	#content main .table-data .head,
+	#content main .table-data .order table,
 	#content main .table-data .todo .todo-list {
-		min-width: 420px;
+		min-width: 100%; /* Mengganti 420px bawaan lama agar tidak patah/meluber */
+	}
+	#content main .head-title .left h1 {
+		font-size: 28px;
+	}
+	#content main {
+		padding: 24px 16px;
 	}
 }
 
-
-
-/* Mencegah animasi transisi pas lagi loading halaman */
 body.preload {
     transition: none !important;
-}
-
-/* --- FIX DOUBLE SCROLLBAR --- */
-
-/* Kita reset aturan bawaan template yang maksa scroll di dalam main */
-#content main {
-    max-height: unset !important; /* Hapus batasan tinggi layar */
-    overflow-y: visible !important; /* Matikan scroll internal */
-    height: auto !important; /* Biarkan tinggi menyesuaikan isi konten */
-}
-
-/* Opsional: Biar navbar tetap nempel di atas pas discroll */
-#content nav {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
 }

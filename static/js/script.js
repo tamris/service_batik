@@ -1,74 +1,80 @@
-const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
+document.addEventListener('DOMContentLoaded', function() {
+	
+	// 1. MANAJEMEN ACTIVE MENU SIDEBAR
+	const allSideMenu = document.querySelectorAll('#sidebar .side-menu.top li a');
 
-allSideMenu.forEach(item => {
-	const li = item.parentElement;
+	allSideMenu.forEach(item => {
+		const li = item.parentElement;
 
-	item.addEventListener('click', function () {
-		allSideMenu.forEach(i => {
-			i.parentElement.classList.remove('active');
-		})
-		li.classList.add('active');
-	})
-});
+		item.addEventListener('click', function () {
+			allSideMenu.forEach(i => {
+				i.parentElement.classList.remove('active');
+			});
+			li.classList.add('active');
 
-// TOGGLE SIDEBAR
-const menuBar = document.querySelector('#content nav .bx.bx-menu');
-const sidebar = document.getElementById('sidebar');
-
-if (menuBar) { // Tambahkan pengecekan agar aman
-	menuBar.addEventListener('click', function () {
-		sidebar.classList.toggle('hide');
-	})
-}
-
-// --- BAGIAN YANG BIKIN ERROR (DIPERBAIKI) ---
-const searchButton = document.querySelector('#content nav form .form-input button');
-const searchButtonIcon = document.querySelector('#content nav form .form-input button .bx');
-const searchForm = document.querySelector('#content nav form');
-
-// Cek dulu: "Ada gak tombol search-nya?" Kalau ada baru jalankan fungsi
-if (searchButton && searchButtonIcon && searchForm) {
-	searchButton.addEventListener('click', function (e) {
-		if (window.innerWidth < 576) {
-			e.preventDefault();
-			searchForm.classList.toggle('show');
-			if (searchForm.classList.contains('show')) {
-				searchButtonIcon.classList.replace('bx-search', 'bx-x');
-			} else {
-				searchButtonIcon.classList.replace('bx-x', 'bx-search');
+			// BEST PRACTICE MOBILE: Otomatis tutup sidebar setelah klik menu di HP
+			if (window.innerWidth <= 768) {
+				const sidebar = document.getElementById('sidebar');
+				if (sidebar) sidebar.classList.remove('show');
 			}
-		}
-	})
+		});
+	});
 
-	window.addEventListener('resize', function () {
-		if (this.innerWidth > 576) {
-			searchButtonIcon.classList.replace('bx-x', 'bx-search');
-			searchForm.classList.remove('show');
-		}
-	})
-}
-// --------------------------------------------
+	// 2. RESPONSIVE SIDEBAR TOGGLE
+	const menuBar = document.querySelector('#content nav .bx.bx-menu');
+	const sidebar = document.getElementById('sidebar');
 
-if (window.innerWidth < 768) {
-	sidebar.classList.add('hide');
-}
-
-// DARK MODE (Pastiin ini tetap di bawah)
-const switchMode = document.getElementById('switch-mode');
-
-if (switchMode) { // Tambahkan pengecekan
-	if (localStorage.getItem('theme') === 'dark') {
-		document.body.classList.add('dark');
-		switchMode.checked = true;
+	if (menuBar && sidebar) { 
+		menuBar.addEventListener('click', function () {
+			if (window.innerWidth <= 768) {
+				// Mode Mobile: Geser keluar/masuk sidebar
+				sidebar.classList.toggle('show');
+				sidebar.classList.remove('hide'); 
+			} else {
+				// Mode Desktop: Ciutkan sidebar ke ukuran minimal
+				sidebar.classList.toggle('hide');
+				sidebar.classList.remove('show'); 
+			}
+		});
 	}
 
-	switchMode.addEventListener('change', function () {
-		if (this.checked) {
-			document.body.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.body.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
+	// Inisialisasi awal reset kelas sidebar berdasarkan ukuran viewport saat load
+	function checkResolution() {
+		if (sidebar) {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.remove('show');
+				sidebar.classList.remove('hide');
+			} else {
+				sidebar.classList.remove('show');
+			}
+		}
+	}
+	checkResolution();
+
+	// Pantau jika layar diputar/di-resize secara real-time
+	window.addEventListener('resize', function () {
+		if (window.innerWidth > 768 && sidebar) {
+			sidebar.classList.remove('show');
 		}
 	});
-}
+
+	// 3. DARK MODE ENGINE
+	const switchMode = document.getElementById('switch-mode');
+
+	if (switchMode) { 
+		if (localStorage.getItem('theme') === 'dark') {
+			document.body.classList.add('dark');
+			switchMode.checked = true;
+		}
+
+		switchMode.addEventListener('change', function () {
+			if (this.checked) {
+				document.body.classList.add('dark');
+				localStorage.setItem('theme', 'dark');
+			} else {
+				document.body.classList.remove('dark');
+				localStorage.setItem('theme', 'light');
+			}
+		});
+	}
+});

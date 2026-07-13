@@ -93,12 +93,12 @@
 			<input type="checkbox" id="switch-mode" hidden>
 			<label for="switch-mode" class="switch-mode"></label>
 
-			
+
 			<a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
-            </a>
+				<!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
+				<img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+					onerror="this.src='/static/img/avatar.png';">
+			</a>
 		</nav>
 
 		<main>
@@ -111,7 +111,8 @@
 						<li><a class="active" href="#">Event</a></li>
 					</ul>
 				</div>
-				<a href="{{ url_for('event.create') }}" class="btn-download">
+				<!-- REFACTOR CLASS SEMANTIK DARI DOWNLOAD KE ADD-EVENT -->
+				<a href="{{ url_for('event.create') }}" class="btn-add-event">
 					<i class='bx bxs-plus-circle'></i><span class="text">Tambah Event</span>
 				</a>
 			</div>
@@ -128,51 +129,55 @@
 							</div>
 						</div>
 					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>Banner</th>
-								<th>Nama & Tanggal</th>
-								<th>Lokasi</th>
-								<th>Status</th>
-								<th>Aksi</th>
-							</tr>
-						</thead>
-						<tbody id="tableBody">
-							{% for item in events %}
-							<tr>
-								<td>
-									<div class="event-banner-thumb">
-										<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
-											onerror="this.src='/static/img/default_event.png';" alt="Banner Event">
-									</div>
-								</td>
-								<td>
-									<span style="font-weight: 600; display: block;">{{ item.title }}</span>
-									<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
-								</td>
-								<td><small>{{ item.address.full | truncate(30) }}</small></td>
-								<td>
-									<span class="status {{ 'completed' if item.is_free else 'pending' }}">
-										{{ 'Gratis' if item.is_free else 'Rp ' + item.price }}
-									</span>
-								</td>
-								<td>
-									<div class="action-btn">
-										<a href="{{ url_for('event.edit', event_id=item._id) }}?page={{ page }}"
-											class="btn-icon btn-edit" title="Edit">
-											<i class='bx bxs-edit'></i>
-										</a>
-										<!-- <a href="#" onclick="eventDelete('{{ item._id|string }}')"
+
+					<!-- BUNGKUSAN RESPONSIVE WRAPPER BARU -->
+					<div class="table-responsive-wrapper">
+						<table>
+							<thead>
+								<tr>
+									<th>Banner</th>
+									<th>Nama & Tanggal</th>
+									<th>Lokasi</th>
+									<th>Status</th>
+									<th>Aksi</th>
+								</tr>
+							</thead>
+							<tbody id="tableBody">
+								{% for item in events %}
+								<tr>
+									<td>
+										<div class="event-banner-thumb">
+											<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
+												onerror="this.src='/static/img/default_event.png';" alt="Banner Event">
+										</div>
+									</td>
+									<td>
+										<span style="font-weight: 600; display: block;">{{ item.title }}</span>
+										<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
+									</td>
+									<td><small>{{ item.address.full | truncate(30) }}</small></td>
+									<td>
+										<span class="status {{ 'completed' if item.is_free else 'pending' }}">
+											{{ 'Gratis' if item.is_free else 'Rp ' + item.price }}
+										</span>
+									</td>
+									<td>
+										<div class="action-btn">
+											<a href="{{ url_for('event.edit', event_id=item._id) }}?page={{ page }}"
+												class="btn-icon btn-edit" title="Edit">
+												<i class='bx bxs-edit'></i>
+											</a>
+												<!-- <a href="#" onclick="eventDelete('{{ item._id|string }}')"
 											class="btn-icon btn-delete" title="Hapus">
 											<i class='bx bxs-trash'></i>
 										</a> -->
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div> <!-- AKHIR WRAPPER TABEL -->
 
 					<div class="pagination-wrapper" id="paginationContainer">
 						<span class="pagi-info">

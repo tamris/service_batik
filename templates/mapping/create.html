@@ -70,10 +70,10 @@
                 </a>
             </li>
             {% endif %}
-          
+
         </ul>
         <ul class="side-menu">
-           
+
             <li>
                 <a href="{{ url_for('auth.logout') }}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
@@ -95,8 +95,8 @@
 
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
                 <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
+                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+                    onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
 
@@ -136,29 +136,28 @@
                             </div>
 
                             <div class="map-group" style="margin-top: 15px;">
-                                <label class="map-label" style="display: block; margin-bottom: 8px;">Layanan / Kategori
-                                    Lengkap</label>
-                                <div
-                                    style="display: flex; gap: 20px; flex-wrap: wrap; background: var(--light); padding: 10px; border-radius: 8px;">
-                                    <label class="check-label" id="label-Sentra-Batik"
-                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                        <input type="checkbox" name="categories" value="Sentra Batik" class="sub-check">
-                                        Sentra Batik
+                                <label class="map-label">Layanan / Kategori Lengkap</label>
+                                <!-- GANTI INLINE STYLING LAMA JADI CLASS BARU YANG RESPONSIF -->
+                                <div class="map-checkbox-wrapper">
+                                    <label class="check-label" id="label-Sentra-Batik">
+                                        <input type="checkbox" name="categories" value="Sentra Batik" class="sub-check"
+                                            {% if mapping is defined and mapping.categories and 'Sentra Batik' in
+                                            mapping.categories %}checked{% endif %}> Sentra Batik
                                     </label>
-                                    <label class="check-label" id="label-Toko"
-                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                        <input type="checkbox" name="categories" value="Toko" class="sub-check"> Toko /
-                                        Showroom
+                                    <label class="check-label" id="label-Toko">
+                                        <input type="checkbox" name="categories" value="Toko" class="sub-check" {% if
+                                            mapping is defined and mapping.categories and 'Toko' in mapping.categories
+                                            %}checked{% endif %}> Toko / Showroom
                                     </label>
-                                    <label class="check-label" id="label-Pengrajin"
-                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                        <input type="checkbox" name="categories" value="Pengrajin" class="sub-check">
-                                        Workshop Pengrajin
+                                    <label class="check-label" id="label-Pengrajin">
+                                        <input type="checkbox" name="categories" value="Pengrajin" class="sub-check" {%
+                                            if mapping is defined and mapping.categories and 'Pengrajin' in
+                                            mapping.categories %}checked{% endif %}> Workshop Pengrajin
                                     </label>
-                                    <label class="check-label" id="label-Edukasi"
-                                        style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                        <input type="checkbox" name="categories" value="Edukasi" class="sub-check">
-                                        Wisata Edukasi
+                                    <label class="check-label" id="label-Edukasi">
+                                        <input type="checkbox" name="categories" value="Edukasi" class="sub-check" {% if
+                                            mapping is defined and mapping.categories and 'Edukasi' in
+                                            mapping.categories %}checked{% endif %}> Wisata Edukasi
                                     </label>
                                 </div>
                             </div>
@@ -213,13 +212,19 @@
                             <input type="file" name="image_url" class="map-input" accept="image/*" required>
                         </div>
 
-                        <div class="user-actions"
-                            style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
-                            <a href="{{ url_for('mapping.index') }}" class="btn-cancel"
-                                style="padding: 10px 20px; background: #eee; border-radius: 8px; color: #333; text-decoration: none; font-weight: 600;">Batal</a>
-                            <button type="submit" class="btn-save"
-                                style="padding: 10px 20px; background: #3C91E6; border: none; border-radius: 8px; color: #fff; font-weight: 600; cursor: pointer;"><i
-                                    class='bx bx-save'></i> Simpan Lokasi</button>
+                        <div class="user-actions">
+                            {% if mapping is defined %}
+                            <div class="creator-info">
+                                <i class='bx bxs-info-circle'></i>
+                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
+                                        mapping.admin_data.username if mapping.admin_data else 'System'
+                                        }}</strong></span>
+                            </div>
+                            {% endif %}
+
+                            <a href="{{ url_for('mapping.index') }}{% if mapping is defined %}?page={{ request.args.get('page', 1) }}{% endif %}"
+                                class="btn-cancel">Batal</a>
+                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Lokasi</button>
                         </div>
                     </form>
                 </div>
