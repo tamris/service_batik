@@ -28,9 +28,11 @@ def extract_video_id(url):
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
+    selected_category = request.args.get('c', '') # 1. Ambil data filter kategori dari parameter URL
     per_page = 7
 
-    all_data = video_model.get_all(search_query)
+    # 2. Kirim parameter search_query dan selected_category ke model data
+    all_data = video_model.get_all(search_query=search_query, category=selected_category)
 
     total_items = len(all_data)
     total_pages = math.ceil(total_items / per_page)
@@ -42,6 +44,7 @@ def index():
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
+    # 3. Lempar variable selected_category ke template agar status ter-select terjaga
     return render_template('video/index.html', 
                            videos=data_tampil, 
                            page=page, 
@@ -49,7 +52,8 @@ def index():
                            total_items=total_items,
                            start_index=start_index,
                            end_index=end_index,
-                           search_query=search_query)
+                           search_query=search_query,
+                           selected_category=selected_category)
 
 @video_bp.route('/data-video/tambah', methods=['GET', 'POST'])
 def create():

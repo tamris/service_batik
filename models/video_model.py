@@ -6,17 +6,29 @@ class VideoModel:
     def collection(self):
         return mongo.db.videos
 
-    def get_all(self, search_query=None):
-        query = {}
+    def get_all(self, search_query=None, category=None):
+        conditions = []
+        
+        # 1. Tambahkan filter kategori jika dipilih oleh user
+        if category:
+            conditions.append({"category": {"$regex": f"^{category}$", "$options": "i"}})
+            
+        # 2. Pertahankan logika pencarian bawaan (berdasarkan judul atau deskripsi)[cite: 12]
         if search_query:
-            # Cari berdasarkan judul atau deskripsi
-            query = {
+            conditions.append({
                 "$or": [
                     {"title": {"$regex": search_query, "$options": "i"}},
                     {"description": {"$regex": search_query, "$options": "i"}}
                 ]
-            }
-        # Urutkan berdasarkan created_at terbaru
+            })
+            
+        # Tentukan objek query akhir berdasarkan kondisi array
+        if conditions:
+            query = {"$and": conditions}
+        else:
+            query = {}
+            
+        # Urutkan berdasarkan created_at terbaru (logika lama tetap aman)[cite: 12]
         return list(self.collection.find(query).sort("created_at", -1))
 
     def get_by_id(self, video_id):
