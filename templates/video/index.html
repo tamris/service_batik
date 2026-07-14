@@ -133,14 +133,15 @@
 									Edukasi</option>
 								<option value="DOKUMENTER" {% if selected_category=='DOKUMENTER' %}selected{% endif %}>
 									Dokumenter</option>
-								<option value="MOTIF & MAKNA" {% if selected_category=='MOTIF & MAKNA' %}selected{% endif %}>Motif & Makna
+								<option value="MOTIF & MAKNA" {% if selected_category=='MOTIF & MAKNA' %}selected{%
+									endif %}>Motif & Makna
 								</option>
 							</select>
 
 							<div class="form-input">
-								<input type="search" name="q" id="searchInput" placeholder="Cari Judul Video..."
-									autocomplete="off" value="{{ search_query }}">
-								<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+								<input type="search" id="searchInput" placeholder="Cari video..." autocomplete="off"
+									data-url="{{ url_for('video.index') }}" name="q" value="{{ search_query }}">
+								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</form>
 					</div>
@@ -182,8 +183,26 @@
 										<small style="color: #888;">{{ item.created_at.strftime('%d %b %Y') if
 											item.created_at else '-' }}</small>
 									</td>
-									<td><span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
-											item.category }}</span></td>
+									<td>
+										{% set badge_class = 'default' %}
+
+										{% if item.category == 'Sejarah' %}
+										{% set badge_class = 'sejarah' %}
+										{% elif item.category == 'Edukasi' %}
+										{% set badge_class = 'edukasi' %}
+										{% elif item.category == 'Dokumenter' %}
+										{% set badge_class = 'dokumenter' %}
+										{% elif item.category == 'Inspirasi' %}
+										{% set badge_class = 'inspirasi' %}
+										{% elif item.category == 'Event' %}
+										{% set badge_class = 'event' %}
+										{% endif %}
+
+										<span class="status {{ badge_class }}"
+											style="font-size: 10px; padding: 2px 8px;">
+											{{ item.category }}
+										</span>
+									</td>
 									<td><a href="{{ item.youtube_url }}" target="_blank"
 											style="color: #3C91E6; font-size: 12px;">Buka di YouTube <i
 												class='bx bx-link-external'></i></a></td>

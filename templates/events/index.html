@@ -140,9 +140,10 @@
 							</select>
 
 							<div class="form-input">
-								<input type="search" name="q" id="searchInput" placeholder="Cari nama event..."
-									autocomplete="off" value="{{ search_query }}">
-								<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+								<input type="search" id="searchInput" placeholder="Cari nama event..."
+									autocomplete="off" data-url="{{ url_for('event.index') }}" name="q"
+									value="{{ search_query }}">
+								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</form>
 					</div>
@@ -166,7 +167,7 @@
 									<td>
 										<div class="event-banner-thumb">
 											<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
-												onerror="this.src='/static/img/default_event.png';" alt="Banner Event">
+												onerror="this.src='/static/img/default_event.webp';" alt="Banner Event">
 										</div>
 									</td>
 									<td>
@@ -176,7 +177,25 @@
 									</td>
 
 									<td><small>{{ item.address.full | truncate(45) }}</small></td>
-									<td><span class="">{{ item.category }}</span></td>
+									<td>
+										{% set badge_class = 'cat-default' %}
+
+										{% if item.category == 'Pameran' %}
+										{% set badge_class = 'cat-pameran' %}
+										{% elif item.category == 'Workshop' %}
+										{% set badge_class = 'cat-workshop' %}
+										{% elif item.category == 'Festival' %}
+										{% set badge_class = 'cat-festival' %}
+										{% elif item.category == 'Lomba' %}
+										{% set badge_class = 'cat-lomba' %}
+										{% elif item.category == 'Webinar' %}
+										{% set badge_class = 'cat-webinar' %}
+										{% endif %}
+
+										<span class="badge-category {{ badge_class }}">
+											{{ item.category }}
+										</span>
+									</td>
 									<td>
 										<span class="status {{ 'completed' if item.is_free else 'pending' }}">
 											{{ 'Gratis' if item.is_free else 'Rp ' + item.price }}

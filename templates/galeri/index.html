@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<title>AdminBatik</title>
+	<title>AdminBatik - Katalog Batik</title>
 </head>
 
 <body>
@@ -61,7 +61,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#">
+				<a href="{{ url_for('mapping.index') }}">
 					<i class='bx bxs-map'></i>
 					<span class="text">Peta Lokasi</span>
 				</a>
@@ -192,8 +192,20 @@
 									</td>
 
 									<td style="vertical-align: middle; padding: 12px 10px 12px 0;">
-										<span class="badge-category">{{ b.category if b.category else 'Belum Diatur'
-											}}</span>
+										<span class="badge-category
+											{% if b.category == 'Klasik' %}
+												cat-klasik
+											{% elif b.category == 'Kontemporer' %}
+												cat-kontemporer
+											{% elif b.category == 'Flora & Fauna' %}
+												cat-flora
+											{% elif b.category == 'Bahari' %}
+												cat-bahari
+											{% else %}
+												cat-default
+											{% endif %}">
+											{{ b.category if b.category else 'Belum Diatur' }}
+										</span>
 									</td>
 
 									<td style="vertical-align: middle; padding: 12px 10px 12px 0;">

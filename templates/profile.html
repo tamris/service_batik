@@ -1,6 +1,9 @@
 {% extends 'dashboard.html' %}
 
 {% block content %}
+<!-- Panggil CSS Profile hasil refactor agar terbaca sistem browser -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
 <div class="head-title">
     <div class="left">
         <h1>Pengaturan Akun</h1>
@@ -13,45 +16,73 @@
 </div>
 
 <div class="table-data">
-    <!-- KOTAK KIRI: GANTI AVATAR -->
-    <div class="order">
-        <div class="head">
-            <h3>Foto Profile Admin</h3>
+    <!-- KOTAK KIRI: MODERNISED AVATAR UPLOAD -->
+    <div class="order profile-card-box">
+        <div class="head" style="margin-bottom: 20px;">
+            <h3>Foto Profil Admin</h3>
         </div>
-        <div style="text-align: center; padding: 20px;">
-            <!-- Menggunakan user.profile_picture agar pas dengan model DB NoSQL kamu -->
-            <img src="{{ url_for('static', filename='img/avatars/' + user.profile_picture) if user.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                 onerror="this.src='/static/img/avatar.png';" 
-                 style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--blue); margin-bottom: 20px;">
+        <div class="avatar-upload-wrapper">
+            <div class="avatar-preview-holder">
+                <img id="avatarPreview" src="{{ url_for('static', filename='img/avatars/' + user.profile_picture) if user.profile_picture else url_for('static', filename='img/avatar.png') }}" 
+                     onerror="this.src='/static/img/avatar.png';" alt="Avatar Profil">
+            </div>
             
-            <form action="{{ url_for('web_dashboard.profile') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ url_for('web_dashboard.profile') }}" method="POST" enctype="multipart/form-data" style="width: 100%;">
                 <input type="hidden" name="action" value="update_avatar">
-                <input type="file" name="avatar" accept="image/*" required style="margin-bottom: 15px; display: block; width: 100%;">
-                <button type="submit" class="status completed" style="border: none; cursor: pointer; padding: 10px 20px;">Upload Foto Baru</button>
+                
+                <div class="profile-file-box">
+                    <input type="file" name="avatar" accept="image/*" id="avatarInput" onchange="previewAvatar(event)" required>
+                    <div class="custom-file-label" id="fileLabelText">
+                        <i class='bx bx-image-add' style="font-size: 18px;"></i>
+                        <span>Pilih Foto Baru...</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-profile-save btn-blue-solid">
+                    <i class='bx bx-cloud-upload' style="font-size: 18px;"></i> Upload Foto Baru
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- KOTAK KANAN: GANTI PASSWORD -->
-    <div class="todo">
-        <div class="head">
-            <h3>Ubah Password</h3>
+    <!-- KOTAK KANAN: UNIFORM PASSWORD CONFIG -->
+    <div class="todo profile-card-box">
+        <div class="head" style="margin-bottom: 20px;">
+            <h3>Ubah Password Keamanan</h3>
         </div>
-        <form action="{{ url_for('web_dashboard.profile') }}" method="POST" style="padding: 10px;">
+        <form action="{{ url_for('web_dashboard.profile') }}" method="POST">
             <input type="hidden" name="action" value="update_password">
             
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password Baru</label>
-                <input type="password" name="new_password" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--grey); background: var(--grey); color: var(--dark);">
+            <div class="profile-group">
+                <label class="profile-label">Password Baru</label>
+                <input type="password" name="new_password" class="profile-input" placeholder="Masukkan kata sandi baru..." required>
             </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Konfirmasi Password Baru</label>
-                <input type="password" name="confirm_password" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--grey); background: var(--grey); color: var(--dark);">
+            <div class="profile-group">
+                <label class="profile-label">Konfirmasi Password Baru</label>
+                <input type="password" name="confirm_password" class="profile-input" placeholder="Ulangi kata sandi baru..." required>
             </div>
 
-            <button type="submit" class="status pending" style="border: none; cursor: pointer; padding: 10px 20px; background: var(--orange); color: white; border-radius: 20px; font-weight: 700;">Simpan Password</button>
+            <button type="submit" class="btn-profile-save btn-orange-solid" style="margin-top: 14px;">
+                <i class='bx bx-lock-open-alt' style="font-size: 18px;"></i> Simpan Password Baru
+            </button>
         </form>
     </div>
 </div>
+
+<script>
+    // Realtime JavaScript preview untuk file input avatar baru
+    function previewAvatar(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('avatarPreview');
+            output.src = reader.result;
+            
+            // Ubah teks box label kustom setelah berhasil load gambar
+            document.getElementById('fileLabelText').querySelector('span').innerText = "Gambar siap diupload!";
+            document.getElementById('fileLabelText').style.borderColor = "#3C91E6";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,171 @@
+/* ==========================================================================
+   MODERN STYLING FOR PROFILE SETTINGS (CLEAN, UNIFIED & BEST PRACTICE)
+   ========================================================================== */
+
+/* Profile Form Containers */
+.profile-card-box {
+    padding: 24px !important;
+    background: var(--light) !important;
+    border-radius: 16px !important;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Avatar Section Area */
+.avatar-upload-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.avatar-preview-holder {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin-bottom: 24px;
+}
+
+.avatar-preview-holder img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(60, 145, 230, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+/* Custom File Input Kapsul Modern */
+.profile-file-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.profile-file-box input[type="file"] {
+    width: 100%;
+    height: 40px;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.custom-file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    width: 100%;
+    background-color: #f1f1f1;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+.profile-file-box:hover .custom-file-label {
+    border-color: #3C91E6;
+    background-color: rgba(60, 145, 230, 0.02);
+    color: #3C91E6;
+}
+
+/* Password Form Field Control */
+.profile-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.profile-label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--dark);
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.profile-input:focus {
+    border-color: #3C91E6;
+    box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.15);
+}
+
+/* Action Button Kapsul Solid Uniform */
+.btn-profile-save {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 42px;
+    border: none;
+    border-radius: 36px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    color: #fff !important;
+}
+
+.btn-blue-solid {
+    background-color: #3C91E6 !important;
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+}
+.btn-blue-solid:hover {
+    background-color: #2b7bc6 !important;
+    transform: translateY(-1px);
+}
+
+.btn-orange-solid {
+    background-color: #FD7238 !important;
+    box-shadow: 0 4px 6px rgba(253, 114, 56, 0.2);
+}
+.btn-orange-solid:hover {
+    background-color: #e06532 !important;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   GLOBAL DESIGN SYSTEMS: DARK MODE OVERRIDES
+   ========================================================================== */
+body.dark .profile-card-box { background: #1a1c1e !important; }
+body.dark .profile-label { color: #e0e0e0; }
+body.dark .profile-input { background: #25282b; border-color: #3f444a; color: #ffffff; }
+body.dark .avatar-preview-holder img { border-color: rgba(60, 145, 230, 0.3); }
+body.dark .custom-file-label { background-color: #25282b; border-color: #3f444a; color: #aaa; }
+body.dark .profile-file-box:hover .custom-file-label { border-color: #3C91E6; color: #3C91E6; background: rgba(255, 255, 255, 0.01); }
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .table-data {
+        flex-direction: column !important;
+    }
+    .profile-card-box {
+        padding: 20px !important;
+    }
+}

@@ -199,10 +199,8 @@
 }
 
 /* Badge Kategori Modern di Halaman Index */
-.table-responsive-wrapper td .status.completed {
+.table-responsive-wrapper td .status {
     display: inline-block !important;
-    background-color: rgba(60, 145, 230, 0.1) !important;
-    color: #3C91E6 !important;
     border-radius: 20px !important;
     padding: 4px 12px !important;
     font-weight: 600 !important;
@@ -210,6 +208,51 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: none !important;
+}
+
+/* ===========================
+   BERITA TERKINI
+=========================== */
+
+.table-responsive-wrapper td .status.berita-terkini {
+    background-color: rgba(79, 172, 254, 0.15) !important;
+    color: #4FACFE !important;
+}
+
+/* ===========================
+   EVENT
+=========================== */
+
+.table-responsive-wrapper td .status.event {
+    background-color: rgba(187, 107, 217, 0.15) !important;
+    color: #BB6BD9 !important;
+}
+
+/* ===========================
+   SOSOK & INSPIRASI
+=========================== */
+
+.table-responsive-wrapper td .status.sosok-inspirasi {
+    background-color: rgba(255, 183, 77, 0.15) !important;
+    color: #FFB74D !important;
+}
+
+/* ===========================
+   EDUKASI
+=========================== */
+
+.table-responsive-wrapper td .status.edukasi {
+    background-color: rgba(102, 187, 106, 0.15) !important;
+    color: #66BB6A !important;
+}
+
+/* ===========================
+   DEFAULT
+=========================== */
+
+.table-responsive-wrapper td .status.default {
+    background-color: rgba(189, 195, 199, 0.15) !important;
+    color: #BDC3C7 !important;
 }
 
 /* Action Buttons Fix */
@@ -502,9 +545,31 @@ body.dark .pagi-info b { color: #fff; }
 body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
 
 body.dark .table-responsive-wrapper td { border-bottom: none !important; }
-body.dark .table-responsive-wrapper td .status.completed {
-    background-color: rgba(60, 145, 230, 0.25) !important;
-    color: #6eb4f7 !important;
+
+/* DARK MODE - STATUS KATEGORI */
+body.dark .table-responsive-wrapper td .status.berita-terkini {
+  background-color: rgba(79, 172, 254, 0.25) !important;
+  color: #8fcdff !important;
+}
+
+body.dark .table-responsive-wrapper td .status.event {
+  background-color: rgba(187, 107, 217, 0.25) !important;
+  color: #d7a6eb !important;
+}
+
+body.dark .table-responsive-wrapper td .status.sosok-inspirasi {
+  background-color: rgba(255, 183, 77, 0.25) !important;
+  color: #ffd08a !important;
+}
+
+body.dark .table-responsive-wrapper td .status.edukasi {
+  background-color: rgba(102, 187, 106, 0.25) !important;
+  color: #9fdea2 !important;
+}
+
+body.dark .table-responsive-wrapper td .status.default {
+  background-color: rgba(189, 195, 199, 0.25) !important;
+  color: #d5dadd !important;
 }
 
 /* Dark Mode Overrides for Create/Edit Form */

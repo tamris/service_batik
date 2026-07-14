@@ -78,9 +78,10 @@
                                 <label class="video-label">Kategori</label>
                                 <select name="category" class="video-input" required>
                                     <option value="Sejarah" {{ 'selected' if video.category=='Sejarah' }}>Sejarah</option>
+                                     <option value="Edukasi" {{ 'selected' if video.category=='Edukasi' }}>Edukasi</option>                                   
+                                    <option value="Dokumenter" {{ 'selected' if video.category=='Dokumenter' }}>Dokumenter</option>
                                     <option value="Event" {{ 'selected' if video.category=='Event' }}>Event</option>
-                                    <option value="Motif & Makna" {{ 'selected' if video.category=='Motif & Makna' }}>Motif & Makna</option>
-                                    <option value="Edukasi" {{ 'selected' if video.category=='Edukasi' }}>Edukasi</option>
+                                    <option value="Inspirasi" {{ 'selected' if video.category=='Inspirasi' }}>Inspirasi</option>
                                 </select>
                             </div>
                         </div>

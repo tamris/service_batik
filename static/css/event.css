@@ -196,9 +196,38 @@
 }
 
 /* KATEGORI: Kolom ke-4 jadi Badge Biru Pastel Proyek[cite: 15] */
-.table-responsive-wrapper table td:nth-child(4) span {
+/* .table-responsive-wrapper table td:nth-child(4) span {
     background-color: rgba(60, 145, 230, 0.1) !important;
     color: #3C91E6 !important;
+} */
+
+
+.badge-category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,.08);
+    text-transform: uppercase;
+}
+
+.cat-pameran   { color:#6366F1; background:rgba(99,102,241,.15); }
+
+.cat-workshop  { color:#F97316; background:rgba(249,115,22,.15); }
+
+.cat-festival  { color:#EC4899; background:rgba(236,72,153,.15); }
+
+.cat-lomba     { color:#F59E0B; background:rgba(245,158,11,.15); }
+
+.cat-webinar   { color:#06B6D4; background:rgba(6,182,212,.15); }
+
+/* Default */
+.cat-default {
+    background: rgba(148, 163, 184, 0.15) !important;
+    color: #94A3B8 !important;
 }
 
 /* STATUS TIKET: Gratis = Hijau, Berbayar = Orange[cite: 15] */
@@ -515,7 +544,47 @@ body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0
 
 body.dark .table-responsive-wrapper td { border-bottom: none !important; } /* Pastikan mati total pas dark mode[cite: 15] */
 body.dark .table-responsive-wrapper table td:nth-child(2) span { color: #fff !important; }
-body.dark .table-responsive-wrapper table td:nth-child(4) span { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; }
+/* body.dark .table-responsive-wrapper table td:nth-child(4) span { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; } */
+/* DARK MODE - kategori event */
+body.dark .table-responsive-wrapper td .badge-category {
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* PAMERAN */
+body.dark .table-responsive-wrapper td .badge-category.cat-pameran {
+  background-color: rgba(99, 102, 241, 0.25) !important;
+  color: #a5a8ff !important;
+}
+
+/* WORKSHOP */
+body.dark .table-responsive-wrapper td .badge-category.cat-workshop {
+  background-color: rgba(249, 115, 22, 0.25) !important;
+  color: #fdba74 !important;
+}
+
+/* FESTIVAL */
+body.dark .table-responsive-wrapper td .badge-category.cat-festival {
+  background-color: rgba(236, 72, 153, 0.25) !important;
+  color: #f9a8d4 !important;
+}
+
+/* LOMBA */
+body.dark .table-responsive-wrapper td .badge-category.cat-lomba {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  color: #fcd34d !important;
+}
+
+/* WEBINAR */
+body.dark .table-responsive-wrapper td .badge-category.cat-webinar {
+  background-color: rgba(6, 182, 212, 0.25) !important;
+  color: #67e8f9 !important;
+}
+
+/* Default */
+body.dark .table-responsive-wrapper td .badge-category.cat-default {
+  background-color: rgba(148, 163, 184, 0.25) !important;
+  color: #cbd5e1 !important;
+}
 body.dark .table-responsive-wrapper td .status.completed { background-color: rgba(46, 204, 113, 0.25) !important; color: #7bf3a2 !important; }
 body.dark .table-responsive-wrapper td .status.pending { background-color: rgba(253, 114, 56, 0.25) !important; color: #ff9f68 !important; }
 

@@ -22,10 +22,25 @@
 }
 
 /* Penyelarasan Warna Pastel Transparan Khas Dashboard */
-.cat-sentra { background: rgba(60, 145, 230, 0.1) !important; color: #3C91E6 !important; }
-.cat-toko   { background: rgba(63, 195, 128, 0.1) !important; color: #3FC380 !important; }
-.cat-edukasi { background: rgba(155, 89, 182, 0.1) !important; color: #9B59B6 !important; }
-.cat-pengrajin { background: rgba(255, 165, 0, 0.1) !important; color: #FFA500 !important; }
+.cat-sentra {
+  color: #3C91E6 !important;
+  background: rgba(60, 145, 230, 0.1) !important;
+}
+
+.cat-toko {
+  color: #9B59B6 !important;
+  background: rgba(155, 89, 182, 0.1) !important;
+}
+
+.cat-edukasi {
+  color: #3FC380 !important;
+  background: rgba(63, 195, 128, 0.1) !important;
+}
+
+.cat-pengrajin {
+  color: #FFA500 !important;
+  background: rgba(255, 165, 0, 0.1) !important;
+}
 
 /* Responsive Table Wrapper Fix */
 .table-responsive-wrapper {
@@ -384,9 +399,25 @@ body.dark .search-box .form-input:focus-within { background: #1e2124; }
 body.dark .table-responsive-wrapper td { border-bottom: none !important; }
 
 /* Dark Mode Badge Map Capsule Sync */
-body.dark .badge-map.cat-sentra { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; }
-body.dark .badge-map.cat-toko { background-color: rgba(63, 195, 128, 0.25) !important; color: #6bf1ab !important; }
-body.dark .badge-map.cat-edukasi { background-color: rgba(155, 89, 182, 0.25) !important; color: #d49aee !important; }
+body.dark .badge-map.cat-sentra {
+  background-color: rgba(60, 145, 230, 0.25) !important;
+  color: #6eb4f7 !important;
+}
+
+body.dark .badge-map.cat-toko {
+  background-color: rgba(63, 195, 128, 0.25) !important;
+  color: #6bf1ab !important;
+}
+
+body.dark .badge-map.cat-edukasi {
+  background-color: rgba(155, 89, 182, 0.25) !important;
+  color: #d49aee !important;
+}
+
+body.dark .badge-map.cat-pengrajin {
+  background-color: rgba(255, 165, 0, 0.25) !important;
+  color: #ffc76b !important;
+}
 
 /* Dark Mode Navigation Glow */
 body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }

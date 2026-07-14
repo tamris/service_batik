@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mapping.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>AdminBatik</title>
+    <title>AdminBatik - Peta Lokasi</title>
 </head>
 
 <body>
@@ -150,7 +150,7 @@
                             </select>
 
                             <div class="form-input">
-                                <input type="search" id="searchInput" placeholder="Cari motif batik..."
+                                <input type="search" id="searchInput" placeholder="Cari lokasi..."
                                     autocomplete="off" data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
                                 <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
                             </div>

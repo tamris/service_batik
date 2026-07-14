@@ -129,22 +129,24 @@
 							<select name="c" id="categoryFilter" onchange="this.form.submit()"
 								style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
 								<option value="">Semua Kategori</option>
-								<option value="BERITA TERKINI" {% if selected_category=='BERITA TERKINI' %}selected{% endif %}>Berita Terkini
+								<option value="BERITA TERKINI" {% if selected_category=='BERITA TERKINI' %}selected{%
+									endif %}>Berita Terkini
 								</option>
 								<option value="EDUKASI" {% if selected_category=='EDUKASI' %}selected{% endif %}>Edukasi
 								</option>
 								<option value="SEJARAH" {% if selected_category=='SEJARAH' %}selected{% endif %}>Sejarah
 								</option>
-								<option value="SOSOK & INSPIRASI" {% if selected_category=='SOSOK & INSPIRASI' %}selected{% endif %}>Sosok & Inspirasi
+								<option value="SOSOK & INSPIRASI" {% if selected_category=='SOSOK & INSPIRASI'
+									%}selected{% endif %}>Sosok & Inspirasi
 								</option>
 								<option value="EVENT" {% if selected_category=='EVENT' %}selected{% endif %}>Event
 								</option>
 							</select>
 
 							<div class="form-input">
-								<input type="search" name="q" id="searchInput" placeholder="Cari artikel..."
-									autocomplete="off" value="{{ search_query }}">
-								<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+								<input type="search" id="searchInput" placeholder="Cari artikel..." autocomplete="off"
+									data-url="{{ url_for('informasi.index') }}" name="q" value="{{ search_query }}">
+								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 							</div>
 						</form>
 					</div>
@@ -154,10 +156,10 @@
 						<table>
 							<thead>
 								<tr>
-									<th >Gambar</th>
-									<th >Judul & Kategori</th>
-									<th >Isi Artikel</th>
-									<th >Aksi</th>
+									<th>Gambar</th>
+									<th>Judul & Kategori</th>
+									<th>Isi Artikel</th>
+									<th>Aksi</th>
 								</tr>
 							</thead>
 							<tbody id="tableBody">
@@ -172,12 +174,24 @@
 									</td>
 									<td>
 										<span class="article-title">{{ item.title | truncate(80) }}</span>
-										<span class="status completed" style="font-size: 10px; padding: 2px 8px;">{{
-											item.category }}</span>
+										
+										{% set badge_class = 'default' %}
+										{% if item.category == 'Berita Terkini' %}
+										{% set badge_class = 'berita-terkini' %}
+										{% elif item.category == 'Event' %}
+										{% set badge_class = 'event' %}
+										{% elif item.category == 'Sosok & Inspirasi' %}
+										{% set badge_class = 'sosok-inspirasi' %}
+										{% elif item.category == 'Edukasi' %}
+										{% set badge_class = 'edukasi' %}
+										{% endif %}
+										<span class="status {{ badge_class }}">
+											{{ item.category }}
+										</span>
 									</td>
 									<td>
 										<div class="limit-text" title="{{ item.description }}">
-											{{ item.description  }}
+											{{ item.description }}
 										</div>
 									</td>
 									<td>
