@@ -391,6 +391,51 @@ body {
 	font-weight: 700;
 }
 
+/* ===========================
+   BADGE KATEGORI BATIK (DASHBOARD)
+=========================== */
+
+/* Base badge biar mirip style galeri */
+#content main .table-data .order table tr td .status {
+	display: inline-block !important;
+	border-radius: 999px !important;
+	padding: 6px 12px !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	text-transform: uppercase;
+	letter-spacing: .4px;
+}
+
+/* Klasik - Coklat Batik */
+#content main .table-data .order table tr td .status.cat-klasik {
+	background: rgba(166, 124, 82, 0.15) !important;
+	color: #C89B6D !important;
+}
+
+/* Kontemporer - Biru */
+#content main .table-data .order table tr td .status.cat-kontemporer {
+	background: rgba(60, 145, 230, 0.15) !important;
+	color: #3C91E6 !important;
+}
+
+/* Flora - Hijau */
+#content main .table-data .order table tr td .status.cat-flora  {
+	background: rgba(46, 204, 113, 0.15) !important;
+	color: #2ECC71 !important;
+}
+
+/* Bahari - Cyan */
+#content main .table-data .order table tr td .status.cat-bahari {
+	background: rgba(0, 188, 212, 0.15) !important;
+	color: #00BCD4 !important;
+}
+
+/* Default */
+#content main .table-data .order table tr td .status.cat-default {
+	background: rgba(148, 163, 184, 0.15) !important;
+	color: #94A3B8 !important;
+}
+
 /* TODO LIST / AGENDA */
 #content main .table-data .todo {
 	flex-grow: 1;
