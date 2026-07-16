@@ -1,88 +1,237 @@
 {% extends 'dashboard.html' %}
 
 {% block content %}
-<!-- Panggil CSS Profile hasil refactor agar terbaca sistem browser -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 
-<div class="head-title">
-    <div class="left">
-        <h1>Pengaturan Akun</h1>
-        <ul class="breadcrumb">
-            <li><a href="#">Dashboard</a></li>
-            <li><i class='bx bx-chevron-right'></i></li>
-            <li><a class="active" href="#">Profile</a></li>
-        </ul>
-    </div>
-</div>
-
-<div class="table-data">
-    <!-- KOTAK KIRI: MODERNISED AVATAR UPLOAD -->
-    <div class="order profile-card-box">
-        <div class="head" style="margin-bottom: 20px;">
-            <h3>Foto Profil Admin</h3>
+<div class="profile-page">
+    <div class="head-title">
+        <div class="left">
+            <h1>Pengaturan Akun</h1>
+            <ul class="breadcrumb">
+                <li><a href="#">Dashboard</a></li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li><a class="active" href="#">Profile</a></li>
+            </ul>
         </div>
-        <div class="avatar-upload-wrapper">
-            <div class="avatar-preview-holder">
-                <img id="avatarPreview" src="{{ url_for('static', filename='img/avatars/' + user.profile_picture) if user.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';" alt="Avatar Profil">
+    </div>
+
+    <div class="profile-grid">
+        <!-- LEFT: AVATAR -->
+        <section class="profile-card profile-card-box profile-card--avatar">
+            <div class="card-head">
+                <h3>Foto Profil</h3>
+                <p>Gunakan foto yang jelas agar akun mudah dikenali.</p>
             </div>
-            
-            <form action="{{ url_for('web_dashboard.profile') }}" method="POST" enctype="multipart/form-data" style="width: 100%;">
-                <input type="hidden" name="action" value="update_avatar">
-                
-                <div class="profile-file-box">
-                    <input type="file" name="avatar" accept="image/*" id="avatarInput" onchange="previewAvatar(event)" required>
-                    <div class="custom-file-label" id="fileLabelText">
-                        <i class='bx bx-image-add' style="font-size: 18px;"></i>
-                        <span>Pilih Foto Baru...</span>
+
+            <div class="avatar-zone">
+                <div class="avatar-ring">
+                    <img id="avatarPreview"
+                         src="{{ url_for('static', filename='img/avatars/' + user.profile_picture) if user and user.profile_picture else url_for('static', filename='img/avatar.png') }}"
+                         onerror="this.src='/static/img/avatar.png';"
+                         alt="Avatar Profil">
+                </div>
+
+                <form action="{{ url_for('web_dashboard.profile') }}" method="POST" enctype="multipart/form-data" class="avatar-form">
+                    <input type="hidden" name="action" value="update_avatar">
+
+                    <label class="file-drop" for="avatarInput">
+                        <input type="file" name="avatar" accept="image/*" id="avatarInput" onchange="previewAvatar(event)" required>
+                        <i class='bx bx-image-add'></i>
+                        <span id="fileLabelText">Pilih foto (PNG/JPG, maks. 2MB)</span>
+                    </label>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class='bx bx-cloud-upload'></i>
+                        Upload Foto
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- RIGHT: SECURITY -->
+        <section class="profile-card profile-card-box profile-card--security">
+            <div class="card-head">
+                <h3>Keamanan Akun</h3>
+                <p>Pastikan akun terlindungi dengan password yang kuat.</p>
+            </div>
+
+            <div class="account-info">
+                <div class="account-info__title">Akun yang sedang login</div>
+                <div class="account-info__grid">
+                    <div class="item">
+                        <span>Username</span>
+                        <strong>{{ (current_user_profile.username if current_user_profile and current_user_profile.username else user.username) or '-' }}</strong>
+                    </div>
+                    <div class="item">
+                        <span>Email</span>
+                        <strong>{{ (current_user_profile.email if current_user_profile and current_user_profile.email else user.email) or '-' }}</strong>
+                    </div>
+                    <div class="item">
+                        <span>Role</span>
+                        <strong>{{ (current_user_profile.role if current_user_profile and current_user_profile.role else user.role) or 'Admin' }}</strong>
                     </div>
                 </div>
-                
-                <button type="submit" class="btn-profile-save btn-blue-solid">
-                    <i class='bx bx-cloud-upload' style="font-size: 18px;"></i> Upload Foto Baru
+            </div>
+
+            <form action="{{ url_for('web_dashboard.profile') }}" method="POST" class="security-form" id="passwordForm">
+                <input type="hidden" name="action" value="update_password">
+
+                <div class="form-group">
+                    <label for="current_password">Password Lama</label>
+                    <div class="input-wrap">
+                        <input type="password" id="current_password" name="current_password" class="profile-input" placeholder="Masukkan password lama..." required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('current_password', this)">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">Password Baru</label>
+                    <div class="input-wrap">
+                        <input type="password" id="new_password" name="new_password" class="profile-input" placeholder="Masukkan kata sandi baru..." required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('new_password', this)">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </div>
+
+                    <!-- Strength Meter -->
+                    <div class="strength-wrap">
+                        <div class="strength-bar">
+                            <div id="strengthFill"></div>
+                        </div>
+                        <small id="strengthText" class="hint">Kekuatan password: -</small>
+                    </div>
+                    <small class="hint">Minimal 8 karakter, huruf besar, huruf kecil, dan angka.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Konfirmasi Password Baru</label>
+                    <div class="input-wrap">
+                        <input type="password" id="confirm_password" name="confirm_password" class="profile-input" placeholder="Ulangi kata sandi baru..." required>
+                        <button type="button" class="toggle-pass" onclick="togglePassword('confirm_password', this)">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </div>
+                    <small id="matchText" class="hint">Konfirmasi password belum diisi.</small>
+                </div>
+
+                <button type="submit" class="btn btn-warning">
+                    <i class='bx bx-lock-alt'></i>
+                    Simpan Password Baru
                 </button>
             </form>
-        </div>
-    </div>
-
-    <!-- KOTAK KANAN: UNIFORM PASSWORD CONFIG -->
-    <div class="todo profile-card-box">
-        <div class="head" style="margin-bottom: 20px;">
-            <h3>Ubah Password Keamanan</h3>
-        </div>
-        <form action="{{ url_for('web_dashboard.profile') }}" method="POST">
-            <input type="hidden" name="action" value="update_password">
-            
-            <div class="profile-group">
-                <label class="profile-label">Password Baru</label>
-                <input type="password" name="new_password" class="profile-input" placeholder="Masukkan kata sandi baru..." required>
-            </div>
-
-            <div class="profile-group">
-                <label class="profile-label">Konfirmasi Password Baru</label>
-                <input type="password" name="confirm_password" class="profile-input" placeholder="Ulangi kata sandi baru..." required>
-            </div>
-
-            <button type="submit" class="btn-profile-save btn-orange-solid" style="margin-top: 14px;">
-                <i class='bx bx-lock-open-alt' style="font-size: 18px;"></i> Simpan Password Baru
-            </button>
-        </form>
+        </section>
     </div>
 </div>
 
 <script>
-    // Realtime JavaScript preview untuk file input avatar baru
     function previewAvatar(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
         const reader = new FileReader();
         reader.onload = function () {
             const output = document.getElementById('avatarPreview');
+            const label = document.getElementById('fileLabelText');
             output.src = reader.result;
-            
-            // Ubah teks box label kustom setelah berhasil load gambar
-            document.getElementById('fileLabelText').querySelector('span').innerText = "Gambar siap diupload!";
-            document.getElementById('fileLabelText').style.borderColor = "#3C91E6";
+            label.innerText = `Siap upload: ${file.name}`;
         };
-        reader.readAsDataURL(event.target.files[0]);
+        reader.readAsDataURL(file);
     }
+
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove('bx-show');
+            icon.classList.add('bx-hide');
+        } else {
+            input.type = "password";
+            icon.classList.remove('bx-hide');
+            icon.classList.add('bx-show');
+        }
+    }
+
+    // ===== Password UX Enhancements =====
+    const newPasswordInput = document.getElementById('new_password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const strengthFill = document.getElementById('strengthFill');
+    const strengthText = document.getElementById('strengthText');
+    const matchText = document.getElementById('matchText');
+    const passwordForm = document.getElementById('passwordForm');
+
+    function getPasswordScore(password) {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/\d/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        return score; // 0 - 5
+    }
+
+    function updateStrengthMeter() {
+        const val = newPasswordInput.value;
+        const score = getPasswordScore(val);
+
+        let width = 0;
+        let label = 'Sangat lemah';
+        let color = '#ef4444';
+
+        if (val.length === 0) {
+            width = 0; label = 'Kekuatan password: -'; color = '#64748b';
+        } else if (score <= 2) {
+            width = 30; label = 'Kekuatan password: Lemah'; color = '#ef4444';
+        } else if (score === 3) {
+            width = 55; label = 'Kekuatan password: Sedang'; color = '#f59e0b';
+        } else if (score === 4) {
+            width = 78; label = 'Kekuatan password: Kuat'; color = '#22c55e';
+        } else {
+            width = 100; label = 'Kekuatan password: Sangat kuat'; color = '#16a34a';
+        }
+
+        strengthFill.style.width = width + '%';
+        strengthFill.style.background = color;
+        strengthText.textContent = label;
+        strengthText.style.color = color;
+    }
+
+    function updateMatchStatus() {
+        const pass1 = newPasswordInput.value;
+        const pass2 = confirmPasswordInput.value;
+
+        if (!pass2) {
+            matchText.textContent = 'Konfirmasi password belum diisi.';
+            matchText.style.color = '#8a94a6';
+            return;
+        }
+
+        if (pass1 === pass2) {
+            matchText.textContent = '✅ Password cocok.';
+            matchText.style.color = '#22c55e';
+        } else {
+            matchText.textContent = '❌ Password tidak cocok.';
+            matchText.style.color = '#ef4444';
+        }
+    }
+
+    newPasswordInput.addEventListener('input', () => {
+        updateStrengthMeter();
+        updateMatchStatus();
+    });
+
+    confirmPasswordInput.addEventListener('input', updateMatchStatus);
+
+    passwordForm.addEventListener('submit', function (e) {
+        if (newPasswordInput.value !== confirmPasswordInput.value) {
+            e.preventDefault();
+            matchText.textContent = '❌ Password tidak cocok. Cek kembali.';
+            matchText.style.color = '#ef4444';
+            confirmPasswordInput.focus();
+        }
+    });
 </script>
 {% endblock %}

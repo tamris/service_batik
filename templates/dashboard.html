@@ -271,8 +271,14 @@
 
 			// 3. Eksekusi SweetAlert
 			const validIcons = ['success', 'error', 'warning', 'info'];
+			const titleMap = {
+				success: 'Berhasil!',
+				error: 'Gagal!',
+				warning: 'Perhatian!',
+				info: 'Info!'
+			};
 			Swal.fire({
-				title: 'Berhasil!',
+				title: titleMap[category] || 'Info!',
 				text: message,
 				icon: validIcons.includes(category) ? category : 'info',
 				timer: 2500,

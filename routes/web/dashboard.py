@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
 from routes.web.auth import login_required
 from bson.objectid import ObjectId
@@ -9,6 +10,7 @@ from werkzeug.utils import secure_filename
 web_bp = Blueprint('web_dashboard', __name__)
 
 UPLOAD_AVATAR_FOLDER = 'static/img/avatars'
+
 
 # ==========================================
 # 1. GLOBAL CONTEXT PROCESSOR & JINJA FILTER
@@ -33,17 +35,45 @@ def format_tgl_indo(date_str):
     if not date_str:
         return "Segera Hadir"
     try:
-        if 'T' in date_str:
-            date_str = date_str.split('T')[0]
-            
-        dt = datetime.strptime(date_str, "%Y-%m-%d")
+        if isinstance(date_str, datetime):
+            dt = date_str
+        else:
+            date_str = str(date_str)
+            if 'T' in date_str:
+                date_str = date_str.split('T')[0]
+            dt = datetime.strptime(date_str, "%Y-%m-%d")
+
         bulan_indo = [
             "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ]
         return f"{dt.day} {bulan_indo[dt.month]} {dt.year}"
     except Exception:
-        return date_str
+        return str(date_str)
+
+
+@web_bp.app_template_filter('tgl_indo')
+def tgl_indo_filter(date_str):
+    """Registrasi filter Jinja global: {{ value|tgl_indo }}"""
+    return format_tgl_indo(date_str)
+
+
+def is_strong_password(password: str) -> bool:
+    """
+    Minimal 8 karakter, mengandung:
+    - huruf besar
+    - huruf kecil
+    - angka
+    """
+    if not password or len(password) < 8:
+        return False
+    if not re.search(r"[A-Z]", password):
+        return False
+    if not re.search(r"[a-z]", password):
+        return False
+    if not re.search(r"\d", password):
+        return False
+    return True
 
 
 # ==========================================
@@ -58,29 +88,26 @@ def index():
         'users_count': current_app.mongo.db.users.count_documents({}),
         'artikel_count': current_app.mongo.db.informasi.count_documents({}),
         'event_count': current_app.mongo.db.events.count_documents({}),
-        'video_count': current_app.mongo.db.videos.count_documents({}),     
-        'mapping_count': current_app.mongo.db.mappings.count_documents({}), 
+        'video_count': current_app.mongo.db.videos.count_documents({}),
+        'mapping_count': current_app.mongo.db.mappings.count_documents({}),
     }
-    
+
     batik_terbaru = list(
         current_app.mongo.db.batiks.find({"is_deleted": {"$ne": True}})
         .sort("_id", -1)
         .limit(5)
     )
-    
+
     event_terbaru = list(
         current_app.mongo.db.events.find({})
         .sort("created_at", -1)
         .limit(3)
     )
-    
-    if 'tgl_indo' not in current_app.jinja_env.filters:
-        current_app.jinja_env.filters['tgl_indo'] = format_tgl_indo
 
     return render_template(
-        'dashboard.html', 
+        'dashboard.html',
         batik_terbaru=batik_terbaru,
-        event_terbaru=event_terbaru,  
+        event_terbaru=event_terbaru,
         **counts
     )
 
@@ -98,42 +125,53 @@ def profile():
     if request.method == 'POST':
         action = request.form.get('action')
         bcrypt = current_app.bcrypt
-        
+
         # A. LOGIKA GANTI PROFILE PICTURE ADMIN
         if action == 'update_avatar':
             file = request.files.get('avatar')
             if file and file.filename != '':
                 filename = secure_filename(f"avatar_{user_id}_{file.filename}")
+
                 if not os.path.exists(UPLOAD_AVATAR_FOLDER):
                     os.makedirs(UPLOAD_AVATAR_FOLDER)
-                
+
                 file.save(os.path.join(UPLOAD_AVATAR_FOLDER, filename))
-                
+
                 current_app.mongo.db.users.update_one(
-                    {"_id": ObjectId(user_id)}, 
+                    {"_id": ObjectId(user_id)},
                     {"$set": {"profile_picture": filename}}
                 )
-                
+
                 flash('Foto profil berhasil diperbarui!', 'success')
             else:
                 flash('Pilih file gambar terlebih dahulu.', 'error')
 
-        # B. LOGIKA GANTI PASSWORD ADMIN
+        # B. LOGIKA GANTI PASSWORD ADMIN (PAKAI VERIFIKASI PASSWORD LAMA)
         elif action == 'update_password':
+            current_password = request.form.get('current_password')
             new_password = request.form.get('new_password')
             confirm_password = request.form.get('confirm_password')
 
-            if not new_password or not confirm_password:
-                flash('Password tidak boleh kosong!', 'error')
+            if not current_password or not new_password or not confirm_password:
+                flash('Semua field password wajib diisi!', 'error')
+            elif not user_data or not user_data.get('password'):
+                flash('Data akun tidak valid. Silakan login ulang.', 'error')
+            elif not bcrypt.check_password_hash(user_data.get('password', ''), current_password):
+                flash('Password lama salah!', 'error')
             elif new_password != confirm_password:
                 flash('Konfirmasi password tidak cocok!', 'error')
+            elif current_password == new_password:
+                flash('Password baru tidak boleh sama dengan password lama!', 'error')
+            elif not is_strong_password(new_password):
+                flash('Password minimal 8 karakter dan wajib mengandung huruf besar, huruf kecil, serta angka!', 'error')
             else:
                 hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
-                
+
                 current_app.mongo.db.users.update_one(
-                    {"_id": ObjectId(user_id)}, 
+                    {"_id": ObjectId(user_id)},
                     {"$set": {"password": hashed_password}}
                 )
+
                 flash('Password berhasil diubah!', 'success')
 
         return redirect(url_for('web_dashboard.profile'))
