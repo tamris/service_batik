@@ -19,7 +19,7 @@ def create_user(data):
         "profile_picture": data.get("profile_picture", ""),
         "gender": data.get("gender", ""),
         "tanggal_lahir": data.get("tanggal_lahir", ""),
-        "created_at": datetime.utcnow()
+        "created_at": datetime.now()
     }
     current_app.mongo.db.users.insert_one(user)
     return user

@@ -67,10 +67,10 @@
                     <span class="text">Manajemen User</span>
                 </a>
             </li>
-            
+
         </ul>
         <ul class="side-menu">
-           
+
             <li>
                 <a href="{{ url_for('auth.logout') }}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
@@ -91,13 +91,13 @@
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
 
-        <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
+            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
                 <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
+                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+                    onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
-        
+
         <main>
             <div class="head-title">
                 <div class="left">
@@ -114,34 +114,33 @@
             </div>
 
             <div class="table-data">
-                <!-- FIX 6: Ubah batik-form-container jadi user-form-container -->
                 <div class="order user-form-container">
                     <form action="{{ url_for('user_manager.create') }}" method="POST">
 
-                        <!-- FIX 7: Ubah semua class batik-* menjadi user-* -->
-                        <div class="user-group">
-                            <label class="user-label">Username Lengkap</label>
-                            <!-- FIX 8: Pastikan name="username" sesuai dengan database -->
-                            <input type="text" name="username" class="user-input" placeholder="Masukkan nama admin..."
-                                required>
-                        </div>
+                        <!-- BUNGKUS GRID BIAR BERDAMPINGAN SEIMBANG -->
+                        <div class="user-form-grid">
+                            <div class="user-group">
+                                <label class="user-label">Username Lengkap</label>
+                                <input type="text" name="username" class="user-input"
+                                    placeholder="Masukkan nama admin..." required>
+                            </div>
 
-                        <div class="user-group">
-                            <label class="user-label">Alamat Email</label>
-                            <input type="email" name="email" class="user-input" placeholder="contoh@gmail.com"
-                                required>
-                        </div>
+                            <div class="user-group">
+                                <label class="user-label">Alamat Email</label>
+                                <input type="email" name="email" class="user-input" placeholder="contoh@gmail.com"
+                                    required>
+                            </div>
 
-                        <div class="user-group">
-                            <label class="user-label">Password Sementara</label>
-                            <input type="password" name="password" class="user-input" placeholder="Minimal 6 karakter"
-                                required minlength="6">
-                        </div>
+                            <div class="user-group">
+                                <label class="user-label">Password Sementara</label>
+                                <input type="password" name="password" class="user-input"
+                                    placeholder="Minimal 6 karakter" required minlength="6">
+                            </div>
 
-                        <div class="user-group">
-                            <label class="user-label">Role Akses</label>
-                            <!-- Input disabled otomatis merespons styling dari user.css -->
-                            <input type="text" class="user-input" value="Admin" disabled>
+                            <div class="user-group">
+                                <label class="user-label">Role Akses</label>
+                                <input type="text" class="user-input" value="Admin" disabled>
+                            </div>
                         </div>
 
                         <div class="user-actions">

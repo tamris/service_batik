@@ -144,14 +144,15 @@
                                 <option value="Sentra Batik" {% if selected_category=='Sentra Batik' %}selected{% endif
                                     %}>Sentra Batik</option>
                                 <option value="Toko" {% if selected_category=='Toko' %}selected{% endif %}>Toko</option>
-                                <option value="Pengrajin" {% if selected_category=='Pengrajin' %}selected{% endif %}>Pengrajin</option>
+                                <option value="Pengrajin" {% if selected_category=='Pengrajin' %}selected{% endif %}>
+                                    Pengrajin</option>
                                 <option value="Edukasi" {% if selected_category=='Edukasi' %}selected{% endif %}>Edukasi
                                 </option>
                             </select>
 
                             <div class="form-input">
-                                <input type="search" id="searchInput" placeholder="Cari lokasi..."
-                                    autocomplete="off" data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
+                                <input type="search" id="searchInput" placeholder="Cari lokasi..." autocomplete="off"
+                                    data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
                                 <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
                             </div>
                         </form>

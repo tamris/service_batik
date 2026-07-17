@@ -278,7 +278,7 @@ body {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	grid-gap: 24px;
-	margin-top: 36px;
+	margin-top: 24px; /* Diturunkan seimbang */
 }
 #content main .box-info li {
 	padding: 24px;
@@ -348,24 +348,26 @@ body {
 	font-weight: 600;
 }
 
-/* KATALOG TABLE */
+/* KATALOG TABLE - FIXED LINE FREE & BALANCED SPACE */
 #content main .table-data .order {
 	flex-grow: 1;
-	flex-basis: 500px;
+	flex-basis: 350px;
 }
 #content main .table-data .order table {
 	width: 100%;
 	border-collapse: collapse;
 }
 #content main .table-data .order table th {
-	padding-bottom: 12px;
-	font-size: 13px;
+	padding-bottom: 16px;
+	font-size: 14px;
+	font-weight: 600;
 	text-align: left;
-	border-bottom: 1px solid var(--grey);
+	border-bottom: 2px solid var(--grey);
 }
 #content main .table-data .order table td {
 	padding: 16px 0;
 	vertical-align: middle;
+	border-bottom: none !important; /* Murni polos tanpa bocor garis horizontal */
 }
 #content main .table-data .order table tr td:first-child {
 	display: flex;
@@ -378,97 +380,179 @@ body {
 	height: 60px;
 	border-radius: 10px;  
 	object-fit: cover;   
-	border: 1px solid var(--grey); 
+	border: 1px solid transparent; 
 }
+
+/* Netralisir background hover tabel agar tidak membekas kontras di dark mode */
 #content main .table-data .order table tbody tr:hover {
-	background: var(--grey);
-}
-#content main .table-data .order table tr td .status {
-	font-size: 10px;
-	padding: 6px 16px;
-	color: var(--light);
-	border-radius: 20px;
-	font-weight: 700;
+	background: transparent !important;
 }
 
-/* ===========================
-   BADGE KATEGORI BATIK (DASHBOARD)
-=========================== */
-
-/* Base badge biar mirip style galeri */
+/* ==========================================================================
+   BADGE KATEGORI BATIK (UNIFIED CAPSULE STYLING)
+   ========================================================================== */
 #content main .table-data .order table tr td .status {
 	display: inline-block !important;
-	border-radius: 999px !important;
+	border-radius: 20px !important; /* Bulat kapsul sempurna */
 	padding: 6px 12px !important;
 	font-size: 11px !important;
 	font-weight: 600 !important;
 	text-transform: uppercase;
-	letter-spacing: .4px;
+	letter-spacing: .5px;
+	box-shadow: none !important;
+	min-width: 85px;
+	text-align: center;
 }
 
-/* Klasik - Coklat Batik */
+/* Klasik */
 #content main .table-data .order table tr td .status.cat-klasik {
 	background: rgba(166, 124, 82, 0.15) !important;
 	color: #C89B6D !important;
 }
-
-/* Kontemporer - Biru */
+/* Kontemporer */
 #content main .table-data .order table tr td .status.cat-kontemporer {
 	background: rgba(60, 145, 230, 0.15) !important;
 	color: #3C91E6 !important;
 }
-
-/* Flora - Hijau */
+/* Flora */
 #content main .table-data .order table tr td .status.cat-flora  {
 	background: rgba(46, 204, 113, 0.15) !important;
 	color: #2ECC71 !important;
 }
-
-/* Bahari - Cyan */
+/* Bahari */
 #content main .table-data .order table tr td .status.cat-bahari {
 	background: rgba(0, 188, 212, 0.15) !important;
 	color: #00BCD4 !important;
 }
-
 /* Default */
 #content main .table-data .order table tr td .status.cat-default {
 	background: rgba(148, 163, 184, 0.15) !important;
 	color: #94A3B8 !important;
 }
 
-/* TODO LIST / AGENDA */
+/* ==========================================================================
+   AKTIVITAS TERBARU PANEL SYSTEM
+   ========================================================================== */
 #content main .table-data .todo {
-	flex-grow: 1;
-	flex-basis: 300px;
+	flex-grow: 2; /* Menaikkan grow factor agar mengambil sisa ruang lebih banyak */
+	flex-basis: 550px; /* Diperbesar dari 300px agar layout otomatis melebar jauh */
 }
-#content main .table-data .todo .todo-list {
-	width: 100%;
+
+#content main .table-data .todo .activity-title {
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 4px;
+	font-weight: 600;
+	color: var(--dark);
 }
-#content main .table-data .todo .todo-list li {
-	width: 100%;
-	margin-bottom: 16px;
-	background: var(--grey);
+
+#content main .table-data .todo .activity-list {
+	max-height: 430px;
+	overflow-y: auto;
+	padding-right: 6px;
+}
+#content main .table-data .todo .activity-list::-webkit-scrollbar {
+	width: 6px;
+}
+#content main .table-data .todo .activity-list::-webkit-scrollbar-thumb {
+	background: rgba(148,163,184,.35);
 	border-radius: 10px;
-	padding: 14px 20px;
+}
+#content main .table-data .todo .activity-list .activity-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	border-left: 4px solid transparent;
+	padding: 12px 14px;
+	margin-bottom: 10px;
+	border-radius: 0 8px 8px 0;
+	background: transparent;
+}
+
+#content main .table-data .todo .activity-left {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+#content main .table-data .todo .activity-icon {
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	flex-shrink: 0;
+}
+
+#content main .table-data .todo .activity-content {
+	min-width: 0;
+}
+
+#content main .table-data .todo .activity-content small {
+	color: var(--dark-grey);
+	font-size: 12px;
+}
+
+#content main .table-data .todo .activity-link {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--blue);
+	background: rgba(60, 145, 230, 0.12);
+	padding: 6px 10px;
+	border-radius: 8px;
+	flex-shrink: 0;
+	transition: all 0.2s ease;
+}
+#content main .table-data .todo .activity-link:hover {
+	background: var(--blue);
+	color: #fff;
+}
+
+/* Variasi Warna Komponen Aktivitas */
+#content main .table-data .todo .activity-item.artikel { border-left-color: #F97316; }
+#content main .table-data .todo .activity-item.artikel .activity-icon { background: rgba(249,115,22,.15); color: #F97316; }
+
+#content main .table-data .todo .activity-item.event { border-left-color: #06B6D4; }
+#content main .table-data .todo .activity-item.event .activity-icon { background: rgba(6,182,212,.15); color: #06B6D4; }
+
+#content main .table-data .todo .activity-item.video { border-left-color: #EC4899; }
+#content main .table-data .todo .activity-item.video .activity-icon { background: rgba(236,72,153,.15); color: #EC4899; }
+
+#content main .table-data .todo .activity-item.mapping { border-left-color: #10B981; }
+#content main .table-data .todo .activity-item.mapping .activity-icon { background: rgba(16,185,129,.15); color: #10B981; }
+
+#content main .table-data .todo .activity-item.user { border-left-color: #8B5CF6; }
+#content main .table-data .todo .activity-item.user .activity-icon { background: rgba(139,92,246,.15); color: #8B5CF6; }
+
+/* Header panel aktivitas */
+#content main .table-data .todo .activity-head {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: flex-start;
+	gap: 12px;
+	flex-wrap: wrap;
 }
-#content main .table-data .todo .todo-list li.completed {
-	border-left: 10px solid var(--blue);
-}
-#content main .table-data .todo .todo-list li:last-child {
-	margin-bottom: 0;
+
+#content main .table-data .todo .activity-subtitle {
+	margin-top: 6px;
+	font-size: 12px;
+	color: var(--dark-grey);
+	line-height: 1.4;
 }
 
 /* ==========================================================================
-   BEST PRACTICE MEDIA QUERIES
+   BEST PRACTICE MEDIA QUERIES & RESPONSIVENESS
    ========================================================================== */
-
 @media screen and (max-width: 768px) {
 	#sidebar {
 		width: 280px;
-		left: -280px; /* Sembunyikan sidebar ke kiri luar screen default mobile */
+		left: -280px; 
 	}
 	#sidebar.show {
 		left: 0;
@@ -479,7 +563,7 @@ body {
 	}
 	#sidebar.show ~ #content {
 		opacity: 0.4;
-		pointer-events: none; /* Mencegah user klik konten pas sidebar mobile kebuka */
+		pointer-events: none; 
 	}
 	#content nav .nav-link {
 		display: none;
@@ -496,7 +580,7 @@ body {
 	#content main .table-data .head,
 	#content main .table-data .order table,
 	#content main .table-data .todo .todo-list {
-		min-width: 100%; /* Mengganti 420px bawaan lama agar tidak patah/meluber */
+		min-width: 100%; 
 	}
 	#content main .head-title .left h1 {
 		font-size: 28px;
@@ -508,4 +592,19 @@ body {
 
 body.preload {
     transition: none !important;
+}
+
+/* Styling Teks Tambahan Informasi Growth di Card Statistik */
+#content main .box-info li .text .stat-growth {
+	display: block;
+	margin-top: 4px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #2ecc71; /* Warna hijau indikator penambahan data */
+}
+
+/* Penyesuaian warna teks growth saat mode gelap */
+body.dark #content main .box-info li .text .stat-growth {
+	color: #2ecc71;
+	opacity: 0.9;
 }

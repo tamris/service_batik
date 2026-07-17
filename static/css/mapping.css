@@ -405,13 +405,13 @@ body.dark .badge-map.cat-sentra {
 }
 
 body.dark .badge-map.cat-toko {
-  background-color: rgba(63, 195, 128, 0.25) !important;
-  color: #6bf1ab !important;
+  background-color: rgba(155, 89, 182, 0.25) !important;
+  color: #d49aee !important;
 }
 
 body.dark .badge-map.cat-edukasi {
-  background-color: rgba(155, 89, 182, 0.25) !important;
-  color: #d49aee !important;
+  background-color: rgba(63, 195, 128, 0.25) !important;
+  color: #6bf1ab !important;
 }
 
 body.dark .badge-map.cat-pengrajin {

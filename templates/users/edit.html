@@ -117,22 +117,23 @@
             </div>
 
             <div class="table-data">
-                <!-- FIX 7: Ubah class form-container ke user-form-container agar full-width modern -->
                 <div class="order user-form-container">
                     <form action="{{ url_for('user_manager.edit', user_id=user._id) }}" method="POST">
 
                         <!-- Hidden input untuk menyimpan nomor halaman asal -->
                         <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
 
-                        <div class="user-group">
-                            <label class="user-label">Username Lengkap</label>
-                            <!-- FIX 8: Ubah name="name" ke "username" dan value ke user.username -->
-                            <input type="text" name="username" class="user-input" value="{{ user.username }}" required>
-                        </div>
+                        <!-- BUNGKUS GRID BIAR BERDAMPINGAN SEIMBANG -->
+                        <div class="user-form-grid">
+                            <div class="user-group">
+                                <label class="user-label">Username Lengkap</label>
+                                <input type="text" name="username" class="user-input" value="{{ user.username }}" required>
+                            </div>
 
-                        <div class="user-group">
-                            <label class="user-label">Alamat Email</label>
-                            <input type="email" name="email" class="user-input" value="{{ user.email }}" required>
+                            <div class="user-group">
+                                <label class="user-label">Alamat Email</label>
+                                <input type="email" name="email" class="user-input" value="{{ user.email }}" required>
+                            </div>
                         </div>
 
                         <div class="user-group">

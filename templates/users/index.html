@@ -7,7 +7,6 @@
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
-    <!-- Judul sudah diperbaiki -->
     <title>AdminBatik - Manajemen User</title>
 </head>
 
@@ -17,6 +16,7 @@
         if (theme === 'dark') { document.body.classList.add('dark'); }
     </script>
 
+    <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="#" class="brand">
             <i class='bx bxs-smile'></i>
@@ -69,25 +69,21 @@
             {% endif %}
         </ul>
         <ul class="side-menu">
-            <!-- <li>
-                <a href="#">
-                    <i class='bx bxs-cog'></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li> -->
             <li>
-                <a href=" {{ url_for('auth.logout') }}" class="logout">
+                <a href="{{ url_for('auth.logout') }}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="text">Logout</span>
                 </a>
             </li>
         </ul>
     </section>
+    <!-- SIDEBAR -->
 
+    <!-- CONTENT -->
     <section id="content">
+        <!-- NAVBAR -->
         <nav>
             <i class='bx bx-menu'></i>
-            <!-- Navbar title sudah diperbaiki -->
             <a href="#" class="nav-link">Manajemen User</a>
 
             <div class="spacer" style="flex-grow: 1;"></div>
@@ -95,13 +91,14 @@
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
 
-
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
                 <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
                     onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
         <main>
             <div class="head-title">
                 <div class="left">
@@ -112,7 +109,6 @@
                         <li><a class="active" href="#">Users</a></li>
                     </ul>
                 </div>
-                <!-- REFACTOR CLASS KAKU GLOBAL JADI ADD-USER -->
                 <a href="{{ url_for('user_manager.create') }}" class="btn-add-user">
                     <i class='bx bxs-user-plus'></i>
                     <span class="text">Tambah Admin</span>
@@ -121,52 +117,43 @@
 
             <div class="table-data">
                 <div class="order">
-                    <!-- Header Tabel & Search Box -->
-                    <div class="head"
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <!-- Header Tabel & Search Box Terpadu -->
+                    <div class="head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <h3 style="margin: 0;">Daftar Pengguna Sistem</h3>
 
-                        <!-- WRAPPER UNTUK FILTER DAN SEARCH -->
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <select id="roleFilter" class="user-filter" onchange="applyFilters()">
+                        <!-- SINKRONISASI SEJAJAR FORM & ID SELECT -->
+                        <form class="search-box" action="" method="GET" onsubmit="event.preventDefault(); applyFilters();">
+                            <select id="categoryFilter" onchange="applyFilters()">
                                 <option value="all" {% if role_filter=='all' %}selected{% endif %}>Semua Role</option>
-                                <option value="superadmin" {% if role_filter=='superadmin' %}selected{% endif %}>
-                                    Superadmin</option>
+                                <option value="superadmin" {% if role_filter=='superadmin' %}selected{% endif %}>Superadmin</option>
                                 <option value="admin" {% if role_filter=='admin' %}selected{% endif %}>Admin</option>
-                                <option value="users" {% if role_filter=='users' %}selected{% endif %}>User Biasa
-                                </option>
+                                <option value="users" {% if role_filter=='users' %}selected{% endif %}>User Biasa</option>
                             </select>
 
-                            <form class="search-box" onsubmit="event.preventDefault(); applyFilters();">
-                                <div class="form-input">
-                                    <input type="search" id="searchInput" placeholder="Cari nama atau email..."
-                                        autocomplete="off" data-url="{{ url_for('user_manager.index') }}">
-                                    <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="form-input">
+                                <input type="search" id="searchInput" placeholder="Cari nama atau email..."
+                                    autocomplete="off" value="{{ search_query }}" data-url="{{ url_for('user_manager.index') }}">
+                                <button type="button" class="search-btn" onclick="applyFilters()"><i class='bx bx-search'></i></button>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- BUNGKUSAN RESPONSIVE WRAPPER MAUT -->
+                    <!-- TABLE RESPONSIVE AREA -->
                     <div class="table-responsive-wrapper">
                         <table style="width: 100%; border-collapse: collapse; text-align: left;">
                             <thead>
                                 <tr style="border-bottom: 2px solid var(--grey);">
                                     <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Username</th>
                                     <th style="width: 30%; padding: 0 10px 15px 10px; color: var(--dark);">Email</th>
-                                    <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak
-                                        Akses</th>
+                                    <th style="width: 25%; padding: 0 10px 15px 10px; color: var(--dark);">Role / Hak Akses</th>
                                     <th style="width: 20%; padding: 0 10px 15px 10px; color: var(--dark);">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
-                                <!-- Loop Data Jinja Kamu -->
                                 {% for u in users %}
-                                <tr
-                                    style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
+                                <tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
                                     <td style="vertical-align: middle; padding: 18px 10px;">
-                                        <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{
-                                            u.username }}</span>
+                                        <span style="font-weight: 600; color: var(--dark); letter-spacing: 0.3px;">{{ u.username }}</span>
                                     </td>
                                     <td style="vertical-align: middle; padding: 18px 10px; color: #666;">
                                         {{ u.email }}
@@ -196,34 +183,28 @@
                                     </td>
                                 </tr>
                                 {% else %}
-                                <!-- Empty State -->
                                 <tr>
                                     <td colspan="4" style="text-align: center; padding: 60px 20px;">
                                         <div class="empty-state">
-                                            <i class='bx bx-group empty-icon'
-                                                style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                                            <p class="empty-title"
-                                                style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada
-                                                data pengguna.</p>
-                                            <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru
-                                                akan muncul di sini.</p>
+                                            <i class='bx bx-group empty-icon' style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                                            <p class="empty-title" style="font-weight: 600; color: var(--dark); font-size: 16px;">Belum ada data pengguna.</p>
+                                            <p style="color: #888; font-size: 13px; margin-top: 5px;">Data pengguna baru akan muncul di sini.</p>
                                         </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+                        
+                        <!-- PAGINATION -->
                         <div class="pagination-wrapper" id="paginationContainer">
                             <span class="pagi-info">
-                                Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
-                                results
+                                Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
                             </span>
 
                             <div class="pagi-buttons">
                                 {% if page > 1 %}
-                                <!-- Tambahkan parameter role dan q di setiap url_for -->
-                                <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}"
-                                    class="pagi-btn prev">
+                                <a href="{{ url_for('user_manager.index', page=page-1, q=search_query, role=role_filter) }}" class="pagi-btn prev">
                                     <i class='bx bx-chevron-left'></i> Prev
                                 </a>
                                 {% endif %}
@@ -237,16 +218,16 @@
                                     {% endfor %}
                                 </div>
 
-                                {% if page < total_pages %} <a
-                                    href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}"
-                                    class="pagi-btn next">
+                                {% if page < total_pages %} 
+                                <a href="{{ url_for('user_manager.index', page=page+1, q=search_query, role=role_filter) }}" class="pagi-btn next">
                                     Next <i class='bx bx-chevron-right'></i>
-                                    </a>
-                                    {% endif %}
+                                </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </main>
     </section>
 
@@ -254,18 +235,16 @@
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
+    <!-- LOGIKA FILTER JAVASCRIPT -->
     <script>
         function applyFilters() {
             let q = document.getElementById('searchInput').value;
-            let role = document.getElementById('roleFilter').value;
-
-            // Pindah halaman dengan membawa parameter filter ke Backend
+            let role = document.getElementById('categoryFilter').value;
             window.location.href = `?q=${encodeURIComponent(q)}&role=${encodeURIComponent(role)}`;
         }
     </script>
 
-
-    <!-- SCRIPT ALERT -->
+    <!-- FLASH MESSAGES ALERT -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <script>
