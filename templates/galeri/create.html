@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Tambah Batik - AdminBatik</title>
+    <title>Tambah Batik - Admin Sibatikgal</title>
 </head>
 
 <body>
@@ -18,25 +18,44 @@
     </script>
 
     <section id="sidebar">
-        <a href="#" class="brand"><i class='bx bxs-smile'></i><span class="text">AdminBatik</span></a>
+        <a href="#" class="brand" style="padding-left: 18px;">
+            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
+                <g fill="currentColor">
+                    <ellipse cx="50" cy="30" rx="9" ry="14" />
+                    <ellipse cx="50" cy="70" rx="9" ry="14" />
+                    <ellipse cx="30" cy="50" rx="14" ry="9" />
+                    <ellipse cx="70" cy="50" rx="14" ry="9" />
+                </g>
+                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
+            </svg>
+            <span class="text">Admin Sibatikgal</span>
+        </a>
         <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span class="text">Dashboard</span></a></li>
-            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a></li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta Lokasi</span></a></li>
+            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
+                        class="text">Dashboard</span></a></li>
+            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span
+                        class="text">Katalog Batik</span></a></li>
+            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
+                        Artikel</span></a></li>
+            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
+                        class="text">Event</span></a></li>
+            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
+            </li>
+            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta
+                        Lokasi</span></a></li>
             {% if session.get('role') == 'superadmin' %}
-			<li>
-				<a href="{{ url_for('user_manager.index') }}">
-					<i class='bx bxs-user'></i>
-					<span class="text">Manajemen User</span>
-				</a>
-			</li>
-			{% endif %}
+            <li>
+                <a href="{{ url_for('user_manager.index') }}">
+                    <i class='bx bxs-user'></i>
+                    <span class="text">Manajemen User</span>
+                </a>
+            </li>
+            {% endif %}
         </ul>
         <ul class="side-menu">
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Keluar</span></a></li>
+            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
+                        class="text">Keluar</span></a></li>
         </ul>
     </section>
 
@@ -48,8 +67,8 @@
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
+                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+                    onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
 
@@ -68,7 +87,8 @@
                         <div class="form-grid-upper">
                             <div class="batik-group">
                                 <label class="batik-label">Nama Motif Batik</label>
-                                <input type="text" name="name" class="batik-input" placeholder="Contoh: Batik Mega Mendung" required>
+                                <input type="text" name="name" class="batik-input"
+                                    placeholder="Contoh: Batik Mega Mendung" required>
                             </div>
 
                             <div class="batik-group">
@@ -94,7 +114,8 @@
 
                             <div class="batik-group">
                                 <label class="batik-label">Filosofi Batik</label>
-                                <input type="text" name="philosophy" class="batik-input" placeholder="Contoh: Ketenangan, kepedulian, dan keharmonisan." required>
+                                <input type="text" name="philosophy" class="batik-input"
+                                    placeholder="Contoh: Ketenangan, kepedulian, dan keharmonisan." required>
                             </div>
                         </div>
 
@@ -102,7 +123,8 @@
                             <div class="batik-group">
                                 <label class="batik-label">Gambar Motif Batik</label>
                                 <div class="file-upload-box">
-                                    <input type="file" name="image_url" accept="image/*" id="fileInput" onchange="previewImage(event)" required>
+                                    <input type="file" name="image_url" accept="image/*" id="fileInput"
+                                        onchange="previewImage(event)" required>
                                     <div class="upload-content">
                                         <i class='bx bx-cloud-upload upload-icon'></i>
                                         <p id="uploadText">Klik/seret gambar batik ke sini</p>
@@ -110,19 +132,27 @@
                                 </div>
                             </div>
 
-                            <div class="preview-container" id="previewContainer" style="display: none; margin-bottom: 24px;">
-                                <label class="batik-label">Preview Motif Batik: <span style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik pada gambar untuk menggunakan pipet warna)</span></label>
+                            <div class="preview-container" id="previewContainer"
+                                style="display: none; margin-bottom: 24px;">
+                                <label class="batik-label">Preview Motif Batik: <span
+                                        style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik pada gambar
+                                        untuk menggunakan pipet warna)</span></label>
                                 <div class="image-preview-wrapper-full">
-                                    <img id="imagePreview" src="#" alt="Preview Motif" style="cursor: pointer; max-width: 100%; display: block;">
+                                    <img id="imagePreview" src="#" alt="Preview Motif"
+                                        style="cursor: pointer; max-width: 100%; display: block;">
                                 </div>
                             </div>
 
                             <!-- Area Modifikasi Pipet Warna Dinamis -->
                             <div class="form-row-color-picker-safe">
                                 <div class="batik-group">
-                                    <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet warna pada gambar preview di atas</label>
-                                    <div id="container-warna-visual" style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
-                                        <span id="placeholder-text" style="color: #888; font-size: 14px; font-style: italic;">Belum ada warna terpilih. Silakan upload dan klik gambar preview di atas.</span>
+                                    <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet
+                                        warna pada gambar preview di atas</label>
+                                    <div id="container-warna-visual"
+                                        style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
+                                        <span id="placeholder-text"
+                                            style="color: #888; font-size: 14px; font-style: italic;">Belum ada warna
+                                            terpilih. Silakan upload dan klik gambar preview di atas.</span>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +169,8 @@
                                     <span class="checkbox-custom"></span>
                                     <div class="checkbox-text">
                                         <span class="title">Aktifkan Fitur Simulasi Membatik</span>
-                                        <span class="desc">Buat file sketsa otomatis via OpenCV jika motif ini berkategori mudah/sedang untuk aplikasi Flutter.</span>
+                                        <span class="desc">Buat file sketsa otomatis via OpenCV jika motif ini
+                                            berkategori mudah/sedang untuk aplikasi Flutter.</span>
                                     </div>
                                 </label>
                             </div>
@@ -147,12 +178,15 @@
                             <div class="form-grid-narration-split">
                                 <div class="batik-group">
                                     <label class="batik-label">Makna Batik</label>
-                                    <textarea name="makna" class="batik-input" style="height: 160px; resize: none;" placeholder="Tuliskan makna motif secara mendalam..." required></textarea>
+                                    <textarea name="makna" class="batik-input" style="height: 160px; resize: none;"
+                                        placeholder="Tuliskan makna motif secara mendalam..." required></textarea>
                                 </div>
 
                                 <div class="batik-group">
                                     <label class="batik-label">Sejarah Batik</label>
-                                    <textarea name="history" class="batik-input" style="height: 160px; resize: none;" placeholder="Tuliskan asal-usul/sejarah singkat motif batik di masyarakat lokal..." required></textarea>
+                                    <textarea name="history" class="batik-input" style="height: 160px; resize: none;"
+                                        placeholder="Tuliskan asal-usul/sejarah singkat motif batik di masyarakat lokal..."
+                                        required></textarea>
                                 </div>
                             </div>
 

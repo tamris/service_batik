@@ -20,6 +20,7 @@ from routes.api.event_api import event_api_bp
 from routes.api.maping_api import mapping_api_bp
 from routes.api.studio_api import studio_api_bp
 from routes.api.user_api import user_api_bp
+from routes.api.search_api import search_api
 from routes.api.batik_interaction import interaction_bp
 from utils.rag_utils import initialize_rag
 
@@ -63,6 +64,7 @@ app.register_blueprint(event_api_bp, url_prefix='/api')
 app.register_blueprint(mapping_api_bp, url_prefix='/api')
 app.register_blueprint(studio_api_bp, url_prefix='/api')
 app.register_blueprint(interaction_bp, url_prefix='/api')
+app.register_blueprint(search_api, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

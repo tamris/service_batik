@@ -156,9 +156,36 @@
 .btn-icon.btn-edit { background: #FFCE26 !important; color: #342E37 !important; }
 .btn-icon.btn-edit:hover { background: #e6b822 !important; transform: translateY(-2px); }
 
-.status-text { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
-.status-owner { color: #FD7238; }
-.status-view { color: #aaa; font-style: italic; font-weight: 400; }
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.status-chip .bx {
+    font-size: 16px !important;
+    line-height: 1 !important;
+}
+
+.status-owner {
+    background: rgba(253, 114, 56, 0.1);
+    color: #FD7238;
+    border: 1px solid rgba(253, 114, 56, 0.2);
+}
+
+.status-view {
+    background: rgba(136, 136, 136, 0.1);
+    color: #888;
+    border: 1px solid rgba(136, 136, 136, 0.2);
+}
 
 .btn-add-user {
     height: 36px;
@@ -404,8 +431,8 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
         text-align: left;
     }
 
-    .table-responsive-wrapper td:nth-child(1)::before { content: "Username: "; font-weight: 500; color: var(--dark-grey); }
-    .table-responsive-wrapper td:nth-child(2)::before { content: "Email: "; font-weight: 500; color: var(--dark-grey); }
+    /* .table-responsive-wrapper td:nth-child(1)::before { content: "Username: "; font-weight: 500; color: var(--dark-grey); } */
+    .table-responsive-wrapper td:nth-child(2)::before { content: "Role: "; font-weight: 500; color: var(--dark-grey); }
     body.dark .table-responsive-wrapper td::before { color: #888; }
 
     .table-responsive-wrapper td:last-child {

@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<title>AdminBatik - Katalog Batik</title>
+	<title>Admin Sibatikgal - Katalog Batik</title>
 </head>
 
 <body>
@@ -25,9 +25,18 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="#" class="brand">
-			<i class='bx bxs-smile'></i>
-			<span class="text">AdminBatik</span>
+		<a href="#" class="brand" style="padding-left: 18px;">
+			<svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
+				<g fill="currentColor">
+					<ellipse cx="50" cy="30" rx="9" ry="14" />
+					<ellipse cx="50" cy="70" rx="9" ry="14" />
+					<ellipse cx="30" cy="50" rx="14" ry="9" />
+					<ellipse cx="70" cy="50" rx="14" ry="9" />
+				</g>
+				<circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
+			</svg>
+			<span class="text">Admin Sibatikgal</span>
 		</a>
 		<ul class="side-menu top">
 			<li>
@@ -173,6 +182,7 @@
 								</tr>
 							</thead>
 							<tbody id="tableBody">
+								{% if batiks %}
 								{% for b in batiks %}
 								<tr
 									style="border-bottom: 1px solid #eee; {% if b.is_deleted %} opacity: 0.5; background-color: rgba(0,0,0,0.03); {% endif %}">
@@ -193,17 +203,17 @@
 
 									<td style="vertical-align: middle; padding: 12px 10px 12px 0;">
 										<span class="badge-category
-											{% if b.category == 'Klasik' %}
-												cat-klasik
-											{% elif b.category == 'Kontemporer' %}
-												cat-kontemporer
-											{% elif b.category == 'Flora & Fauna' %}
-												cat-flora
-											{% elif b.category == 'Bahari' %}
-												cat-bahari
-											{% else %}
-												cat-default
-											{% endif %}">
+										{% if b.category == 'Klasik' %}
+										cat-klasik
+										{% elif b.category == 'Kontemporer' %}
+										cat-kontemporer
+										{% elif b.category == 'Flora & Fauna' %}
+										cat-flora
+										{% elif b.category == 'Bahari' %}
+										cat-bahari
+										{% else %}
+										cat-default
+										{% endif %}">
 											{{ b.category if b.category else 'Belum Diatur' }}
 										</span>
 									</td>
@@ -230,12 +240,34 @@
 											<!-- <a href="#" onclick="confirmDelete('{{ b._id|string }}', '{{ b.name }}')"
 												class="btn-icon btn-delete" title="Nonaktifkan">
 												<i class='bx bx-power-off'></i>
-											</a> -->
+												</a> -->
 											{% endif %}
 										</div>
 									</td>
 								</tr>
 								{% endfor %}
+								{% else %}
+								<!-- SOLUSI TRICKY: Menggunakan grid overlay absolut di dalam tr agar lepas dari jeratan CSS table -->
+								<tr style="position: relative; height: 200px;">
+									<td colspan="5"
+										style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important;">
+										<div
+											style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
+											<i class='bx bxs-collection'
+												style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
+											<span
+												style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum ada data batik.</span>
+											
+										
+										</div>
+									</td>
+									<!-- Dummy TD biar browser gak komplain struktur table hancur di desktop -->
+									<td style="display: none;"></td>
+									<td style="display: none;"></td>
+									<td style="display: none;"></td>
+									<td style="display: none;"></td>
+								</tr>
+								{% endif %}
 							</tbody>
 						</table>
 					</div>
