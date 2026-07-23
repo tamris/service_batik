@@ -213,7 +213,6 @@
 /* ===========================
    BERITA TERKINI
 =========================== */
-
 .table-responsive-wrapper td .status.berita-terkini {
     background-color: rgba(79, 172, 254, 0.15) !important;
     color: #4FACFE !important;
@@ -222,7 +221,6 @@
 /* ===========================
    EVENT
 =========================== */
-
 .table-responsive-wrapper td .status.event {
     background-color: rgba(187, 107, 217, 0.15) !important;
     color: #BB6BD9 !important;
@@ -231,7 +229,6 @@
 /* ===========================
    SOSOK & INSPIRASI
 =========================== */
-
 .table-responsive-wrapper td .status.sosok-inspirasi {
     background-color: rgba(255, 183, 77, 0.15) !important;
     color: #FFB74D !important;
@@ -240,7 +237,6 @@
 /* ===========================
    EDUKASI
 =========================== */
-
 .table-responsive-wrapper td .status.edukasi {
     background-color: rgba(102, 187, 106, 0.15) !important;
     color: #66BB6A !important;
@@ -249,7 +245,6 @@
 /* ===========================
    DEFAULT
 =========================== */
-
 .table-responsive-wrapper td .status.default {
     background-color: rgba(189, 195, 199, 0.15) !important;
     color: #BDC3C7 !important;
@@ -474,7 +469,9 @@ textarea.info-input {
     display: block;
 }
 
-/* Foot Container Action Buttons */
+/* ==========================================================================
+   REFINE ARTIKEL ACTIONS FOOTER ENGINE (BEST PRACTICE STYLING MATCH)
+   ========================================================================== */
 .info-actions {
     display: flex;
     justify-content: flex-end;
@@ -483,10 +480,32 @@ textarea.info-input {
     margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid #eee;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Menjaga keamanan pembungkusan layout */
 }
 
-.info-actions .creator-info { margin-right: auto; }
+/* Memisahkan area info penginput ke kiri dan tombol aksi ke kanan */
+.info-actions .creator-info,
+.info-actions .editor-info {
+    margin-right: auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.info-actions .creator-info {
+    margin-right: auto;
+}
+
+.info-actions .creator-info + .editor-info {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.info-actions .creator-info ~ .btn-cancel {
+    margin-left: auto; /* Memaksa tombol untuk tetap merapat di kanan */
+}
 
 .btn-cancel {
     padding: 10px 24px;
@@ -599,14 +618,29 @@ body.dark .pagi-btn.number:not(.active) { color: #ffffff !important; background-
 body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; color: #ffffff !important; border-color: #3C91E6 !important; }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN INTERCEPTORS (TABLET BREAKPOINTS)
+   RESPONSIVE DESIGN INTERCEPTORS (TABLET & MOBILE BREAKPOINTS)
    ========================================================================== */
 @media (max-width: 768px) {
     .title-category-grid { grid-template-columns: 1fr; gap: 16px; }
     .info-form-container { padding: 20px !important; }
-    .info-actions { flex-direction: column; align-items: stretch; width: 100%; }
-    .info-actions .creator-info { margin-right: 0; margin-bottom: 10px; justify-content: center; }
-    .btn-cancel, .btn-save { width: 100%; justify-content: center; text-align: center; }
+    
+    /* MODIFIKASI TOTAL: RESPONSIVE FOOTER ARTIKEL */
+    .info-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 16px !important;
+    }
+    .info-actions .creator-info,
+    .info-actions .editor-info {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+    .info-actions .btn-cancel,
+    .info-actions .btn-save {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
 }
 
 @media (max-width: 900px) and (min-width: 577px) {
@@ -616,9 +650,6 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
 }
 
-/* ==========================================================================
-   MOBILE SCREEN CONTEXT INTERCEPTOR (TRICK MAUT TABEL JADI CARD VERTIKAL)
-   ========================================================================== */
 @media (max-width: 576px) {
     .table-data .head {
         flex-direction: column;

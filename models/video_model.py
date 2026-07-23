@@ -32,7 +32,35 @@ class VideoModel:
         return list(self.collection.find(query).sort("created_at", -1))
 
     def get_by_id(self, video_id):
-        return self.collection.find_one({"_id": ObjectId(video_id)})
+        # --- UBAH MENGGUNAKAN AGGREGATION UNTUK JOIN USER ---
+        pipeline = [
+            {"$match": {"_id": ObjectId(video_id)}},
+            
+            # 1. Lookup untuk Creator (Pembuat Video) menggunakan field user_id
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "user_id",     # Field di koleksi videos saat create
+                    "foreignField": "_id",
+                    "as": "creator_data"
+                }
+            },
+            {"$unwind": {"path": "$creator_data", "preserveNullAndEmptyArrays": True}},
+            
+            # 2. Lookup untuk Editor (Pengedit Terakhir) menggunakan field updated_by
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "updated_by",   # Field di koleksi videos saat update
+                    "foreignField": "_id",
+                    "as": "editor_data"
+                }
+            },
+            {"$unwind": {"path": "$editor_data", "preserveNullAndEmptyArrays": True}}
+        ]
+        
+        result = list(self.collection.aggregate(pipeline))
+        return result[0] if result else None
 
     def create(self, data):
         return self.collection.insert_one(data)

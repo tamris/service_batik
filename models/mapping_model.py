@@ -3,8 +3,6 @@ from flask import current_app
 from bson.objectid import ObjectId
 
 class MappingModel:
-    # HAPUS FUNGSI __init__ YANG LAMA
-    
     # Gunakan @property agar dipanggil secara dinamis saat route diakses
     @property
     def collection(self):
@@ -33,18 +31,31 @@ class MappingModel:
         else:
             query = {}
             
-        # Menggunakan Aggregation ($lookup) untuk nge-JOIN dengan tabel 'users'[cite: 14]
+        # Menggunakan Aggregation ($lookup) untuk nge-JOIN dengan tabel 'users'
+        # Logika query awal dan pengurutan sort tetap dipertahankan utuh
         pipeline = [
             {"$match": query},
             {"$sort": {"created_at": -1}},
+            
+            # Tambahan lookup ganda tanpa mengubah filter match & sort di atas
             {"$lookup": {
                 "from": "users",          
                 "localField": "user_id",  
                 "foreignField": "_id",    
-                "as": "admin_data"        
+                "as": "creator_data"        
             }},
             {"$unwind": {
-                "path": "$admin_data", 
+                "path": "$creator_data", 
+                "preserveNullAndEmptyArrays": True 
+            }},
+            {"$lookup": {
+                "from": "users",          
+                "localField": "updated_by",  
+                "foreignField": "_id",    
+                "as": "editor_data"        
+            }},
+            {"$unwind": {
+                "path": "$editor_data", 
                 "preserveNullAndEmptyArrays": True 
             }}
         ]
@@ -52,17 +63,27 @@ class MappingModel:
         return list(self.collection.aggregate(pipeline))
 
     def get_by_id(self, mapping_id):
-        # Gunakan aggregation (JOIN) untuk menarik data admin berdasarkan user_id
+        # Gunakan aggregation (JOIN) untuk menarik data admin berdasarkan user_id dan updated_by
         pipeline = [
             {"$match": {"_id": ObjectId(mapping_id)}},
             {"$lookup": {
-                "from": "users",          # Nama tabel users
-                "localField": "user_id",  # Field di tabel mapping
-                "foreignField": "_id",    # Field di tabel users
-                "as": "admin_data"
+                "from": "users",          
+                "localField": "user_id",  
+                "foreignField": "_id",    
+                "as": "creator_data"
             }},
             {"$unwind": {
-                "path": "$admin_data", 
+                "path": "$creator_data", 
+                "preserveNullAndEmptyArrays": True
+            }},
+            {"$lookup": {
+                "from": "users",          
+                "localField": "updated_by",  
+                "foreignField": "_id",    
+                "as": "editor_data"
+            }},
+            {"$unwind": {
+                "path": "$editor_data", 
                 "preserveNullAndEmptyArrays": True
             }}
         ]
@@ -91,45 +112,6 @@ class MappingModel:
         if user_data:
             return user_data.get("username", "Anonymous")
         return "Anonymous"
-    
-    def add_review(self, mapping_id, review_data):
-        """
-        Menambahkan ulasan baru ke dalam array 'reviews' dan mengupdate 
-        nilai 'average_rating' serta 'total_reviews' secara atomik.
-        """
-        # 1. Masukkan review baru ke dalam array 'reviews'
-        self.collection.update_one(
-            {"_id": ObjectId(mapping_id)},
-            {"$push": {"reviews": review_data}}
-        )
-
-        # 2. Ambil data dokumen terbaru untuk menghitung ulang rata-rata rating
-        mapping = self.collection.find_one({"_id": ObjectId(mapping_id)})
-        if not mapping:
-            return False
-
-        reviews = mapping.get("reviews", [])
-        total_reviews = len(reviews)
-        
-        if total_reviews > 0:
-            # Hitung total bintang lalu bagi dengan total review
-            total_stars = sum([r.get("rating", 0) for r in reviews])
-            average_rating = round(float(total_stars / total_reviews), 1)
-        else:
-            average_rating = 0.0
-
-        # 3. Update field denormalisasi ke dalam dokumen utama
-        self.collection.update_one(
-            {"_id": ObjectId(mapping_id)},
-            {
-                "$set": {
-                    "average_rating": average_rating,
-                    "total_reviews": total_reviews,
-                    "update_at": datetime.now() # Pastikan datetime di-import di model jika belum
-                }
-            }
-        )
-        return True
     
     def check_existing_review(self, mapping_id, user_id):
         """Mengecek apakah user ini sudah pernah me-review lokasi ini"""

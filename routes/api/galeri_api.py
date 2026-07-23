@@ -15,8 +15,8 @@ def get_all_batik():
         # Ambil identitas token di paling atas agar bisa di-print dengan aman
         current_user_id = get_jwt_identity()
 
-        print("\n=== DEBUG ENDPOINT GALERI ===")
-        print(f"Token Terdeteksi (User ID): {current_user_id}")
+        # print("\n=== DEBUG ENDPOINT GALERI ===")
+        # print(f"Token Terdeteksi (User ID): {current_user_id}")
 
         # 1. Parameter Pagination & Pencarian
         page = request.args.get('page', 1, type=int)

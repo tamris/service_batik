@@ -51,10 +51,8 @@
                 </a>
             </li>
             {% endif %}
-
         </ul>
         <ul class="side-menu">
-
             <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
                         class="text">Logout</span></a>
             </li>
@@ -62,6 +60,7 @@
     </section>
 
     <section id="content">
+        <!-- NAVBAR -->
         <nav>
             <i class='bx bx-menu'></i>
             <a href="#" class="nav-link">Edit Data Artikel</a>
@@ -70,12 +69,13 @@
             <label for="switch-mode" class="switch-mode"></label>
 
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
                 <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
                     onerror="this.src='/static/img/avatar.png';">
             </a>
         </nav>
+        <!-- NAVBAR -->
 
+        <!-- MAIN AREA -->
         <main>
             <div class="head-title">
                 <div class="left">
@@ -101,10 +101,8 @@
                                     <option value="Berita Terkini" {{ 'selected' if info.category=='Berita Terkini' }}>
                                         Berita Terkini</option>
                                     <option value="Event" {{ 'selected' if info.category=='Event' }}>Event</option>
-                                    <option value="Sosok & Inspirasi" {{ 'selected' if
-                                        info.category=='Sosok & Inspirasi' }}>Sosok & Inspirasi</option>
-                                    <option value="Edukasi" {{ 'selected' if info.category=='Edukasi' }}>Edukasi
-                                    </option>
+                                    <option value="Sosok & Inspirasi" {{ 'selected' if info.category=='Sosok & Inspirasi' }}>Sosok & Inspirasi</option>
+                                    <option value="Edukasi" {{ 'selected' if info.category=='Edukasi' }}>Edukasi</option>
                                 </select>
                             </div>
                         </div>
@@ -120,34 +118,39 @@
                                 </div>
                             </div>
 
-                            <div class="preview-container" id="previewWrapper"
-                                style="display: block; margin-top: 15px;">
-                                <span class="info-label" id="previewTitle"
-                                    style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar Saat
-                                    Ini:</span>
-                                <img id="imagePreview"
-                                    src="{{ url_for('static', filename='img/informasi/' + info.image_url) }}"
-                                    alt="Preview">
+                            <div class="preview-container" id="previewWrapper" style="display: block; margin-top: 15px;">
+                                <span class="info-label" id="previewTitle" style="font-size:12px; margin-bottom:5px; color:#888;">Preview Gambar Saat Ini:</span>
+                                <img id="imagePreview" src="{{ url_for('static', filename='img/informasi/' + info.image_url) }}" alt="Preview">
                             </div>
                         </div>
 
                         <div class="info-group">
                             <label class="info-label">Isi Deskripsi / Artikel</label>
-                            <textarea name="description" class="info-input" rows="8"
-                                required>{{ info.description }}</textarea>
+                            <textarea name="description" class="info-input" rows="8" required>{{ info.description }}</textarea>
                         </div>
 
+                        <!-- MURNI BAWAAN KELAS KUSTOM PROYEK TANPA EMBEL-EMBEL INLINE STYLE -->
                         <div class="info-actions">
 
-                            <div class="creator-info"
-                                style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #888;">
-                                <i class='bx bxs-info-circle' style="font-size: 16px;"></i>
-                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
-                                        info.admin_data.username if info.admin_data else 'System'
-                                        }}</strong></span>
+                            <div class="creator-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ info.admin_data.username if info.admin_data else 'System' }}</strong> 
+                                    {% if info.created_at %} • {{ info.created_at | date_format }}{% endif %}</span>
+                                </div>
                             </div>
-                            <a href="{{ url_for('informasi.index') }}?page={{ request.args.get('page', 1) }}"
-                                class="btn-cancel">Batal</a>
+
+                            {% if info.updated_by %}
+                            <div class="editor-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ info.editor_data.username if info.editor_data else 'System' }}</strong>
+                                    {% if info.updated_at %} • {{ info.updated_at | date_format }}{% endif %}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <a href="{{ url_for('informasi.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Konten</button>
                         </div>
                     </form>
@@ -181,7 +184,7 @@
 
                 output.src = reader.result;
                 title.innerText = "Preview Gambar Baru:";
-                title.style.color = "#3C91E6"; // Kasih highlight biru biar jelas ini gambar baru
+                title.style.color = "#3C91E6"; 
 
                 document.getElementById('uploadText').innerText = "Gambar baru berhasil dipilih. Klik lagi untuk mengganti.";
             };

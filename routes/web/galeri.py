@@ -167,7 +167,9 @@ def edit(batik_id):
             "philosophy": request.form['philosophy'],
             "technique": request.form['technique'],
             "history": request.form['history'],
-            "dominant_color": dominant_colors_array
+            "dominant_color": dominant_colors_array,
+            "updated_at": datetime.now(),
+            "updated_by": ObjectId(session.get('user_id'))
         }
         
         gambar_file = request.files.get('image_url') 

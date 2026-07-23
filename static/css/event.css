@@ -111,7 +111,7 @@
     margin-bottom: 20px;
 }
 
-/* Penataan Lebar Kolom Fleksibel Rata Kiri Dashboard Desktop[cite: 15] */
+/* Penataan Lebar Kolom Fleksibel Rata Kiri Dashboard Desktop */
 .table-responsive-wrapper table {
     width: 100%;
     border-collapse: collapse;
@@ -126,29 +126,29 @@
     border-bottom: 2px solid var(--grey);
 }
 
-/* Hilangkan border-bottom agar tidak ada garis kaku di sela baris[cite: 15] */
+/* Hilangkan border-bottom agar tidak ada garis kaku di sela baris */
 .table-responsive-wrapper table td {
     vertical-align: middle;
     padding: 18px 10px;
     text-align: left;
-    border-bottom: none !important; /* Murni polos tanpa garis pembatas cell[cite: 15] */
+    border-bottom: none !important; /* Murni polos tanpa garis pembatas cell */
 }
 
-/* Mengatur Sebaran Proporsi Kolom Dashboard Desktop[cite: 15] */
+/* Mengatur Sebaran Proporsi Kolom Dashboard Desktop */
 .table-responsive-wrapper table th:nth-child(1),
-.table-responsive-wrapper table td:nth-child(1) { width: 12%; } /* Banner[cite: 15] */
+.table-responsive-wrapper table td:nth-child(1) { width: 12%; } /* Banner */
 .table-responsive-wrapper table th:nth-child(2),
-.table-responsive-wrapper table td:nth-child(2) { width: 38%; } /* Nama & Tanggal[cite: 15] */
+.table-responsive-wrapper table td:nth-child(2) { width: 38%; } /* Nama & Tanggal */
 .table-responsive-wrapper table th:nth-child(3),
-.table-responsive-wrapper table td:nth-child(3) { width: 22%; } /* Lokasi[cite: 15] */
+.table-responsive-wrapper table td:nth-child(3) { width: 22%; } /* Lokasi */
 .table-responsive-wrapper table th:nth-child(4),
-.table-responsive-wrapper table td:nth-child(4) { width: 10%; } /* Kategori[cite: 15] */
+.table-responsive-wrapper table td:nth-child(4) { width: 10%; } /* Kategori */
 .table-responsive-wrapper table th:nth-child(5),
-.table-responsive-wrapper table td:nth-child(5) { width: 10%; } /* Status[cite: 15] */
+.table-responsive-wrapper table td:nth-child(5) { width: 10%; } /* Status */
 .table-responsive-wrapper table th:nth-child(6),
-.table-responsive-wrapper td:nth-child(6) { width: 8%; }  /* Aksi[cite: 15] */
+.table-responsive-wrapper td:nth-child(6) { width: 8%; }  /* Aksi */
 
-/* Banner Thumbnail Styling[cite: 15] */
+/* Banner Thumbnail Styling */
 .event-banner-thumb {
     width: 100px; 
     min-width: 100px;
@@ -156,7 +156,7 @@
     border-radius: 6px; 
     overflow: hidden;
     background-color: #f1f1f1; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /*[cite: 15] */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); 
 }
 
 .event-banner-thumb img {
@@ -168,7 +168,7 @@
     display: block !important;
 }
 
-/* Judul Event Teks Biasa Rata Kiri[cite: 15] */
+/* Judul Event Teks Biasa Rata Kiri */
 .table-responsive-wrapper table td:nth-child(2) span {
     background: none !important;
     padding: 0 !important;
@@ -179,7 +179,7 @@
     display: block !important;
 }
 
-/* SYSTEM ENGINE BADGE (Kategori & Status Tiket)[cite: 15] */
+/* SYSTEM ENGINE BADGE (Kategori & Status Tiket) */
 .table-responsive-wrapper td .status,
 .table-responsive-wrapper table td:nth-child(4) span {
     display: inline-block !important;
@@ -195,13 +195,6 @@
     min-width: 85px;
 }
 
-/* KATEGORI: Kolom ke-4 jadi Badge Biru Pastel Proyek[cite: 15] */
-/* .table-responsive-wrapper table td:nth-child(4) span {
-    background-color: rgba(60, 145, 230, 0.1) !important;
-    color: #3C91E6 !important;
-} */
-
-
 .badge-category {
     display: inline-flex;
     align-items: center;
@@ -215,13 +208,9 @@
 }
 
 .cat-pameran   { color:#6366F1; background:rgba(99,102,241,.15); }
-
 .cat-workshop  { color:#F97316; background:rgba(249,115,22,.15); }
-
 .cat-festival  { color:#EC4899; background:rgba(236,72,153,.15); }
-
 .cat-lomba     { color:#F59E0B; background:rgba(245,158,11,.15); }
-
 .cat-webinar   { color:#06B6D4; background:rgba(6,182,212,.15); }
 
 /* Default */
@@ -230,7 +219,7 @@
     color: #94A3B8 !important;
 }
 
-/* STATUS TIKET: Gratis = Hijau, Berbayar = Orange[cite: 15] */
+/* STATUS TIKET: Gratis = Hijau, Berbayar = Orange */
 .table-responsive-wrapper td .status.completed {
     background-color: rgba(46, 204, 113, 0.1) !important;
     color: #27ae60 !important;
@@ -241,7 +230,7 @@
     color: #FD7238 !important;
 }
 
-/* Action Buttons Fix[cite: 15] */
+/* Action Buttons Fix */
 .action-btn {
     display: flex;
     align-items: center;
@@ -257,7 +246,7 @@
     border-radius: 8px;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /*[cite: 15] */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
 }
 
 .btn-icon .bx, 
@@ -273,7 +262,7 @@
 .btn-delete { background-color: #FD7238 !important; color: #fff !important; }
 .btn-delete:hover { background-color: #e06532 !important; transform: translateY(-2px); }
 
-/* Tombol Tambah Event (Kanan Atas)[cite: 15] */
+/* Tombol Tambah Event (Kanan Atas) */
 .btn-add-event {
     height: 36px;
     padding: 0 16px;
@@ -288,7 +277,7 @@
     font-size: 14px;
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.15); /*[cite: 15] */
+    box-shadow: 0 4px 6px rgba(60, 145, 230, 0.15); 
 }
 
 .btn-add-event:hover {
@@ -297,7 +286,7 @@
 }
 
 /* ==========================================================================
-   PAGINATION STYLING (GLOBAL MATCH DESIGN SYSTEMS)[cite: 15]
+   PAGINATION STYLING (GLOBAL MATCH DESIGN SYSTEMS)
    ========================================================================== */
 .pagination-wrapper {
     display: flex;
@@ -476,7 +465,9 @@ select.event-input {
 .price-input:focus { outline: none; }
 .price-input:disabled { color: #888; cursor: not-allowed; }
 
-/* Foot Action Buttons Container */
+/* ==========================================================================
+   REFINE EVENT ACTIONS FOOTER ENGINE (BEST PRACTICE STYLING)
+   ========================================================================== */
 .event-actions {
     display: flex;
     justify-content: flex-end;
@@ -485,7 +476,31 @@ select.event-input {
     margin-top: 30px;
     padding-top: 20px;
     border-top: 1px solid #eee;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Menjaga kemanan pembungkusan layout */
+}
+
+/* Memisahkan area info ke kiri dan tombol aksi ke kanan */
+.event-actions .creator-info,
+.event-actions .editor-info {
+    margin-right: auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.event-actions .creator-info {
+    margin-right: auto;
+}
+
+.event-actions .creator-info + .editor-info {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.event-actions .creator-info ~ .btn-cancel {
+    margin-left: auto; /* Memaksa tombol untuk tetap merapat di kanan */
 }
 
 .btn-cancel {
@@ -524,7 +539,7 @@ select.event-input {
 .btn-save:hover { background: #2b7bc6; transform: translateY(-1px); }
 
 /* ==========================================================================
-   GLOBAL DESIGN SYSTEMS: DARK MODE OVERRIDES[cite: 15]
+   GLOBAL DESIGN SYSTEMS: DARK MODE OVERRIDES
    ========================================================================== */
 body.dark .search-box select#categoryFilter {
     background-color: #25282b !important;
@@ -542,49 +557,21 @@ body.dark .pagination-wrapper { border-top-color: #3f444a; }
 body.dark .pagi-info b { color: #fff; }
 body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
 
-body.dark .table-responsive-wrapper td { border-bottom: none !important; } /* Pastikan mati total pas dark mode[cite: 15] */
+body.dark .table-responsive-wrapper td { border-bottom: none !important; } 
 body.dark .table-responsive-wrapper table td:nth-child(2) span { color: #fff !important; }
-/* body.dark .table-responsive-wrapper table td:nth-child(4) span { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; } */
+
 /* DARK MODE - kategori event */
 body.dark .table-responsive-wrapper td .badge-category {
   border: 1px solid rgba(255,255,255,.08);
 }
 
-/* PAMERAN */
-body.dark .table-responsive-wrapper td .badge-category.cat-pameran {
-  background-color: rgba(99, 102, 241, 0.25) !important;
-  color: #a5a8ff !important;
-}
+body.dark .table-responsive-wrapper td .badge-category.cat-pameran { background-color: rgba(99, 102, 241, 0.25) !important; color: #a5a8ff !important; }
+body.dark .table-responsive-wrapper td .badge-category.cat-workshop { background-color: rgba(249, 115, 22, 0.25) !important; color: #fdba74 !important; }
+body.dark .table-responsive-wrapper td .badge-category.cat-festival { background-color: rgba(236, 72, 153, 0.25) !important; color: #f9a8d4 !important; }
+body.dark .table-responsive-wrapper td .badge-category.cat-lomba { background-color: rgba(245, 158, 11, 0.25) !important; color: #fcd34d !important; }
+body.dark .table-responsive-wrapper td .badge-category.cat-webinar { background-color: rgba(6, 182, 212, 0.25) !important; color: #67e8f9 !important; }
+body.dark .table-responsive-wrapper td .badge-category.cat-default { background-color: rgba(148, 163, 184, 0.25) !important; color: #cbd5e1 !important; }
 
-/* WORKSHOP */
-body.dark .table-responsive-wrapper td .badge-category.cat-workshop {
-  background-color: rgba(249, 115, 22, 0.25) !important;
-  color: #fdba74 !important;
-}
-
-/* FESTIVAL */
-body.dark .table-responsive-wrapper td .badge-category.cat-festival {
-  background-color: rgba(236, 72, 153, 0.25) !important;
-  color: #f9a8d4 !important;
-}
-
-/* LOMBA */
-body.dark .table-responsive-wrapper td .badge-category.cat-lomba {
-  background-color: rgba(245, 158, 11, 0.25) !important;
-  color: #fcd34d !important;
-}
-
-/* WEBINAR */
-body.dark .table-responsive-wrapper td .badge-category.cat-webinar {
-  background-color: rgba(6, 182, 212, 0.25) !important;
-  color: #67e8f9 !important;
-}
-
-/* Default */
-body.dark .table-responsive-wrapper td .badge-category.cat-default {
-  background-color: rgba(148, 163, 184, 0.25) !important;
-  color: #cbd5e1 !important;
-}
 body.dark .table-responsive-wrapper td .status.completed { background-color: rgba(46, 204, 113, 0.25) !important; color: #7bf3a2 !important; }
 body.dark .table-responsive-wrapper td .status.pending { background-color: rgba(253, 114, 56, 0.25) !important; color: #ff9f68 !important; }
 
@@ -606,6 +593,7 @@ body.dark .btn-cancel { background: #333; color: #bbb; }
 body.dark .btn-cancel:hover { background: #444; color: #fff; }
 body.dark .event-map { border-color: #3f444a; filter: grayscale(0.2) brightness(0.9); }
 body.dark .loading-text { color: #ff9f68; }
+body.dark .event-actions { border-top-color: #3f444a; }
 
 body.dark .pagi-btn.active {
     background-color: #3C91E6 !important;
@@ -618,8 +606,27 @@ body.dark .pagi-btn.number:not(.active) { color: #ffffff !important; background-
 body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; color: #ffffff !important; border-color: #3C91E6 !important; }
 
 /* ==========================================================================
-   MOBILE RESPONSIVE BREAKPOINT - COMPACT CARD (100% CLEAN & MATCH ARTIKEL)[cite: 15]
+   MOBILE RESPONSIVE BREAKPOINT - COMPACT CARD (100% CLEAN & MATCH ARTIKEL)
    ========================================================================== */
+@media (max-width: 768px) {
+    .event-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 16px !important;
+    }
+    .event-actions .creator-info,
+    .event-actions .editor-info {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+    .event-actions .btn-cancel,
+    .event-actions .btn-save {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
 @media (max-width: 576px) {
     .table-data .head {
         flex-direction: column;
@@ -645,7 +652,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     .price-card { flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; }
     .price-card .divider { width: 100%; height: 1px; }
 
-    /* Transformasi Struktur Tabel -> Blok Grid Box Card[cite: 15] */
+    /* Transformasi Struktur Tabel -> Blok Grid Box Card */
     .table-responsive-wrapper table, 
     .table-responsive-wrapper thead, 
     .table-responsive-wrapper tbody, 
@@ -679,7 +686,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
 
     .table-responsive-wrapper td::before { content: none !important; }
 
-    /* Wadah Gambar Banner[cite: 15] */
+    /* Wadah Gambar Banner */
     .table-responsive-wrapper td:nth-child(1) {
         display: flex !important;
         justify-content: center !important;
@@ -687,14 +694,14 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     .event-banner-thumb { width: 100% !important; height: 160px !important; }
     
-    /* Judul Event Rata Kiri[cite: 15] */
+    /* Judul Event Rata Kiri */
     .table-responsive-wrapper table td:nth-child(2) span {
         font-size: 16px !important;
         font-weight: 600 !important;
         margin-bottom: 4px !important;
     }
     
-    /* Format Tanggal[cite: 15] */
+    /* Format Tanggal */
     .table-responsive-wrapper td:nth-child(2) small {
         font-size: 13px !important;
         color: #888 !important;
@@ -702,7 +709,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
         margin-bottom: 10px !important;
     }
 
-    /* Detail Teks Alamat Lokasi[cite: 15] */
+    /* Detail Teks Alamat Lokasi */
     .table-responsive-wrapper td:nth-child(3) {
         margin-bottom: 12px !important;
     }
@@ -713,7 +720,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     body.dark .table-responsive-wrapper td:nth-child(3) small { color: #bbb !important; }
 
-    /* Bungkus Area Jajaran Badge[cite: 15] */
+    /* Bungkus Area Jajaran Badge */
     .table-responsive-wrapper table td:nth-child(4),
     .table-responsive-wrapper td:nth-child(5) {
         display: inline-block !important;
@@ -722,7 +729,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
         margin-bottom: 10px !important;
     }
 
-    /* Tombol Aksi Kanan Bawah[cite: 15] */
+    /* Tombol Aksi Kanan Bawah */
     .table-responsive-wrapper td:last-child {
         display: flex !important;
         justify-content: flex-end !important;
@@ -732,7 +739,7 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     body.dark .table-responsive-wrapper td:last-child { border-top-color: rgba(255,255,255,0.06) !important; }
 
-    /* Fix Pagination Mobile Identik Modul Artikel[cite: 15] */
+    /* Fix Pagination Mobile Identik Modul Artikel */
     .pagination-wrapper {
         flex-direction: column !important;
         align-items: center !important;

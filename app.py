@@ -37,6 +37,15 @@ jwt.init_app(app)
 bcrypt.init_app(app)
 mail.init_app(app)
 
+# Tambahkan filter ini di file utama (app.py atau main.py)
+@app.template_filter('date_format')
+def date_format(value):
+    if not value:
+        return ''
+    # Format: 18 Jul 2026 09:15
+    # %b akan menghasilkan singkatan bulan (Jan, Feb, Mar, Jul, dst)
+    return value.strftime('%d %b %Y %H:%M')
+
 app.mongo = mongo
 app.bcrypt = bcrypt
 app.mail = mail

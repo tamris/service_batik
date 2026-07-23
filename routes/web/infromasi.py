@@ -19,7 +19,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
     selected_category = request.args.get('c', '') # 1. Tangkap parameter kategori baru
-    per_page = 5
+    per_page = 10
 
     # 2. Kirim parameter search_query dan selected_category ke model
     all_data = info_model.get_all(search_query=search_query, category=selected_category)
@@ -86,7 +86,9 @@ def edit(info_id):
         data_update = {
             "title": request.form['title'],
             "description": request.form['description'],
-            "category": request.form['category']
+            "category": request.form['category'],
+            "updated_by": ObjectId(session.get('user_id')),
+            "updated_at": datetime.now()  # Catat waktu update
         }
         
         file = request.files.get('image_url')

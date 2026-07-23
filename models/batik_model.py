@@ -70,7 +70,16 @@ class BatikModel:
             {"$unwind": {
                 "path": "$admin_data", 
                 "preserveNullAndEmptyArrays": True
-            }}
+            }},
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "updated_by",
+                    "foreignField": "_id",
+                    "as": "editor_data"
+                }
+            },
+            {"$unwind": {"path": "$editor_data", "preserveNullAndEmptyArrays": True}}
         ]
         hasil = list(self.collection.aggregate(pipeline))
         return hasil[0] if hasil else None

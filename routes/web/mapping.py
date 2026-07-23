@@ -18,7 +18,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
     selected_category = request.args.get('c', '') # 1. Tangkap parameter filter kategori baru
-    per_page = 5
+    per_page = 10
     
     # 2. Kirim parameter search_query dan selected_category ke model data
     all_data = mapping_model.get_all(search_query=search_query, category=selected_category)
@@ -127,7 +127,9 @@ def edit(mapping_id):
                 "full": request.form['address_full']
             },
             "phone": request.form['phone'],
-            "update_at": datetime.now()
+            "update_at": datetime.now(),
+            "updated_by": ObjectId(session.get('user_id')),
+            "updated_at": datetime.now()
         }
         
         # Jika gambar diganti

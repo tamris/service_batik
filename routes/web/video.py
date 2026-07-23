@@ -1,9 +1,11 @@
 import re
 import math
+from bson import ObjectId
 import requests
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.video_model import VideoModel
 from datetime import datetime
+from flask import session
 
 video_bp = Blueprint('video', __name__)
 video_model = VideoModel()
@@ -29,7 +31,7 @@ def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
     selected_category = request.args.get('c', '') # 1. Ambil data filter kategori dari parameter URL
-    per_page = 7
+    per_page = 10
 
     # 2. Kirim parameter search_query dan selected_category ke model data
     all_data = video_model.get_all(search_query=search_query, category=selected_category)
@@ -71,6 +73,7 @@ def create():
             return redirect(url_for('video.create'))
 
         data_baru = {
+            "user_id": ObjectId(session.get('user_id')),
             "youtube_url":      youtube_url,
             "video_id":         video_id,
             "category":         request.form['category'],
@@ -123,6 +126,8 @@ def edit(video_id):
             "duration_minutes": meta['duration_minutes'],
             "duration_seconds": meta['duration_seconds'],
             "channel_name":     meta['channel_name'],
+            "updated_by":       ObjectId(session.get('user_id')),
+            "updated_at":       datetime.now()
         }
         video_model.update(video_id, data_update)
         flash('Video berhasil diperbarui!', 'success')

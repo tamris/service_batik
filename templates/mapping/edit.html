@@ -79,10 +79,8 @@
                 </a>
             </li>
             {% endif %}
-
         </ul>
         <ul class="side-menu">
-
             <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
                         class="text">Logout</span></a>
             </li>
@@ -97,7 +95,6 @@
             <input type="checkbox" id="switch-mode" hidden>
             <label for="switch-mode" class="switch-mode"></label>
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
                 <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
                     onerror="this.src='/static/img/avatar.png';">
             </a>
@@ -146,7 +143,6 @@
 
                         <div class="map-group" style="margin-top: 15px;">
                             <label class="map-label">Layanan / Kategori Lengkap</label>
-                            <!-- GANTI INLINE STYLING LAMA JADI CLASS BARU YANG RESPONSIF -->
                             <div class="map-checkbox-wrapper">
                                 <label class="check-label" id="label-Sentra-Batik">
                                     <input type="checkbox" name="categories" value="Sentra Batik" class="sub-check" {%
@@ -170,8 +166,6 @@
                                 </label>
                             </div>
                         </div>
-
-
 
                         <div class="map-group">
                             <label class="map-label">Cari Lokasi Cepat</label>
@@ -226,14 +220,24 @@
                                 mengganti foto saat ini.</p>
                         </div>
 
-                        <!-- BERSIHKAN INLINE STYLE KAKU PADA USER ACTIONS -->
+                        <!-- MURNI ARSITEKTUR KELAS BAWAN TANPA TAG CSS INLINE YANG MERUSAK -->
                         <div class="user-actions">
                             {% if mapping is defined %}
                             <div class="creator-info">
-                                <i class='bx bxs-info-circle'></i>
-                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
-                                        mapping.admin_data.username if mapping.admin_data else 'System'
-                                        }}</strong></span>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ mapping.admin_data.username if mapping.admin_data else 'System' }}</strong> {% if mapping.created_at %} • {{ mapping.created_at | date_format }}{% endif %}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if mapping.updated_by %}
+                            <div class="editor-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ mapping.editor_data.username if mapping.editor_data else 'System' }}</strong>
+                                    {% if mapping.updated_at %} • {{ mapping.updated_at | date_format }}{% endif %}</span>
+                                </div>
                             </div>
                             {% endif %}
 
@@ -241,8 +245,6 @@
                                 class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Lokasi</button>
                         </div>
-
-
                     </form>
                 </div>
             </div>
@@ -253,7 +255,6 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
     <script>
-        // Inisialisasi Peta dengan koordinat yang sudah ada
         var existingLat = parseFloat("{{ mapping.latitude }}") || -6.8797;
         var existingLng = parseFloat("{{ mapping.longitude }}") || 109.1256;
 
@@ -291,11 +292,9 @@
             updateLocation(e.latlng.lat, e.latlng.lng, true);
         });
 
-        // Sinkronisasi input manual
         latInput.addEventListener('change', () => updateLocation(parseFloat(latInput.value), parseFloat(lngInput.value), true));
         lngInput.addEventListener('change', () => updateLocation(parseFloat(latInput.value), parseFloat(lngInput.value), true));
 
-        // Pencarian Lokasi
         btnSearch.addEventListener('click', function () {
             var query = document.getElementById('searchAddressInput').value;
             if (!query) return;
@@ -322,9 +321,9 @@
 
                 subCheckboxes.forEach(checkbox => {
                     if (checkbox.value === nilaiUtama) {
-                        checkbox.checked = false; // Supaya tidak dobel kirim data
+                        checkbox.checked = false; 
                         checkbox.disabled = true;
-                        checkbox.parentElement.style.opacity = '0.4'; // Efek visual buram
+                        checkbox.parentElement.style.opacity = '0.4'; 
                     } else {
                         checkbox.disabled = false;
                         checkbox.parentElement.style.opacity = '1';
@@ -332,10 +331,7 @@
                 });
             }
 
-            // 1. Jalankan langsung saat halaman pertama kali dimuat (Edit Mode Init)
             handleCheckboxDisabling();
-
-            // 2. Jalankan ulang setiap kali admin mengubah pilihan dropdown
             utamaSelect.addEventListener('change', handleCheckboxDisabling);
         });
     </script>

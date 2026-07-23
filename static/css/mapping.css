@@ -292,7 +292,9 @@
 .btn-icon.btn-delete { background: #FF4B4B !important; color: #fff !important; }
 .btn-icon.btn-delete:hover { background: #e63939 !important; transform: translateY(-2px); }
 
-/* TOMBOL AKSI BAWAH (Batal & Simpan) */
+/* ==========================================================================
+   REFINE MAPPING ACTIONS FOOTER ENGINE (SINKRON MODUL LAIN)
+   ========================================================================== */
 .user-actions {
     display: flex;
     justify-content: flex-end;
@@ -303,7 +305,30 @@
     border-top: 1px solid var(--grey);
     flex-wrap: wrap;
 }
-.user-actions .creator-info { margin-right: auto; }
+
+/* Pengunci Letak Teks Metadata Infolog Ke Pojok Kiri, Tombol Ke Kanan */
+.user-actions .creator-info,
+.user-actions .editor-info {
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.user-actions .creator-info {
+    margin-right: auto;
+}
+
+.user-actions .creator-info + .editor-info {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.user-actions .creator-info ~ .btn-cancel {
+    margin-left: auto;
+}
 
 .btn-cancel {
     padding: 10px 24px;
@@ -314,11 +339,15 @@
     font-weight: 600;
     font-size: 14px;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    box-sizing: border-box;
 }
 .btn-cancel:hover { background: #d0d0d0; }
 
 .btn-save {
-    padding: 10px 24px;
+    padding: 0 24px;
     background: #3C91E6;
     color: #fff;
     border: none;
@@ -331,6 +360,8 @@
     gap: 8px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(60, 145, 230, 0.2);
+    height: 38px;
+    box-sizing: border-box;
 }
 .btn-save:hover { background: #2b7bc9; transform: translateY(-1px); }
 
@@ -379,7 +410,6 @@
 body.dark .search-box select#categoryFilter {
     background-color: #25282b !important;
     color: #fff !important;
-    /* border-color: #3f444a !important; */
     background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23aaa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
 }
 body.dark .search-box select#categoryFilter option { background: #1a1c1e; color: #fff; }
@@ -399,25 +429,10 @@ body.dark .search-box .form-input:focus-within { background: #1e2124; }
 body.dark .table-responsive-wrapper td { border-bottom: none !important; }
 
 /* Dark Mode Badge Map Capsule Sync */
-body.dark .badge-map.cat-sentra {
-  background-color: rgba(60, 145, 230, 0.25) !important;
-  color: #6eb4f7 !important;
-}
-
-body.dark .badge-map.cat-toko {
-  background-color: rgba(155, 89, 182, 0.25) !important;
-  color: #d49aee !important;
-}
-
-body.dark .badge-map.cat-edukasi {
-  background-color: rgba(63, 195, 128, 0.25) !important;
-  color: #6bf1ab !important;
-}
-
-body.dark .badge-map.cat-pengrajin {
-  background-color: rgba(255, 165, 0, 0.25) !important;
-  color: #ffc76b !important;
-}
+body.dark .badge-map.cat-sentra { background-color: rgba(60, 145, 230, 0.25) !important; color: #6eb4f7 !important; }
+body.dark .badge-map.cat-toko { background-color: rgba(155, 89, 182, 0.25) !important; color: #d49aee !important; }
+body.dark .badge-map.cat-edukasi { background-color: rgba(63, 195, 128, 0.25) !important; color: #6bf1ab !important; }
+body.dark .badge-map.cat-pengrajin { background-color: rgba(255, 165, 0, 0.25) !important; color: #ffc76b !important; }
 
 /* Dark Mode Navigation Glow */
 body.dark .pagi-btn { background: #25282b; border-color: #3f444a; color: #e0e0e0; }
@@ -438,8 +453,19 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     .coord-grid { grid-template-columns: 1fr; gap: 16px; }
     .map-form-container { padding: 20px !important; }
     .pagination-wrapper { flex-direction: column; text-align: center; }
-    .user-actions { flex-direction: column; align-items: stretch; width: 100%; }
-    .user-actions .creator-info { margin-right: 0; margin-bottom: 10px; justify-content: center; }
+    
+    /* MODIFIKASI TOTAL: RESPONSIVE FOOTER ACTIONS ACCORDING TO KAIDAH UI/UX DESIGN SYSTEM */
+    .user-actions { 
+        flex-direction: column !important; 
+        align-items: stretch !important; 
+        width: 100%; 
+        gap: 16px !important;
+    }
+    .user-actions .creator-info,
+    .user-actions .editor-info {
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
     .btn-cancel, .btn-save { width: 100%; justify-content: center; text-align: center; }
 }
 
@@ -459,7 +485,6 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     .table-data .head h3 { font-size: 20px; }
     
-    /* Paksa form & seluruh komponen isinya melebar penuh di HP */
     .search-box {
         flex-direction: column;
         align-items: stretch !important;
@@ -521,34 +546,13 @@ body.dark .pagi-btn:hover:not(.active) { background-color: #3C91E6 !important; c
     }
     body.dark .table-responsive-wrapper td:last-child { border-top-color: rgba(255,255,255,0.06); }
 
-    /* Pagination Mobile Berjejer Horizontal */
     .pagination-wrapper {
         flex-direction: column !important;
         align-items: center !important;
         gap: 12px !important;
     }
-
-    .pagi-buttons {
-        flex-direction: column !important;
-        width: 100% !important;
-    }
-
-    .pagi-numbers {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-
-    .pagi-btn {
-        width: 100% !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-    }
-
-    .pagi-btn.number {
-        width: 36px !important;
-    }
+    .pagi-buttons { flex-direction: column !important; width: 100% !important; }
+    .pagi-numbers { flex-wrap: wrap !important; justify-content: center !important; display: flex !important; align-items: center !important; gap: 8px !important; }
+    .pagi-btn { width: 100% !important; display: flex !important; justify-content: center !important; align-items: center !important; }
+    .pagi-btn.number { width: 36px !important; }
 }

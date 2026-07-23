@@ -95,14 +95,10 @@
                                 <label class="batik-label">Kategori Motif</label>
                                 <select name="category" class="batik-input" required>
                                     <option value="" disabled>Pilih Kategori...</option>
-                                    <option value="Klasik" {% if batik.category=='Klasik' %}selected{% endif %}>Klasik
-                                    </option>
-                                    <option value="Kontemporer" {% if batik.category=='Kontemporer' %}selected{% endif
-                                        %}>Kontemporer</option>
-                                    <option value="Bahari" {% if batik.category=='Bahari' %}selected{% endif %}>Bahari
-                                    </option>
-                                    <option value="Flora & Fauna" {% if batik.category=='Flora & Fauna' %}selected{%
-                                        endif %}>Flora & Fauna</option>
+                                    <option value="Klasik" {% if batik.category=='Klasik' %}selected{% endif %}>Klasik</option>
+                                    <option value="Kontemporer" {% if batik.category=='Kontemporer' %}selected{% endif %}>Kontemporer</option>
+                                    <option value="Bahari" {% if batik.category=='Bahari' %}selected{% endif %}>Bahari</option>
+                                    <option value="Flora & Fauna" {% if batik.category=='Flora & Fauna' %}selected{% endif %}>Flora & Fauna</option>
                                 </select>
                             </div>
 
@@ -110,19 +106,15 @@
                                 <label class="batik-label">Teknik Pembuatan</label>
                                 <select name="technique" class="batik-input" required>
                                     <option value="" disabled>Pilih Teknik Pembuatan...</option>
-                                    <option value="Batik Tulis" {% if batik.technique=='Batik Tulis' %}selected{% endif
-                                        %}>Batik Tulis</option>
-                                    <option value="Batik Cap" {% if batik.technique=='Batik Cap' %}selected{% endif %}>
-                                        Batik Cap</option>
-                                    <option value="Batik Kombinasi" {% if batik.technique=='Batik Kombinasi'
-                                        %}selected{% endif %}>Batik Kombinasi</option>
+                                    <option value="Batik Tulis" {% if batik.technique=='Batik Tulis' %}selected{% endif %}>Batik Tulis</option>
+                                    <option value="Batik Cap" {% if batik.technique=='Batik Cap' %}selected{% endif %}>Batik Cap</option>
+                                    <option value="Batik Kombinasi" {% if batik.technique=='Batik Kombinasi' %}selected{% endif %}>Batik Kombinasi</option>
                                 </select>
                             </div>
 
                             <div class="batik-group">
                                 <label class="batik-label">Filosofi Batik</label>
-                                <input type="text" name="philosophy" class="batik-input" value="{{ batik.philosophy }}"
-                                    required>
+                                <input type="text" name="philosophy" class="batik-input" value="{{ batik.philosophy }}" required>
                             </div>
                         </div>
 
@@ -130,8 +122,7 @@
                             <div class="batik-group">
                                 <label class="batik-label">Ganti Gambar Motif (Opsional)</label>
                                 <div class="file-upload-box">
-                                    <input type="file" name="image_url" accept="image/*" id="fileInput"
-                                        onchange="previewImage(event)">
+                                    <input type="file" name="image_url" accept="image/*" id="fileInput" onchange="previewImage(event)">
                                     <div class="upload-content">
                                         <i class='bx bx-cloud-upload upload-icon'></i>
                                         <p id="uploadText">Klik/seret file ke sini untuk mengganti gambar saat ini</p>
@@ -139,31 +130,22 @@
                                 </div>
                             </div>
 
-                            <div class="preview-container" id="previewWrapper"
-                                style="display: block; margin-bottom: 24px;">
-                                <label class="batik-label" id="previewTitle">Preview Motif Batik: <span
-                                        style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik gambar untuk
-                                        memakai pipet warna)</span></label>
+                            <div class="preview-container" id="previewWrapper" style="display: block; margin-bottom: 24px;">
+                                <label class="batik-label" id="previewTitle">Preview Motif Batik: <span style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik gambar untuk memakai pipet warna)</span></label>
                                 <div class="image-preview-wrapper-full">
-                                    <img id="imagePreview"
-                                        src="{{ url_for('static', filename='img/galeri/' + batik.image_url) }}"
-                                        alt="Preview Motif" style="cursor: pointer; max-width: 100%; display: block;">
+                                    <img id="imagePreview" src="{{ url_for('static', filename='img/galeri/' + batik.image_url) }}" alt="Preview Motif" style="cursor: pointer; max-width: 100%; display: block;">
                                 </div>
                             </div>
 
-                            <!-- Area Modifikasi Pipet Warna Dinamis untuk Edit -->
                             <div class="form-row-color-picker-safe">
                                 <div class="batik-group">
-                                    <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet
-                                        warna pada gambar preview di atas</label>
-                                    <div id="container-warna-visual"
-                                        style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
+                                    <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet warna pada gambar preview di atas</label>
+                                    <div id="container-warna-visual" style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
                                         <!-- Di-render oleh script JS bawaan database -->
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Form Input Hidden yang Dikirim ke Flask Backend -->
                             <input type="hidden" name="dominant_color_1" id="dominant_color_1" value="">
                             <input type="hidden" name="dominant_color_2" id="dominant_color_2" value="">
                             <input type="hidden" name="dominant_color_3" id="dominant_color_3" value="">
@@ -171,13 +153,11 @@
 
                             <div class="sketch-toggle-container" style="margin-bottom: 24px; margin-top: 15px;">
                                 <label class="checkbox-premium-label">
-                                    <input type="checkbox" name="activate_sketch" value="true" {% if
-                                        batik.is_sketsa_available %}checked{% endif %}>
+                                    <input type="checkbox" name="activate_sketch" value="true" {% if batik.is_sketsa_available %}checked{% endif %}>
                                     <span class="checkbox-custom"></span>
                                     <div class="checkbox-text">
                                         <span class="title">Aktifkan Fitur Simulasi Membatik</span>
-                                        <span class="desc">Buat/perbarui file sketsa via OpenCV secara otomatis jika
-                                            motif berkategori mudah/sedang.</span>
+                                        <span class="desc">Buat/perbarui file sketsa via OpenCV secara otomatis jika motif berkategori mudah/sedang.</span>
                                     </div>
                                 </label>
                             </div>
@@ -186,26 +166,37 @@
                         <div class="form-grid-narration-split">
                             <div class="batik-group">
                                 <label class="batik-label">Makna Batik</label>
-                                <textarea name="makna" class="batik-input" style="height: 160px; resize: none;"
-                                    required>{{ batik.makna }}</textarea>
+                                <textarea name="makna" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.makna }}</textarea>
                             </div>
 
                             <div class="batik-group">
                                 <label class="batik-label">Sejarah Batik</label>
-                                <textarea name="history" class="batik-input" style="height: 160px; resize: none;"
-                                    required>{{ batik.history }}</textarea>
+                                <textarea name="history" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.history }}</textarea>
                             </div>
                         </div>
 
+                        <!-- MURNI ARSITEKTUR KELAS BAWAN TANPA TAG CSS INLINE YANG MERUSAK -->
                         <div class="batik-actions">
-                            <div class="creator-info"
-                                style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #888;">
-                                <i class='bx bxs-info-circle'></i>
-                                <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
-                                        batik.admin_data.username if batik.admin_data else 'System' }}</strong></span>
+
+                            <div class="creator-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ batik.admin_data.username if batik.admin_data else 'System' }}</strong> 
+                                    {% if batik.created_at %} • {{ batik.created_at | date_format }}{% endif %}</span>
+                                </div>
                             </div>
-                            <a href="{{ url_for('galeri.index') }}?page={{ request.args.get('page', 1) }}"
-                                class="btn-cancel">Batal</a>
+
+                            {% if batik.updated_by %}
+                            <div class="editor-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ batik.editor_data.username if batik.editor_data else 'System' }}</strong>
+                                    {% if batik.updated_at %} • {{ batik.updated_at | date_format }}{% endif %}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <a href="{{ url_for('galeri.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Batik</button>
                         </div>
                     </form>

@@ -51,10 +51,8 @@
                 </a>
             </li>
             {% endif %}
-
         </ul>
         <ul class="side-menu">
-
             <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
                         class="text">Logout</span></a></li>
         </ul>
@@ -69,7 +67,6 @@
             <label for="switch-mode" class="switch-mode"></label>
 
             <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
                 <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
                     onerror="this.src='/static/img/avatar.png';">
             </a>
@@ -142,7 +139,30 @@
                                 required>{{ video.description }}</textarea>
                         </div>
 
+                        <!-- MURNI ARSITEKTUR KELAS BAWAN TANPA TAG CSS INLINE YANG MERUSAK -->
                         <div class="video-actions">
+                            <div class="creator-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{
+                                            video.creator_data.username if video.creator_data else 'System' }}</strong>
+                                        {% if video.created_at %} • {{ video.created_at | date_format }}{% endif
+                                        %}</span>
+                                </div>
+                            </div>
+
+                            {% if video.updated_by %}
+                            <div class="editor-info">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{
+                                            video.editor_data.username if video.editor_data else 'System' }}</strong>
+                                        {% if video.updated_at %} • {{ video.updated_at | date_format }}{% endif
+                                        %}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             <a href="{{ url_for('video.index') }}?page={{ request.args.get('page', 1) }}"
                                 class="btn-cancel">Batal</a>
                             <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Video</button>
@@ -185,12 +205,9 @@
 
             if (match) {
                 const videoId = match[1];
-
-                // Pasang thumbnail fallback cepat dari CDN image YouTube
                 thumb.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
                 previewWrapper.style.display = 'block';
 
-                // Ambil info detail judul asli dan channel secara asynchronous
                 fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
                     .then(response => {
                         if (!response.ok) throw new Error();
@@ -209,7 +226,6 @@
             }
         }
 
-        // Jalankan tracking saat admin mengetik atau mengubah isi input URL
         document.getElementById('youtube_url').addEventListener('input', updateYouTubePreview);
 
         document.getElementById('clear-youtube').addEventListener('click', function () {
@@ -228,7 +244,6 @@
             urlInput.focus();
         });
 
-        // Jalankan otomatis sekali saat halaman pertama kali selesai di-load (Initial Fetch)
         document.addEventListener("DOMContentLoaded", updateYouTubePreview);
     </script>
 </body>
