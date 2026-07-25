@@ -1,358 +1,163 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Admin Sibatikgal - Peta Lokasi{% endblock %}
 
-    <!-- Boxicons -->
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <!-- My CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mapping.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Admin Sibatikgal - Peta Lokasi</title>
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mapping.css') }}">
+{% endblock %}
 
-<body>
-    <script>
-        // Cek LocalStorage SEBELUM render konten
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') {
-            document.body.classList.add('dark');
-        }
-    </script>
+{% block menu_peta %}active{% endblock %}
 
-    <!-- SIDEBAR -->
-    <section id="sidebar">
-        <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li>
-                <a href="{{ url_for('web_dashboard.index') }}">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('galeri.index') }}">
-                    <i class='bx bxs-collection'></i>
-                    <span class="text">Katalog Batik</span>
-                </a>
-            <li>
-                <a href="{{ url_for('informasi.index') }}">
-                    <i class='bx bxs-info-circle'></i>
-                    <span class="text">Konten Artikel</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('event.index') }}">
-                    <i class='bx bxs-calendar'></i>
-                    <span class="text">Event</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ url_for('video.index') }}">
-                    <i class='bx bxs-video'></i>
-                    <span class="text">Video</span>
-                </a>
-            </li>
-            <li class="active">
-                <a href="{{ url_for('mapping.index') }}">
-                    <i class='bx bxs-map'></i>
-                    <span class="text">Peta Lokasi</span>
-                </a>
-            </li>
-            {% if session.get('role') == 'superadmin' %}
-            <li>
-                <a href="{{ url_for('user_manager.index') }}">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Manajemen User</span>
-                </a>
-            </li>
-            {% endif %}
+{% block page_name %}Data Lokasi{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Peta Lokasi</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Mapping</a></li>
         </ul>
-        <ul class="side-menu">
-            <!-- <li>
-                <a href="#">
-                    <i class='bx bxs-cog'></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li> -->
-            <li>
-                <a href="{{ url_for('auth.logout') }}" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </section>
-    <!-- SIDEBAR -->
+    </div>
+    <a href="{{ url_for('mapping.create') }}" class="btn-add-map">
+        <i class='bx bxs-map-add'></i>
+        <i class='bx bxs-plus-circle'></i><span class="text">Tambah Lokasi</span>
+    </a>
+</div>
 
-    <!-- CONTENT -->
-    <section id="content">
-        <!-- NAVBAR -->
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Data Lokasi</a>
+<div class="table-data">
+    <div class="order">
+        <div class="head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3 style="margin: 0;">Daftar Peta Lokasi Batik</h3>
 
-            <div class="spacer" style="flex-grow: 1;"></div>
+            <form class="search-box" id="searchFilterForm" method="GET" action="{{ url_for('mapping.index') }}" style="display: flex; gap: 10px;">
+                <!-- Dropdown Filter Kategori Lokasi Pemetaan -->
+                <select name="c" id="categoryFilter" onchange="this.form.submit()"
+                    style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+                    <option value="">Semua Lokasi</option>
+                    <option value="Sentra Batik" {% if selected_category=='Sentra Batik' %}selected{% endif %}>Sentra Batik</option>
+                    <option value="Toko" {% if selected_category=='Toko' %}selected{% endif %}>Toko</option>
+                    <option value="Pengrajin" {% if selected_category=='Pengrajin' %}selected{% endif %}>Pengrajin</option>
+                    <option value="Edukasi" {% if selected_category=='Edukasi' %}selected{% endif %}>Edukasi</option>
+                </select>
 
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-                    onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
-        <!-- NAVBAR -->
-
-        <!-- MAIN -->
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Peta Lokasi</h1>
-                    <ul class="breadcrumb">
-                        <li><a href="#">Dashboard</a></li>
-                        <li><i class='bx bx-chevron-right'></i></li>
-                        <li><a class="active" href="#">Mapping</a></li>
-                    </ul>
+                <div class="form-input">
+                    <input type="search" id="searchInput" placeholder="Cari lokasi..." autocomplete="off"
+                        data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
+                    <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
                 </div>
-                <!-- REFACTOR CLASS KAKU GLOBAL JADI ADD-MAP -->
-                <a href="{{ url_for('mapping.create') }}" class="btn-add-map">
-                    <i class='bx bxs-map-add'></i>
-                    <i class='bx bxs-plus-circle'></i><span class="text">Tambah Lokasi</span>
-                </a>
-            </div>
+            </form>
+        </div>
 
-            <div class="table-data">
-                <div class="order">
-                    <div class="head"
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                        <h3 style="margin: 0;">Daftar Peta Lokasi Batik</h3>
+        <div class="table-responsive-wrapper">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--grey);">
+                        <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 15%;">Preview</th>
+                        <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 25%;">Informasi Lokasi</th>
+                        <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 20%;">Koordinat</th>
+                        <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 30%;">Alamat Lengkap</th>
+                        <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 10%;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% if mappings %}
+                    {% for m in mappings %}
+                    <tr style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
+                        <td style="vertical-align: middle; padding: 16px 10px;">
+                            <img src="{{ url_for('static', filename='img/mapping/' + m.image_url) }}"
+                                style="width: 80px; height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                        </td>
 
-                        <form class="search-box" id="searchFilterForm" method="GET"
-                            action="{{ url_for('mapping.index') }}" style="display: flex; gap: 10px;">
-                            <!-- Dropdown Filter Kategori Lokasi Pemetaan -->
-                            <select name="c" id="categoryFilter" onchange="this.form.submit()"
-                                style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
-                                <option value="">Semua Lokasi</option>
-                                <option value="Sentra Batik" {% if selected_category=='Sentra Batik' %}selected{% endif
-                                    %}>Sentra Batik</option>
-                                <option value="Toko" {% if selected_category=='Toko' %}selected{% endif %}>Toko</option>
-                                <option value="Pengrajin" {% if selected_category=='Pengrajin' %}selected{% endif %}>
-                                    Pengrajin</option>
-                                <option value="Edukasi" {% if selected_category=='Edukasi' %}selected{% endif %}>Edukasi
-                                </option>
-                            </select>
-
-                            <div class="form-input">
-                                <input type="search" id="searchInput" placeholder="Cari lokasi..." autocomplete="off"
-                                    data-url="{{ url_for('mapping.index') }}" name="q" value="{{ search_query }}">
-                                <button type="button" class="search-btn"><i class='bx bx-search'></i></button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- BUNGKUSAN RESPONSIVE WRAPPER MAUT -->
-                    <div class="table-responsive-wrapper">
-                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid var(--grey);">
-                                    <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 15%;">Preview</th>
-                                    <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 25%;">Informasi
-                                        Lokasi</th>
-                                    <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 20%;">Koordinat
-                                    </th>
-                                    <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 30%;">Alamat
-                                        Lengkap</th>
-                                    <th style="padding: 0 10px 15px 10px; color: var(--dark); width: 10%;">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                {% if mappings %}
-                                {% for m in mappings %}
-                                <tr
-                                    style="border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.3s ease;">
-
-                                    <td style="vertical-align: middle; padding: 16px 10px;">
-                                        <img src="{{ url_for('static', filename='img/mapping/' + m.image_url) }}"
-                                            style="width: 80px; height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                                    </td>
-
-                                    <td style="vertical-align: middle; padding: 16px 10px;">
-                                        <strong
-                                            style="display:block; color:var(--dark); font-size: 15px; margin-bottom: 6px;">{{
-                                            m.name }}</strong>
-                                        <span
-                                            class="badge-map {% if m.category == 'Sentra Batik' %}cat-sentra{% elif m.category == 'Toko' %}cat-toko{% elif m.category == 'Pengrajin' %}cat-pengrajin{% else %}cat-edukasi{% endif %}">
-                                            {{ m.category }}
-                                        </span>
-                                    </td>
-
-                                    <td
-                                        style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
-                                        <i class='bx bx-map' style="color: #FD7238; margin-right: 4px;"></i> {{
-                                        m.latitude
-                                        }}<br>
-                                        <i class='bx bx-map-pin' style="color: #3C91E6; margin-right: 4px;"></i> {{
-                                        m.longitude }}
-                                    </td>
-
-                                    <td
-                                        style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
-                                        {{ m.address.full }}
-                                        {% if m.phone %}<br><i class='bx bx-phone'
-                                            style="color: #28a745; margin-right: 4px;"></i> {{ m.phone }}{% endif %}
-                                    </td>
-
-                                    <td style="vertical-align: middle; padding: 16px 10px;">
-                                        <div class="action-btn">
-                                            <a href="{{ url_for('mapping.edit', mapping_id=m._id) }}?page={{ page }}"
-                                                class="btn-icon btn-edit" title="Edit Lokasi">
-                                                <i class='bx bxs-edit'></i>
-                                            </a>
-
-                                            <!-- <form action="{{ url_for('mapping.delete', mapping_id=m._id) }}?page={{ page }}"
-                                                method="POST" style="display:inline;"
-                                                onsubmit="return confirm('Yakin mau menghapus lokasi {{ m.name }} secara permanen?');">
-                                                <button type="submit" class="btn-icon btn-delete" title="Hapus Lokasi"
-                                                    style="border:none; cursor:pointer;">
-                                                    <i class='bx bxs-trash'></i>
-                                                </button>
-                                            </form> -->
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                {% endfor %}
-                                {% else %}
-                                <!-- SOLUSI DETEKSI AJAK & RESPONSIF MOBIL BERSIH -->
-                                <style>
-                                    #tableBody tr.row-empty-mapping td::before {
-                                        content: none !important;
-                                        display: none !important;
-                                    }
-                                </style>
-                                <tr class="row-empty-mapping"
-                                    style="position: relative; height: 200px; border: none !important;">
-                                    <td colspan="5"
-                                        style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important; background: transparent !important;">
-                                        <div
-                                            style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
-                                            <i class='bx bx-map-alt'
-                                                style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
-                                            <p
-                                                style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">
-                                                Belum ada data lokasi.</p>
-                                            <!-- <p style="color: #888; font-size: 13px; margin-top: 5px; margin-bottom: 0;">
-                                                Data lokasi  batik tidak ditemukan.</p> -->
-                                        </div>
-                                    </td>
-                                    <!-- Dummy TD sebanyak 4 buah untuk mengimbangi 5 total kolom tabel -->
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
-                                    <td style="display: none;"></td>
-                                </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                        <div class="pagination-wrapper" id="paginationContainer">
-                            <span class="pagi-info">
-                                Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
-                                results
+                        <td style="vertical-align: middle; padding: 16px 10px;">
+                            <strong style="display:block; color:var(--dark); font-size: 15px; margin-bottom: 6px;">{{ m.name }}</strong>
+                            <span class="badge-map {% if m.category == 'Sentra Batik' %}cat-sentra{% elif m.category == 'Toko' %}cat-toko{% elif m.category == 'Pengrajin' %}cat-pengrajin{% else %}cat-edukasi{% endif %}">
+                                {{ m.category }}
                             </span>
+                        </td>
 
-                            <div class="pagi-buttons">
-                                {% if page > 1 %}
-                                <a href="{{ url_for('mapping.index', page=page-1, q=search_query, c=selected_category) }}"
-                                    class="pagi-btn prev">
-                                    <i class='bx bx-chevron-left'></i> Prev
+                        <td style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
+                            <i class='bx bx-map' style="color: #FD7238; margin-right: 4px;"></i> {{ m.latitude }}<br>
+                            <i class='bx bx-map-pin' style="color: #3C91E6; margin-right: 4px;"></i> {{ m.longitude }}
+                        </td>
+
+                        <td style="vertical-align: middle; padding: 16px 10px; font-size: 13px; color: #666; line-height: 1.6;">
+                            {{ m.address.full }}
+                            {% if m.phone %}<br><i class='bx bx-phone' style="color: #28a745; margin-right: 4px;"></i> {{ m.phone }}{% endif %}
+                        </td>
+
+                        <td style="vertical-align: middle; padding: 16px 10px;">
+                            <div class="action-btn">
+                                <a href="{{ url_for('mapping.edit', mapping_id=m._id) }}?page={{ page }}"
+                                    class="btn-icon btn-edit" title="Edit Lokasi">
+                                    <i class='bx bxs-edit'></i>
                                 </a>
+                                {% if session.get('role') == 'superadmin' %}    
+                                <form action="{{ url_for('mapping.delete', mapping_id=m._id) }}?page={{ page }}"
+                                    method="POST" style="display:inline;"
+                                    onsubmit="return confirm('Yakin mau menghapus lokasi {{ m.name }} secara permanen?');">
+                                    <button type="submit" class="btn-icon btn-delete" title="Hapus Lokasi" style="border:none; cursor:pointer;">
+                                        <i class='bx bxs-trash'></i>
+                                    </button>
+                                </form>
                                 {% endif %}
-
-                                <div class="pagi-numbers">
-                                    {% for p in range(1, total_pages + 1) %}
-                                    <a href="{{ url_for('mapping.index', page=p, q=search_query, c=selected_category) }}"
-                                        class="pagi-btn number {{ 'active' if p == page else '' }}">
-                                        {{ p }}
-                                    </a>
-                                    {% endfor %}
-                                </div>
-
-                                {% if page < total_pages %} <a
-                                    href="{{ url_for('mapping.index', page=page+1, q=search_query, c=selected_category) }}"
-                                    class="pagi-btn next">
-                                    Next <i class='bx bx-chevron-right'></i>
-                                    </a>
-                                    {% endif %}
                             </div>
-                        </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <style>
+                        #tableBody tr.row-empty-mapping td::before {
+                            content: none !important;
+                            display: none !important;
+                        }
+                    </style>
+                    <tr class="row-empty-mapping" style="position: relative; height: 200px; border: none !important;">
+                        <td colspan="5" style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important; background: transparent !important;">
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
+                                <i class='bx bx-map-alt' style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
+                                <p style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum ada data lokasi.</p>
+                            </div>
+                        </td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <div class="pagination-wrapper" id="paginationContainer">
+                <span class="pagi-info">
+                    Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
+                </span>
+
+                <div class="pagi-buttons">
+                    {% if page > 1 %}
+                    <a href="{{ url_for('mapping.index', page=page-1, q=search_query, c=selected_category) }}" class="pagi-btn prev">
+                        <i class='bx bx-chevron-left'></i> Prev
+                    </a>
+                    {% endif %}
+
+                    <div class="pagi-numbers">
+                        {% for p in range(1, total_pages + 1) %}
+                        <a href="{{ url_for('mapping.index', page=p, q=search_query, c=selected_category) }}"
+                            class="pagi-btn number {{ 'active' if p == page else '' }}">
+                            {{ p }}
+                        </a>
+                        {% endfor %}
                     </div>
+
+                    {% if page < total_pages %}
+                    <a href="{{ url_for('mapping.index', page=page+1, q=search_query, c=selected_category) }}" class="pagi-btn next">
+                        Next <i class='bx bx-chevron-right'></i>
+                    </a>
+                    {% endif %}
                 </div>
-        </main>
-    </section>
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <script>
-        // 1. Ubah data dari Flask menjadi JSON agar aman dibaca JavaScript
-        const flashMessages = {{ messages | tojson | safe }};
-
-        // 2. Gunakan JavaScript murni untuk proses looping dan logika
-        flashMessages.forEach(msgItem => {
-            let category = 'info';
-            let message = '';
-
-            // Logika pengecekan format data
-            if (Array.isArray(msgItem) && msgItem.length === 2) {
-                category = msgItem[0];
-                message = msgItem[1];
-            } else {
-                message = msgItem;
-            }
-
-            // Handle jika message berbentuk object {' t': [cat, msg]}
-            if (typeof message === 'object' && message !== null) {
-                const data = message[' t'] || message['t'];
-                if (data && Array.isArray(data)) {
-                    category = data[0];
-                    message = data[1];
-                }
-            }
-
-            // 3. Eksekusi SweetAlert
-            const validIcons = ['success', 'error', 'warning', 'info'];
-            Swal.fire({
-                title: 'Berhasil!',
-                text: message,
-                icon: validIcons.includes(category) ? category : 'info',
-                timer: 2500,
-                showConfirmButton: false,
-                background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
-                color: document.body.classList.contains('dark') ? '#fff' : '#000'
-            });
-        });
-    </script>
-    {% endif %}
-    {% endwith %}
-</body>
-
-</html>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

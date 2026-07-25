@@ -1,180 +1,103 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/informasi.css') }}">
-    <title>Tambah Artikel - Admin Sibatikgal</title>
-</head>
+{% block title %}Tambah Artikel - Admin Sibatikgal{% endblock %}
 
-<body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/informasi.css') }}">
+{% endblock %}
 
-    <section id="sidebar">
-        <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
-                        class="text">Dashboard</span></a></li>
-            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog
-                        Batik</span></a></li>
-            <li class="active"><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span
-                        class="text">Konten Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
-                        class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
-            </li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta
-                        Lokasi</span></a></li>
-            {% if session.get('role') == 'superadmin' %}
-            <li>
-                <a href="{{ url_for('user_manager.index') }}">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Manajemen User</span>
-                </a>
-            </li>
-            {% endif %}
+{% block menu_artikel %}active{% endblock %}
 
+{% block page_name %}Tambah Data Artikel{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Tambah Artikel Baru</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a href="{{ url_for('informasi.index') }}">Artikel</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Tambah Artikel</a></li>
         </ul>
-        <ul class="side-menu">
+    </div>
+</div>
 
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
-                        class="text">Logout</span></a></li>
-        </ul>
-    </section>
+<div class="table-data">
+    <div class="order info-form-container">
+        <form action="{{ url_for('informasi.create') }}" method="POST" enctype="multipart/form-data">
 
-    <section id="content">
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Tambah Data Artikel</a>
-            <div class="spacer" style="flex-grow: 1;"></div>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-                    onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
-
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Tambah Artikel Baru</h1>
+            <div class="info-grid title-category-grid">
+                <div class="info-group">
+                    <label class="info-label">Judul Konten</label>
+                    <input type="text" name="title" class="info-input"
+                        placeholder="Masukkan judul informasi..." required>
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Kategori</label>
+                    <select name="category" class="info-input" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="Berita Terkini">Berita Terkini</option>
+                        <option value="Event">Event</option>
+                        <option value="Sosok & Inspirasi">Sosok & Inspirasi</option>
+                        <option value="Edukasi">Edukasi</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="table-data">
-                <div class="order info-form-container">
-                    <form action="{{ url_for('informasi.create') }}" method="POST" enctype="multipart/form-data">
+            <div class="info-group">
+                <label class="info-label">Thumbnail Informasi</label>
+                <div class="file-upload-box">
+                    <input type="file" name="image_url" accept="image/*" id="fileInput"
+                        onchange="previewImage(event)">
+                    <div class="upload-content">
+                        <i class='bx bx-cloud-upload upload-icon'></i>
+                        <p id="uploadText">Klik atau seret file ke sini untuk memilih gambar thumbnail</p>
+                    </div>
+                </div>
 
-                        <div class="info-grid title-category-grid">
-                            <div class="info-group">
-                                <label class="info-label">Judul Konten</label>
-                                <input type="text" name="title" class="info-input"
-                                    placeholder="Masukkan judul informasi..." required>
-                            </div>
-                            <div class="info-group">
-                                <label class="info-label">Kategori</label>
-                                <select name="category" class="info-input" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
-                                    <option value="Berita Terkini">Berita Terkini</option>
-                                    <option value="Event">Event</option>
-                                    <option value="Sosok & Inspirasi">Sosok & Inspirasi</option>
-                                    <option value="Edukasi">Edukasi</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="info-group">
-                            <label class="info-label">Thumbnail Informasi</label>
-                            <div class="file-upload-box">
-                                <input type="file" name="image_url" accept="image/*" id="fileInput"
-                                    onchange="previewImage(event)">
-                                <div class="upload-content">
-                                    <i class='bx bx-cloud-upload upload-icon'></i>
-                                    <p id="uploadText">Klik atau seret file ke sini untuk memilih gambar thumbnail</p>
-                                </div>
-                            </div>
-
-                            <div class="preview-container" id="previewWrapper"
-                                style="display: none; margin-top: 15px; text-align: left;">
-                                <span class="info-label"
-                                    style="font-size:12px; margin-bottom:5px; color:#888; display:block;">Preview
-                                    Gambar:</span>
-                                <div
-                                    style="width: 100%; max-width: 300px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
-                                    <img id="imagePreview" src="#" alt="Preview"
-                                        style="width: 100%; height: auto; display: block; object-fit: cover;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-group">
-                            <label class="info-label">Isi Deskripsi / Artikel</label>
-                            <textarea name="description" class="info-input" rows="8"
-                                placeholder="Tulis detail informasi di sini..." required></textarea>
-                        </div>
-
-                        <div class="info-actions">
-                            <a href="{{ url_for('informasi.index') }}" class="btn-cancel">Batal</a>
-                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Konten</button>
-                        </div>
-                    </form>
+                <div class="preview-container" id="previewWrapper"
+                    style="display: none; margin-top: 15px; text-align: left;">
+                    <span class="info-label"
+                        style="font-size:12px; margin-bottom:5px; color:#888; display:block;">Preview Gambar:</span>
+                    <div style="width: 100%; max-width: 300px; border-radius: 8px; overflow: hidden; border: 1px solid #ddd;">
+                        <img id="imagePreview" src="#" alt="Preview"
+                            style="width: 100%; height: auto; display: block; object-fit: cover;">
+                    </div>
                 </div>
             </div>
-        </main>
-    </section>
 
-    <script>
-        // Logika Dark Mode
-        const switchMode = document.getElementById('switch-mode');
-        if (localStorage.getItem('theme') === 'dark') {
-            switchMode.checked = true;
-        }
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        });
+            <div class="info-group">
+                <label class="info-label">Isi Deskripsi / Artikel</label>
+                <textarea name="description" class="info-input" rows="8"
+                    placeholder="Tulis detail informasi di sini..." required></textarea>
+            </div>
 
-        // Script Preview Gambar
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var output = document.getElementById('imagePreview');
-                var wrapper = document.getElementById('previewWrapper');
-                output.src = reader.result;
-                wrapper.style.display = 'block';
+            <div class="info-actions">
+                <a href="{{ url_for('informasi.index') }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Konten</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
 
-                // Ubah teks upload setelah gambar dipilih
-                document.getElementById('uploadText').innerText = "Gambar berhasil dipilih. Klik lagi untuk mengganti.";
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    </script>
-</body>
+{% block extra_js %}
+<script>
+    // Script Preview Gambar
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('imagePreview');
+            var wrapper = document.getElementById('previewWrapper');
+            output.src = reader.result;
+            wrapper.style.display = 'block';
 
-</html>
+            // Ubah teks upload setelah gambar dipilih
+            document.getElementById('uploadText').innerText = "Gambar berhasil dipilih. Klik lagi untuk mengganti.";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+{% endblock %}

@@ -1,254 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
-    <title>Tambah Event - Admin Sibatikgal</title>
-</head>
+{% block title %}Tambah Event - Admin Sibatikgal{% endblock %}
 
-<body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
+{% endblock %}
 
-    <section id="sidebar">
-      <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
-                        class="text">Dashboard</span></a></li>
-            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog
-                        Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
-                        Artikel</span></a></li>
-            <li class="active"><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
-                        class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
-            </li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta Lokasi</span></a></li>
-            {% if session.get('role') == 'superadmin' %}
-			<li>
-				<a href="{{ url_for('user_manager.index') }}">
-					<i class='bx bxs-user'></i>
-					<span class="text">Manajemen User</span>
-				</a>
-			</li>
-			{% endif %}
-          
+{% block menu_event %}active{% endblock %}
+
+{% block page_name %}Data Event{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Tambah Event Baru</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a href="{{ url_for('event.index') }}">Event</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Tambah Event</a></li>
         </ul>
-        <ul class="side-menu">
-          
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span class="text">Logout</span></a>
-            </li>
-        </ul>
-    </section>
+    </div>
+</div>
 
-    <section id="content">
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Data Event</a>
-            <div class="spacer" style="flex-grow: 1;"></div>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}" 
-                     onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
+<div class="table-data">
+    <div class="order event-form-container">
+        <form action="{{ url_for('event.create') }}" method="POST" enctype="multipart/form-data">
 
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Tambah Event Baru</h1>
+            <div class="event-grid title-category-grid">
+                <div class="event-group">
+                    <label class="event-label">Nama Event</label>
+                    <input type="text" name="title" class="event-input"
+                        placeholder="Masukkan nama agenda..." required>
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Kategori</label>
+                    <select name="category" class="event-input" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Festival">Festival</option>
+                        <option value="Webinar">Webinar</option>
+                        <option value="Pameran">Pameran</option>
+                        <option value="Lomba">Lomba</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="table-data">
-                <div class="order event-form-container">
-                    <form action="{{ url_for('event.create') }}" method="POST" enctype="multipart/form-data">
+            <div class="event-group">
+                <label class="event-label">Titik Lokasi (Pilih pada Peta)</label>
+                <div id="map" class="event-map"></div>
+            </div>
 
-                        <div class="event-grid title-category-grid">
-                            <div class="event-group">
-                                <label class="event-label">Nama Event</label>
-                                <input type="text" name="title" class="event-input"
-                                    placeholder="Masukkan nama agenda..." required>
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Kategori</label>
-                                <select name="category" class="event-input" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
-                                    <option value="Workshop">Workshop</option>
-                                    <option value="Festival">Festival</option>
-                                    <option value="Webinar">Webinar</option>
-                                    <option value="Pameran">Pameran</option>
-                                    <option value="Lomba">Lomba</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Titik Lokasi (Pilih pada Peta)</label>
-                            <div id="map" class="event-map"></div>
-                        </div>
-
-                        <div class="event-grid col-2-grid">
-                            <div class="event-group">
-                                <label class="event-label">Latitude</label>
-                                <input type="text" name="latitude" id="latInput" class="event-input readonly-input"
-                                    readonly required placeholder="Otomatis terisi...">
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Longitude</label>
-                                <input type="text" name="longitude" id="lngInput" class="event-input readonly-input"
-                                    readonly required placeholder="Otomatis terisi...">
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label d-flex-align">
-                                Alamat Lengkap <span id="loadingAddr" class="loading-text"><i
-                                        class='bx bx-loader-alt bx-spin'></i> Menarik alamat...</span>
-                            </label>
-                            <textarea name="address" id="addressInput" class="event-input" rows="3"
-                                placeholder="Detail alamat lengkap akan terisi otomatis atau bisa diisi manual..."
-                                required></textarea>
-                        </div>
-
-                        <div class="event-grid col-2-grid">
-                            <div class="event-group">
-                                <label class="event-label">Tanggal & Waktu Event</label>
-                                <input type="datetime-local" name="event_date" class="event-input" required>
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Banner Event</label>
-                                <input type="file" name="banner" class="event-input file-input" accept="image/*">
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Biaya Masuk (Tiket)</label>
-                            <div class="price-card" id="priceCard">
-                                <label class="free-option">
-                                    <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()">
-                                    <span class="checkbox-custom"></span>
-                                    <span>Gratis</span>
-                                </label>
-                                <div class="divider"></div>
-                                <div class="price-input-group">
-                                    <span class="currency-label">Rp</span>
-                                    <input type="number" name="price" id="priceInput" class="price-input"
-                                        placeholder="Masukkan harga tiket...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Link Pendaftaran</label>
-                            <input type="url" name="registration_url" class="event-input"
-                                placeholder="https://contoh.com/pendaftaran (opsional)">
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Deskripsi Event</label>
-                            <textarea name="description" class="event-input" rows="6"
-                                placeholder="Tuliskan detail acara dengan lengkap..." required></textarea>
-                        </div>
-
-                        <div class="event-actions">
-                            <a href="{{ url_for('event.index') }}" class="btn-cancel">Batal</a>
-                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Event</button>
-                        </div>
-                    </form>
+            <div class="event-grid col-2-grid">
+                <div class="event-group">
+                    <label class="event-label">Latitude</label>
+                    <input type="text" name="latitude" id="latInput" class="event-input readonly-input"
+                        readonly required placeholder="Otomatis terisi...">
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Longitude</label>
+                    <input type="text" name="longitude" id="lngInput" class="event-input readonly-input"
+                        readonly required placeholder="Otomatis terisi...">
                 </div>
             </div>
-        </main>
-    </section>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
+            <div class="event-group">
+                <label class="event-label d-flex-align">
+                    Alamat Lengkap <span id="loadingAddr" class="loading-text"><i
+                            class='bx bx-loader-alt bx-spin'></i> Menarik alamat...</span>
+                </label>
+                <textarea name="address" id="addressInput" class="event-input" rows="3"
+                    placeholder="Detail alamat lengkap akan terisi otomatis atau bisa diisi manual..."
+                    required></textarea>
+            </div>
 
-        const switchMode = document.getElementById('switch-mode');
+            <div class="event-grid col-2-grid">
+                <div class="event-group">
+                    <label class="event-label">Tanggal & Waktu Event</label>
+                    <input type="datetime-local" name="event_date" class="event-input" required>
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Banner Event</label>
+                    <input type="file" name="banner" class="event-input file-input" accept="image/*">
+                </div>
+            </div>
 
-        // Sesuaikan status checkbox saat halaman dimuat
-        if (localStorage.getItem('theme') === 'dark') {
-            switchMode.checked = true;
+            <div class="event-group">
+                <label class="event-label">Biaya Masuk (Tiket)</label>
+                <div class="price-card" id="priceCard">
+                    <label class="free-option">
+                        <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()">
+                        <span class="checkbox-custom"></span>
+                        <span>Gratis</span>
+                    </label>
+                    <div class="divider"></div>
+                    <div class="price-input-group">
+                        <span class="currency-label">Rp</span>
+                        <input type="number" name="price" id="priceInput" class="price-input"
+                            placeholder="Masukkan harga tiket...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-group">
+                <label class="event-label">Link Pendaftaran</label>
+                <input type="url" name="registration_url" class="event-input"
+                    placeholder="https://contoh.com/pendaftaran (opsional)">
+            </div>
+
+            <div class="event-group">
+                <label class="event-label">Deskripsi Event</label>
+                <textarea name="description" class="event-input" rows="6"
+                    placeholder="Tuliskan detail acara dengan lengkap..." required></textarea>
+            </div>
+
+            <div class="event-actions">
+                <a href="{{ url_for('event.index') }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Event</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Inisialisasi Map (Titik Default Tegal)
+    var map = L.map('map').setView([-6.867, 109.137], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    var marker = L.marker([-6.867, 109.137]).addTo(map);
+
+    // Fix Leaflet issue di dalam container
+    setTimeout(function () { map.invalidateSize(); }, 100);
+
+    async function updateAddress(lat, lng) {
+        const addr = document.getElementById('addressInput');
+        const loader = document.getElementById('loadingAddr');
+        loader.style.display = "inline-flex";
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+            const data = await res.json();
+            addr.value = data.display_name || "";
+        } catch (e) {
+            addr.value = "Gagal mengambil alamat otomatis, silakan ketik manual.";
         }
-
-        // Logika untuk toggle dark mode
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-        // Inisialisasi Map (Titik Default bisa diubah sesuai kebutuhan Tegal)
-        var map = L.map('map').setView([-6.867, 109.137], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        var marker = L.marker([-6.867, 109.137]).addTo(map);
-
-        // Fix Leaflet issue di dalam modal/grid saat load pertama
-        setTimeout(function () { map.invalidateSize(); }, 100);
-
-        async function updateAddress(lat, lng) {
-            const addr = document.getElementById('addressInput');
-            const loader = document.getElementById('loadingAddr');
-            loader.style.display = "inline-flex"; // Tampilkan efek loading
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
-                const data = await res.json();
-                addr.value = data.display_name || "";
-            } catch (e) {
-                addr.value = "Gagal mengambil alamat otomatis, silakan ketik manual.";
-            }
-            finally {
-                loader.style.display = "none"; // Sembunyikan loading
-            }
+        finally {
+            loader.style.display = "none";
         }
+    }
 
-        map.on('click', function (e) {
-            marker.setLatLng(e.latlng);
-            document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
-            document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
-            updateAddress(e.latlng.lat, e.latlng.lng);
-        });
+    map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
+        document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
+        updateAddress(e.latlng.lat, e.latlng.lng);
+    });
 
-        function togglePrice() {
-            const isFree = document.getElementById('isFree').checked;
-            const input = document.getElementById('priceInput');
-            const card = document.getElementById('priceCard');
-            if (isFree) {
-                input.value = "0";
-                input.disabled = true;
-                card.classList.add('is-disabled');
-            } else {
-                input.value = "";
-                input.disabled = false;
-                card.classList.remove('is-disabled');
-                input.focus();
-            }
+    function togglePrice() {
+        const isFree = document.getElementById('isFree').checked;
+        const input = document.getElementById('priceInput');
+        const card = document.getElementById('priceCard');
+        if (isFree) {
+            input.value = "0";
+            input.disabled = true;
+            card.classList.add('is-disabled');
+        } else {
+            input.value = "";
+            input.disabled = false;
+            card.classList.remove('is-disabled');
+            input.focus();
         }
-    </script>
-</body>
-
-</html>
+    }
+</script>
+{% endblock %}

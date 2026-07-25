@@ -1,332 +1,257 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Edit Batik - Admin Sibatikgal</title>
-</head>
+{% block title %}Edit Batik - Admin Sibatikgal{% endblock %}
 
-<body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/galeri.css') }}">
+{% endblock %}
 
-    <section id="sidebar">
-        <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
-                        class="text">Dashboard</span></a></li>
-            <li class="active"><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span
-                        class="text">Katalog Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
-                        Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
-                        class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
-            </li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta
-                        Lokasi</span></a></li>
-            {% if session.get('role') == 'superadmin' %}
-            <li>
-                <a href="{{ url_for('user_manager.index') }}">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Manajemen User</span>
-                </a>
-            </li>
-            {% endif %}
+{% block menu_katalog %}active{% endblock %}
+
+{% block page_name %}Edit Data Batik{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Edit Batik: {{ batik.name }}</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a href="{{ url_for('galeri.index') }}">Katalog Batik</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Edit Batik</a></li>
         </ul>
-        <ul class="side-menu">
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
-                        class="text">Logout</span></a></li>
-        </ul>
-    </section>
+    </div>
+</div>
 
-    <section id="content">
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Edit Data Batik</a>
-            <div class="spacer" style="flex-grow: 1;"></div>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-                    onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
+<div class="table-data">
+    <div class="order batik-form-container">
+        <form action="{{ url_for('galeri.edit', batik_id=batik._id) }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
 
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Edit Batik: {{ batik.name }}</h1>
+            <div class="form-grid-upper">
+                <div class="batik-group">
+                    <label class="batik-label">Nama Motif Batik</label>
+                    <input type="text" name="name" class="batik-input" value="{{ batik.name }}" required>
+                </div>
+
+                <div class="batik-group">
+                    <label class="batik-label">Kategori Motif</label>
+                    <select name="category" class="batik-input" required>
+                        <option value="" disabled>Pilih Kategori...</option>
+                        <option value="Klasik" {% if batik.category=='Klasik' %}selected{% endif %}>Klasik</option>
+                        <option value="Kontemporer" {% if batik.category=='Kontemporer' %}selected{% endif %}>Kontemporer</option>
+                        <option value="Bahari" {% if batik.category=='Bahari' %}selected{% endif %}>Bahari</option>
+                        <option value="Flora & Fauna" {% if batik.category=='Flora & Fauna' %}selected{% endif %}>Flora & Fauna</option>
+                    </select>
+                </div>
+
+                <div class="batik-group">
+                    <label class="batik-label">Teknik Pembuatan</label>
+                    <select name="technique" class="batik-input" required>
+                        <option value="" disabled>Pilih Teknik Pembuatan...</option>
+                        <option value="Batik Tulis" {% if batik.technique=='Batik Tulis' %}selected{% endif %}>Batik Tulis</option>
+                        <option value="Batik Cap" {% if batik.technique=='Batik Cap' %}selected{% endif %}>Batik Cap</option>
+                        <option value="Batik Kombinasi" {% if batik.technique=='Batik Kombinasi' %}selected{% endif %}>Batik Kombinasi</option>
+                    </select>
+                </div>
+
+                <div class="batik-group">
+                    <label class="batik-label">Filosofi Batik</label>
+                    <input type="text" name="philosophy" class="batik-input" value="{{ batik.philosophy }}" required>
                 </div>
             </div>
 
-            <div class="table-data">
-                <div class="order batik-form-container">
-                    <form action="{{ url_for('galeri.edit', batik_id=batik._id) }}" method="POST"
-                        enctype="multipart/form-data">
-                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
-
-                        <div class="form-grid-upper">
-                            <div class="batik-group">
-                                <label class="batik-label">Nama Motif Batik</label>
-                                <input type="text" name="name" class="batik-input" value="{{ batik.name }}" required>
-                            </div>
-
-                            <div class="batik-group">
-                                <label class="batik-label">Kategori Motif</label>
-                                <select name="category" class="batik-input" required>
-                                    <option value="" disabled>Pilih Kategori...</option>
-                                    <option value="Klasik" {% if batik.category=='Klasik' %}selected{% endif %}>Klasik</option>
-                                    <option value="Kontemporer" {% if batik.category=='Kontemporer' %}selected{% endif %}>Kontemporer</option>
-                                    <option value="Bahari" {% if batik.category=='Bahari' %}selected{% endif %}>Bahari</option>
-                                    <option value="Flora & Fauna" {% if batik.category=='Flora & Fauna' %}selected{% endif %}>Flora & Fauna</option>
-                                </select>
-                            </div>
-
-                            <div class="batik-group">
-                                <label class="batik-label">Teknik Pembuatan</label>
-                                <select name="technique" class="batik-input" required>
-                                    <option value="" disabled>Pilih Teknik Pembuatan...</option>
-                                    <option value="Batik Tulis" {% if batik.technique=='Batik Tulis' %}selected{% endif %}>Batik Tulis</option>
-                                    <option value="Batik Cap" {% if batik.technique=='Batik Cap' %}selected{% endif %}>Batik Cap</option>
-                                    <option value="Batik Kombinasi" {% if batik.technique=='Batik Kombinasi' %}selected{% endif %}>Batik Kombinasi</option>
-                                </select>
-                            </div>
-
-                            <div class="batik-group">
-                                <label class="batik-label">Filosofi Batik</label>
-                                <input type="text" name="philosophy" class="batik-input" value="{{ batik.philosophy }}" required>
-                            </div>
+            <div class="form-row-media-full">
+                <div class="batik-group">
+                    <label class="batik-label">Ganti Gambar Motif (Opsional)</label>
+                    <div class="file-upload-box">
+                        <input type="file" name="image_url" accept="image/*" id="fileInput" onchange="previewImage(event)">
+                        <div class="upload-content">
+                            <i class='bx bx-cloud-upload upload-icon'></i>
+                            <p id="uploadText">Klik/seret file ke sini untuk mengganti gambar saat ini</p>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="form-row-media-full">
-                            <div class="batik-group">
-                                <label class="batik-label">Ganti Gambar Motif (Opsional)</label>
-                                <div class="file-upload-box">
-                                    <input type="file" name="image_url" accept="image/*" id="fileInput" onchange="previewImage(event)">
-                                    <div class="upload-content">
-                                        <i class='bx bx-cloud-upload upload-icon'></i>
-                                        <p id="uploadText">Klik/seret file ke sini untuk mengganti gambar saat ini</p>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="preview-container" id="previewWrapper" style="display: block; margin-bottom: 24px;">
+                    <label class="batik-label" id="previewTitle">Preview Motif Batik: <span style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik gambar untuk memakai pipet warna)</span></label>
+                    <div class="image-preview-wrapper-full">
+                        <img id="imagePreview" src="{{ url_for('static', filename='img/galeri/' + batik.image_url) }}" alt="Preview Motif" style="cursor: pointer; max-width: 100%; display: block;">
+                    </div>
+                </div>
 
-                            <div class="preview-container" id="previewWrapper" style="display: block; margin-bottom: 24px;">
-                                <label class="batik-label" id="previewTitle">Preview Motif Batik: <span style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik gambar untuk memakai pipet warna)</span></label>
-                                <div class="image-preview-wrapper-full">
-                                    <img id="imagePreview" src="{{ url_for('static', filename='img/galeri/' + batik.image_url) }}" alt="Preview Motif" style="cursor: pointer; max-width: 100%; display: block;">
-                                </div>
-                            </div>
-
-                            <div class="form-row-color-picker-safe">
-                                <div class="batik-group">
-                                    <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet warna pada gambar preview di atas</label>
-                                    <div id="container-warna-visual" style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
-                                        <!-- Di-render oleh script JS bawaan database -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="hidden" name="dominant_color_1" id="dominant_color_1" value="">
-                            <input type="hidden" name="dominant_color_2" id="dominant_color_2" value="">
-                            <input type="hidden" name="dominant_color_3" id="dominant_color_3" value="">
-                            <input type="hidden" name="dominant_color_4" id="dominant_color_4" value="">
-
-                            <div class="sketch-toggle-container" style="margin-bottom: 24px; margin-top: 15px;">
-                                <label class="checkbox-premium-label">
-                                    <input type="checkbox" name="activate_sketch" value="true" {% if batik.is_sketsa_available %}checked{% endif %}>
-                                    <span class="checkbox-custom"></span>
-                                    <div class="checkbox-text">
-                                        <span class="title">Aktifkan Fitur Simulasi Membatik</span>
-                                        <span class="desc">Buat/perbarui file sketsa via OpenCV secara otomatis jika motif berkategori mudah/sedang.</span>
-                                    </div>
-                                </label>
-                            </div>
+                <div class="form-row-color-picker-safe">
+                    <div class="batik-group">
+                        <label class="batik-label">Warna Dominan Batik (Maks. 4 Warna) — *Gunakan pipet warna pada gambar preview di atas</label>
+                        <div id="container-warna-visual" style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
+                            <!-- Di-render oleh script JS bawaan database -->
                         </div>
+                    </div>
+                </div>
 
-                        <div class="form-grid-narration-split">
-                            <div class="batik-group">
-                                <label class="batik-label">Makna Batik</label>
-                                <textarea name="makna" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.makna }}</textarea>
-                            </div>
+                <input type="hidden" name="dominant_color_1" id="dominant_color_1" value="">
+                <input type="hidden" name="dominant_color_2" id="dominant_color_2" value="">
+                <input type="hidden" name="dominant_color_3" id="dominant_color_3" value="">
+                <input type="hidden" name="dominant_color_4" id="dominant_color_4" value="">
 
-                            <div class="batik-group">
-                                <label class="batik-label">Sejarah Batik</label>
-                                <textarea name="history" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.history }}</textarea>
-                            </div>
+                <div class="sketch-toggle-container" style="margin-bottom: 24px; margin-top: 15px;">
+                    <label class="checkbox-premium-label">
+                        <input type="checkbox" name="activate_sketch" value="true" {% if batik.is_sketsa_available %}checked{% endif %}>
+                        <span class="checkbox-custom"></span>
+                        <div class="checkbox-text">
+                            <span class="title">Aktifkan Fitur Simulasi Membatik</span>
+                            <span class="desc">Buat/perbarui file sketsa via OpenCV secara otomatis jika motif berkategori mudah/sedang.</span>
                         </div>
-
-                        <!-- MURNI ARSITEKTUR KELAS BAWAN TANPA TAG CSS INLINE YANG MERUSAK -->
-                        <div class="batik-actions">
-
-                            <div class="creator-info">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
-                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ batik.admin_data.username if batik.admin_data else 'System' }}</strong> 
-                                    {% if batik.created_at %} • {{ batik.created_at | date_format }}{% endif %}</span>
-                                </div>
-                            </div>
-
-                            {% if batik.updated_by %}
-                            <div class="editor-info">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
-                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ batik.editor_data.username if batik.editor_data else 'System' }}</strong>
-                                    {% if batik.updated_at %} • {{ batik.updated_at | date_format }}{% endif %}</span>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            <a href="{{ url_for('galeri.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
-                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Batik</button>
-                        </div>
-                    </form>
+                    </label>
                 </div>
             </div>
-        </main>
-    </section>
 
-    <script>
-        // Logika Dark Mode
-        const switchMode = document.getElementById('switch-mode');
-        if (localStorage.getItem('theme') === 'dark') {
-            switchMode.checked = true;
+            <div class="form-grid-narration-split">
+                <div class="batik-group">
+                    <label class="batik-label">Makna Batik</label>
+                    <textarea name="makna" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.makna }}</textarea>
+                </div>
+
+                <div class="batik-group">
+                    <label class="batik-label">Sejarah Batik</label>
+                    <textarea name="history" class="batik-input" style="height: 160px; resize: none;" required>{{ batik.history }}</textarea>
+                </div>
+            </div>
+
+            <div class="batik-actions">
+                <div class="creator-info">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                        <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ batik.admin_data.username if batik.admin_data else 'System' }}</strong> 
+                        {% if batik.created_at %} • {{ batik.created_at | date_format }}{% endif %}</span>
+                    </div>
+                </div>
+
+                {% if batik.updated_by %}
+                <div class="editor-info">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                        <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ batik.editor_data.username if batik.editor_data else 'System' }}</strong>
+                        {% if batik.updated_at %} • {{ batik.updated_at | date_format }}{% endif %}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <a href="{{ url_for('galeri.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Batik</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Tangkap data array awal dari Flask ke JavaScript dengan format JSON
+    let selectedColors = {{ (batik.dominant_color | tojson | safe) if batik.dominant_color else '[]' }};
+
+    // Konversi semua elemen di dalam array menjadi UpperCase (jika ada isinya)
+    selectedColors = selectedColors.map(color => color ? color.toUpperCase() : '');
+
+    const imagePreview = document.getElementById('imagePreview');
+    const containerVisual = document.getElementById('container-warna-visual');
+
+    // Jalankan DOM warna pertama kali berdasarkan database saat masuk halaman edit
+    updateColorDOM();
+
+    // Script Preview Gambar (Akan menimpa gambar lama jika file baru dipilih)
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var title = document.getElementById('previewTitle');
+            imagePreview.src = reader.result;
+            title.innerHTML = "Preview Gambar Baru: <span style='font-size: 12px; font-weight: normal; color: #3C91E6;'>(Klik gambar untuk memakai pipet warna)</span>";
+            document.getElementById('uploadText').innerText = "Gambar baru berhasil dipilih. Klik lagi untuk mengganti.";
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Event Pipet Warna Ketika Gambar Preview di-klik
+    imagePreview.addEventListener('click', async () => {
+        if (!window.EyeDropper) {
+            Swal.fire('Browser Jadul!', 'Browser kamu belum support fitur pipet warna otomatis (EyeDropper API), bro.', 'warning');
+            return;
         }
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        });
 
-        // Tangkap data array awal dari Flask ke JavaScript dengan format JSON
-        let selectedColors = {{ (batik.dominant_color | tojson | safe) if batik.dominant_color else '[]' }};
-
-        // Konversi semua elemen di dalam array menjadi UpperCase (jika ada isinya)
-        selectedColors = selectedColors.map(color => color ? color.toUpperCase() : '');
-
-        const imagePreview = document.getElementById('imagePreview');
-        const containerVisual = document.getElementById('container-warna-visual');
-
-        // Jalankan DOM warna pertama kali berdasarkan database saat masuk halaman edit
-        updateColorDOM();
-
-        // Script Preview Gambar (Akan menimpa gambar lama jika file baru dipilih)
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function () {
-                var title = document.getElementById('previewTitle');
-                imagePreview.src = reader.result;
-                title.innerHTML = "Preview Gambar Baru: <span style='font-size: 12px; font-weight: normal; color: #3C91E6;'>(Klik gambar untuk memakai pipet warna)</span>";
-                document.getElementById('uploadText').innerText = "Gambar baru berhasil dipilih. Klik lagi untuk mengganti.";
-            };
-            reader.readAsDataURL(event.target.files[0]);
+        if (selectedColors.length >= 4) {
+            Swal.fire('Maksimal Warna!', 'Kamu sudah memilih batas maksimal 4 warna dominan, bro.', 'info');
+            return;
         }
 
-        // Event Pipet Warna Ketika Gambar Preview di-klik
-        imagePreview.addEventListener('click', async () => {
-            if (!window.EyeDropper) {
-                Swal.fire('Browser Jadul!', 'Browser kamu belum support fitur pipet warna otomatis (EyeDropper API), bro.', 'warning');
-                return;
+        const eyeDropper = new EyeDropper();
+        try {
+            const result = await eyeDropper.open();
+            const hexColor = result.sRGBHex.toUpperCase();
+
+            if (!selectedColors.includes(hexColor)) {
+                selectedColors.push(hexColor);
+                updateColorDOM();
             }
+        } catch (err) {
+            console.log("Pemilihan warna dibatalkan.");
+        }
+    });
 
-            if (selectedColors.length >= 4) {
-                Swal.fire('Maksimal Warna!', 'Kamu sudah memilih batas maksimal 4 warna dominan, bro.', 'info');
-                return;
-            }
+    // Sinkronisasi Array Javascript dengan Lingkaran Visual DOM & Input Hidden
+    function updateColorDOM() {
+        containerVisual.innerHTML = '';
 
-            const eyeDropper = new EyeDropper();
-            try {
-                const result = await eyeDropper.open();
-                const hexColor = result.sRGBHex.toUpperCase();
+        if (selectedColors.length === 0) {
+            containerVisual.innerHTML = `<span id="placeholder-text" style="color: #888; font-size: 14px; font-style: italic;">Belum ada warna terpilih. Silakan klik gambar preview di atas.</span>`;
+        }
 
-                if (!selectedColors.includes(hexColor)) {
-                    selectedColors.push(hexColor);
-                    updateColorDOM();
-                }
-            } catch (err) {
-                console.log("Pemilihan warna dibatalkan.");
-            }
-        });
+        selectedColors.forEach((color, index) => {
+            const circle = document.createElement('div');
+            circle.style.width = '35px';
+            circle.style.height = '35px';
+            circle.style.borderRadius = '50%';
+            circle.style.backgroundColor = color;
+            circle.style.border = '2px solid #fff';
+            circle.style.boxShadow = '0 0 6px rgba(0,0,0,0.4)';
+            circle.style.position = 'relative';
+            circle.style.cursor = 'pointer';
+            circle.setAttribute('title', 'Klik untuk menghapus warna ini');
 
-        // Sinkronisasi Array Javascript dengan Lingkaran Visual DOM & Input Hidden
-        function updateColorDOM() {
-            containerVisual.innerHTML = '';
+            const deleteBtn = document.createElement('span');
+            deleteBtn.innerText = '×';
+            deleteBtn.style.position = 'absolute';
+            deleteBtn.style.top = '-6px';
+            deleteBtn.style.right = '-6px';
+            deleteBtn.style.background = '#e74c3c';
+            deleteBtn.style.color = '#fff';
+            deleteBtn.style.borderRadius = '50%';
+            deleteBtn.style.width = '16px';
+            deleteBtn.style.height = '16px';
+            deleteBtn.style.fontSize = '12px';
+            deleteBtn.style.display = 'flex';
+            deleteBtn.style.alignItems = 'center';
+            deleteBtn.style.justifyContent = 'center';
+            deleteBtn.style.fontWeight = 'bold';
 
-            if (selectedColors.length === 0) {
-                containerVisual.innerHTML = `<span id="placeholder-text" style="color: #888; font-size: 14px; font-style: italic;">Belum ada warna terpilih. Silakan klik gambar preview di atas.</span>`;
-            }
+            circle.appendChild(deleteBtn);
 
-            selectedColors.forEach((color, index) => {
-                const circle = document.createElement('div');
-                circle.style.width = '35px';
-                circle.style.height = '35px';
-                circle.style.borderRadius = '50%';
-                circle.style.backgroundColor = color;
-                circle.style.border = '2px solid #fff';
-                circle.style.boxShadow = '0 0 6px rgba(0,0,0,0.4)';
-                circle.style.position = 'relative';
-                circle.style.cursor = 'pointer';
-                circle.setAttribute('title', 'Klik untuk menghapus warna ini');
-
-                const deleteBtn = document.createElement('span');
-                deleteBtn.innerText = '×';
-                deleteBtn.style.position = 'absolute';
-                deleteBtn.style.top = '-6px';
-                deleteBtn.style.right = '-6px';
-                deleteBtn.style.background = '#e74c3c';
-                deleteBtn.style.color = '#fff';
-                deleteBtn.style.borderRadius = '50%';
-                deleteBtn.style.width = '16px';
-                deleteBtn.style.height = '16px';
-                deleteBtn.style.fontSize = '12px';
-                deleteBtn.style.display = 'flex';
-                deleteBtn.style.alignItems = 'center';
-                deleteBtn.style.justifyContent = 'center';
-                deleteBtn.style.fontWeight = 'bold';
-
-                circle.appendChild(deleteBtn);
-
-                circle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    selectedColors.splice(index, 1);
-                    updateColorDOM();
-                });
-
-                containerVisual.appendChild(circle);
+            circle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectedColors.splice(index, 1);
+                updateColorDOM();
             });
 
-            // Reset dan masukkan value ke input hidden untuk dikirim kembali ke Flask
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`dominant_color_${i}`).value = '';
-            }
-            selectedColors.forEach((color, index) => {
-                document.getElementById(`dominant_color_${index + 1}`).value = color;
-            });
-        }
-    </script>
-</body>
+            containerVisual.appendChild(circle);
+        });
 
-</html>
+        // Reset dan masukkan value ke input hidden untuk dikirim kembali ke Flask
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`dominant_color_${i}`).value = '';
+        }
+        selectedColors.forEach((color, index) => {
+            document.getElementById(`dominant_color_${index + 1}`).value = color;
+        });
+    }
+</script>
+{% endblock %}

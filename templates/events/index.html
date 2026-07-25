@@ -1,380 +1,201 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
-	<title>Admin Sibatikgal - Data Event</title>
-</head>
+{% block title %}Admin Sibatikgal - Data Event{% endblock %}
 
-<body>
-	<script>
-		const theme = localStorage.getItem('theme');
-		if (theme === 'dark') { document.body.classList.add('dark'); }
-	</script>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
+{% endblock %}
 
-	<section id="sidebar">
-		<a href="#" class="brand" style="padding-left: 18px;">
-			<svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-				<g fill="currentColor">
-					<ellipse cx="50" cy="30" rx="9" ry="14" />
-					<ellipse cx="50" cy="70" rx="9" ry="14" />
-					<ellipse cx="30" cy="50" rx="14" ry="9" />
-					<ellipse cx="70" cy="50" rx="14" ry="9" />
-				</g>
-				<circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-			</svg>
-			<span class="text">Admin Sibatikgal</span>
-		</a>
-		<ul class="side-menu top">
-			<li>
-				<a href="{{ url_for('web_dashboard.index') }}">
-					<i class='bx bxs-dashboard'></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for('galeri.index') }}">
-					<i class='bx bxs-collection'></i>
-					<span class="text">Katalog Batik</span>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for('informasi.index') }}">
-					<i class='bx bxs-info-circle'></i>
-					<span class="text">Konten Artikel</span>
-				</a>
-			</li>
-			<li class="active">
-				<a href="{{ url_for('event.index') }}">
-					<i class='bx bxs-calendar'></i>
-					<span class="text">Event</span>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for('video.index') }}">
-					<i class='bx bxs-video'></i>
-					<span class="text">Video</span>
-				</a>
-			</li>
-			<li>
-				<a href="{{ url_for('mapping.index') }}">
-					<i class='bx bxs-map'></i>
-					<span class="text">Peta Lokasi</span>
-				</a>
-			</li>
-			{% if session.get('role') == 'superadmin' %}
-			<li>
-				<a href="{{ url_for('user_manager.index') }}">
-					<i class='bx bxs-user'></i>
-					<span class="text">Manajemen User</span>
-				</a>
-			</li>
-			{% endif %}
+{% block menu_event %}active{% endblock %}
+
+{% block page_name %}Data Event{% endblock %}
+
+{% block content %}
+<div class="head-title">
+	<div class="left">
+		<h1>Data Event</h1>
+		<ul class="breadcrumb">
+			<li><a href="#">Dashboard</a></li>
+			<li><i class='bx bx-chevron-right'></i></li>
+			<li><a class="active" href="#">Event</a></li>
 		</ul>
-		<ul class="side-menu">
-			<!-- <li>
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li> -->
-			<li>
-				<a href="{{ url_for('auth.logout') }}" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
+	</div>
+	<a href="{{ url_for('event.create') }}" class="btn-add-event">
+		<i class='bx bxs-plus-circle'></i><span class="text">Tambah Event</span>
+	</a>
+</div>
 
-	<section id="content">
-		<nav>
-			<i class='bx bx-menu'></i>
-			<a href="#" class="nav-link">Data Event</a>
+<div class="table-data">
+	<div class="order">
+		<div class="head">
+			<h3>List Agenda Event</h3>
+			<form class="search-box" id="searchFilterForm" method="GET"
+				action="{{ url_for('event.index') }}" style="display: flex; gap: 10px;">
+				<!-- Dropdown Filter Kategori Event -->
+				<select name="c" id="categoryFilter" onchange="this.form.submit()"
+					style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
+					<option value="">Semua Kategori</option>
+					<option value="PAMERAN" {% if selected_category=='PAMERAN' %}selected{% endif %}>Pameran</option>
+					<option value="WORKSHOP" {% if selected_category=='WORKSHOP' %}selected{% endif %}>Workshop</option>
+					<option value="FESTIVAL" {% if selected_category=='FESTIVAL' %}selected{% endif %}>Festival</option>
+					<option value="LOMBA" {% if selected_category=='LOMBA' %}selected{% endif %}>Lomba</option>
+					<option value="WEBINAR" {% if selected_category=='WEBINAR' %}selected{% endif %}>Webinar</option>
+				</select>
 
-			<div class="spacer" style="flex-grow: 1;"></div>
-
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-
-
-			<a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-				<!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-				<img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-					onerror="this.src='/static/img/avatar.png';">
-			</a>
-		</nav>
-
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Data Event</h1>
-					<ul class="breadcrumb">
-						<li><a href="#">Dashboard</a></li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li><a class="active" href="#">Event</a></li>
-					</ul>
+				<div class="form-input">
+					<input type="search" id="searchInput" placeholder="Cari nama event..."
+						autocomplete="off" data-url="{{ url_for('event.index') }}" name="q"
+						value="{{ search_query }}">
+					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 				</div>
-				<!-- REFACTOR CLASS SEMANTIK DARI DOWNLOAD KE ADD-EVENT -->
-				<a href="{{ url_for('event.create') }}" class="btn-add-event">
-					<i class='bx bxs-plus-circle'></i><span class="text">Tambah Event</span>
-				</a>
-			</div>
+			</form>
+		</div>
 
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>List Agenda Event</h3>
-						<form class="search-box" id="searchFilterForm" method="GET"
-							action="{{ url_for('event.index') }}" style="display: flex; gap: 10px;">
-							<!-- Dropdown Filter Kategori Event -->
-							<select name="c" id="categoryFilter" onchange="this.form.submit()"
-								style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
-								<option value="">Semua Kategori</option>
-								<option value="PAMERAN" {% if selected_category=='PAMERAN' %}selected{% endif %}>Pameran
-								</option>
-								<option value="WORKSHOP" {% if selected_category=='WORKSHOP' %}selected{% endif %}>
-									Workshop</option>
-								<option value="FESTIVAL" {% if selected_category=='FESTIVAL' %}selected{% endif %}>
-									Festival</option>
-								<option value="LOMBA" {% if selected_category=='LOMBA' %}selected{% endif %}>
-									Lomba</option>
-								<option value="WEBINAR" {% if selected_category=='WEBINAR' %}selected{% endif %}>
-									Webinar</option>
-							</select>
-
-							<div class="form-input">
-								<input type="search" id="searchInput" placeholder="Cari nama event..."
-									autocomplete="off" data-url="{{ url_for('event.index') }}" name="q"
-									value="{{ search_query }}">
-								<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
+		<!-- BUNGKUSAN RESPONSIVE WRAPPER BARU -->
+		<div class="table-responsive-wrapper">
+			<table>
+				<thead>
+					<tr>
+						<th>Banner</th>
+						<th>Nama & Tanggal</th>
+						<th>Lokasi</th>
+						<th>Kategori</th>
+						<th>Status</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					{% if events %}
+					{% for item in events %}
+					<tr>
+						<td>
+							<div class="event-banner-thumb">
+								<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
+									onerror="this.src='/static/img/default.webp';" alt="Banner Event">
 							</div>
-						</form>
-					</div>
+						</td>
+						<td>
+							<span style="font-weight: 600; display: block;">{{ item.title | truncate(60)}}</span>
+							<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
+						</td>
 
-					<!-- BUNGKUSAN RESPONSIVE WRAPPER BARU -->
-					<div class="table-responsive-wrapper">
-						<table>
-							<thead>
-								<tr>
-									<th>Banner</th>
-									<th>Nama & Tanggal</th>
-									<th>Lokasi</th>
-									<th>Kategori</th>
-									<th>Status</th>
-									<th>Aksi</th>
-								</tr>
-							</thead>
-							<tbody id="tableBody">
-								{% if events %}
-								{% for item in events %}
-								<tr>
-									<td>
-										<div class="event-banner-thumb">
-											<img src="{{ url_for('static', filename='img/events/' + item.banner_image_url) }}"
-												onerror="this.src='/static/img/default_event.webp';" alt="Banner Event">
-										</div>
-									</td>
-									<td>
-										<span style="font-weight: 600; display: block;">{{ item.title |
-											truncate(60)}}</span>
-										<small class="format-date" style="color: #888;">{{ item.event_date }}</small>
-									</td>
+						<td><small>{{ item.address.full | truncate(45) }}</small></td>
+						<td>
+							{% set badge_class = 'cat-default' %}
 
-									<td><small>{{ item.address.full | truncate(45) }}</small></td>
-									<td>
-										{% set badge_class = 'cat-default' %}
-
-										{% if item.category == 'Pameran' %}
-										{% set badge_class = 'cat-pameran' %}
-										{% elif item.category == 'Workshop' %}
-										{% set badge_class = 'cat-workshop' %}
-										{% elif item.category == 'Festival' %}
-										{% set badge_class = 'cat-festival' %}
-										{% elif item.category == 'Lomba' %}
-										{% set badge_class = 'cat-lomba' %}
-										{% elif item.category == 'Webinar' %}
-										{% set badge_class = 'cat-webinar' %}
-										{% endif %}
-
-										<span class="badge-category {{ badge_class }}">
-											{{ item.category }}
-										</span>
-									</td>
-									<td>
-										<span class="status {{ 'completed' if item.is_free else 'pending' }}">
-											{{ 'Gratis' if item.is_free else 'Rp ' + item.price }}
-										</span>
-									</td>
-									<td>
-										<div class="action-btn">
-											<a href="{{ url_for('event.edit', event_id=item._id) }}?page={{ page }}"
-												class="btn-icon btn-edit" title="Edit">
-												<i class='bx bxs-edit'></i>
-											</a>
-											<!-- <a href="#" onclick="eventDelete('{{ item._id|string }}')"
-												class="btn-icon btn-delete" title="Hapus">
-												<i class='bx bxs-trash'></i>
-											</a> -->
-										</div>
-									</td>
-								</tr>
-								{% endfor %}
-								{% else %}
-								<!-- SOLUSI ANTI-GAGAL: Sinkron dengan Live Search AJAX & Bersih dari Pseudo Mobile text -->
-								<style>
-									#tableBody tr.row-empty-event td::before {
-										content: none !important;
-										display: none !important;
-									}
-								</style>
-								<tr class="row-empty-event"
-									style="position: relative; height: 200px; border: none !important;">
-									<td colspan="6"
-										style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important; background: transparent !important;">
-										<div
-											style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
-											<i class='bx bxs-calendar'
-												style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
-											<span
-												style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum ada data event.</span>
-											
-										</div>
-									</td>
-									<!-- Dummy TD sebanyak 5 buah untuk mengimbangi 6 total kolom tabel -->
-									<td style="display: none;"></td>
-									<td style="display: none;"></td>
-									<td style="display: none;"></td>
-									<td style="display: none;"></td>
-									<td style="display: none;"></td>
-								</tr>
-								{% endif %}
-							</tbody>
-						</table>
-					</div> <!-- AKHIR WRAPPER TABEL -->
-
-					<div class="pagination-wrapper" id="paginationContainer">
-						<span class="pagi-info">
-							Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b>
-							results
-						</span>
-
-						<div class="pagi-buttons">
-							{% if page > 1 %}
-							<a href="{{ url_for('event.index', page=page-1, q=search_query, c=selected_category) }}"
-								class="pagi-btn prev">
-								<i class='bx bx-chevron-left'></i> Prev
-							</a>
+							{% if item.category == 'Pameran' %}
+							{% set badge_class = 'cat-pameran' %}
+							{% elif item.category == 'Workshop' %}
+							{% set badge_class = 'cat-workshop' %}
+							{% elif item.category == 'Festival' %}
+							{% set badge_class = 'cat-festival' %}
+							{% elif item.category == 'Lomba' %}
+							{% set badge_class = 'cat-lomba' %}
+							{% elif item.category == 'Webinar' %}
+							{% set badge_class = 'cat-webinar' %}
 							{% endif %}
 
-							<div class="pagi-numbers">
-								{% for p in range(1, total_pages + 1) %}
-								<a href="{{ url_for('event.index', page=p, q=search_query, c=selected_category) }}"
-									class="pagi-btn number {{ 'active' if p == page else '' }}">
-									{{ p }}
+							<span class="badge-category {{ badge_class }}">
+								{{ item.category }}
+							</span>
+						</td>
+						<td>
+							<span class="status {{ 'completed' if item.is_free else 'pending' }}">
+								{{ 'Gratis' if item.is_free else 'Rp ' + item.price }}
+							</span>
+						</td>
+						<td>
+							<div class="action-btn">
+								<a href="{{ url_for('event.edit', event_id=item._id) }}?page={{ page }}"
+									class="btn-icon btn-edit" title="Edit">
+									<i class='bx bxs-edit'></i>
 								</a>
-								{% endfor %}
-							</div>
-
-							{% if page < total_pages %} <a
-								href="{{ url_for('event.index', page=page+1, q=search_query, c=selected_category) }}"
-								class="pagi-btn next">
-								Next <i class='bx bx-chevron-right'></i>
+								{% if session.get('role') == 'superadmin' %}
+								<a href="#" onclick="eventDelete('{{ item._id|string }}')"
+									class="btn-icon btn-delete" title="Hapus">
+									<i class='bx bxs-trash'></i>
 								</a>
 								{% endif %}
-						</div>
-					</div>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+					{% else %}
+					<style>
+						#tableBody tr.row-empty-event td::before {
+							content: none !important;
+							display: none !important;
+						}
+					</style>
+					<tr class="row-empty-event" style="position: relative; height: 200px; border: none !important;">
+						<td colspan="6" style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important; background: transparent !important;">
+							<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
+								<i class='bx bxs-calendar' style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
+								<span style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum ada data event.</span>
+							</div>
+						</td>
+						<td style="display: none;"></td>
+						<td style="display: none;"></td>
+						<td style="display: none;"></td>
+						<td style="display: none;"></td>
+						<td style="display: none;"></td>
+					</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div> <!-- AKHIR WRAPPER TABEL -->
+
+		<div class="pagination-wrapper" id="paginationContainer">
+			<span class="pagi-info">
+				Showing <b>{{ start_index }}</b> to <b>{{ end_index }}</b> of <b>{{ total_items }}</b> results
+			</span>
+
+			<div class="pagi-buttons">
+				{% if page > 1 %}
+				<a href="{{ url_for('event.index', page=page-1, q=search_query, c=selected_category) }}" class="pagi-btn prev">
+					<i class='bx bx-chevron-left'></i> Prev
+				</a>
+				{% endif %}
+
+				<div class="pagi-numbers">
+					{% for p in range(1, total_pages + 1) %}
+					<a href="{{ url_for('event.index', page=p, q=search_query, c=selected_category) }}"
+						class="pagi-btn number {{ 'active' if p == page else '' }}">
+						{{ p }}
+					</a>
+					{% endfor %}
 				</div>
+
+				{% if page < total_pages %}
+				<a href="{{ url_for('event.index', page=page+1, q=search_query, c=selected_category) }}" class="pagi-btn next">
+					Next <i class='bx bx-chevron-right'></i>
+				</a>
+				{% endif %}
 			</div>
-		</main>
-	</section>
+		</div>
+	</div>
+</div>
+{% endblock %}
 
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}
+<script>
+	// Script untuk merapikan format tanggal dengan gaya: DD Month YYYY | HH.MM WIB
+	document.addEventListener("DOMContentLoaded", function () {
+		const dateElements = document.querySelectorAll('.format-date');
 
-	<script>
-		// Script untuk merapikan format tanggal dengan gaya: DD Month YYYY | HH.MM WIB
-		document.addEventListener("DOMContentLoaded", function () {
-			const dateElements = document.querySelectorAll('.format-date');
+		dateElements.forEach(el => {
+			const rawDate = el.textContent.trim();
+			if (rawDate) {
+				const dateObj = new Date(rawDate);
+				const day = String(dateObj.getDate()).padStart(2, '0');
+				const month = dateObj.toLocaleDateString('id-ID', { month: 'long' });
+				const year = dateObj.getFullYear();
+				const hours = String(dateObj.getHours()).padStart(2, '0');
+				const minutes = String(dateObj.getMinutes()).padStart(2, '0');
 
-			dateElements.forEach(el => {
-				const rawDate = el.textContent.trim();
-				if (rawDate) {
-					const dateObj = new Date(rawDate);
-
-					// 1. Ambil Tanggal (pastikan selalu 2 digit, misal: 04, 09, 12)
-					const day = String(dateObj.getDate()).padStart(2, '0');
-
-					// 2. Ambil Bulan full text bahasa Indonesia (April, Mei, dll)
-					const month = dateObj.toLocaleDateString('id-ID', { month: 'long' });
-
-					// 3. Ambil Tahun
-					const year = dateObj.getFullYear();
-
-					// 4. Ambil Jam dan Menit (pastikan selalu 2 digit)
-					const hours = String(dateObj.getHours()).padStart(2, '0');
-					const minutes = String(dateObj.getMinutes()).padStart(2, '0');
-
-					// 5. Rakit semuanya jadi satu format yang kamu mau
-					const formattedString = `${day} ${month} ${year} | ${hours}.${minutes} WIB`;
-
-					// Terapkan ke HTML
-					el.textContent = formattedString;
-				}
-			});
-		});
-	</script>
-
-	{% with messages = get_flashed_messages(with_categories=true) %}
-	{% if messages %}
-	<script>
-		// 1. Ubah data dari Flask menjadi JSON agar aman dibaca JavaScript
-		const flashMessages = {{ messages | tojson | safe }};
-
-		// 2. Gunakan JavaScript murni untuk proses looping dan logika
-		flashMessages.forEach(msgItem => {
-			let category = 'info';
-			let message = '';
-
-			// Logika pengecekan format data
-			if (Array.isArray(msgItem) && msgItem.length === 2) {
-				category = msgItem[0];
-				message = msgItem[1];
-			} else {
-				message = msgItem;
+				el.textContent = `${day} ${month} ${year} | ${hours}.${minutes} WIB`;
 			}
-
-			// Handle jika message berbentuk object {' t': [cat, msg]}
-			if (typeof message === 'object' && message !== null) {
-				const data = message[' t'] || message['t'];
-				if (data && Array.isArray(data)) {
-					category = data[0];
-					message = data[1];
-				}
-			}
-
-			// 3. Eksekusi SweetAlert
-			const validIcons = ['success', 'error', 'warning', 'info'];
-			Swal.fire({
-				title: 'Berhasil!',
-				text: message,
-				icon: validIcons.includes(category) ? category : 'info',
-				timer: 2500,
-				showConfirmButton: false,
-				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
-				color: document.body.classList.contains('dark') ? '#fff' : '#000'
-			});
 		});
-	</script>
-	{% endif %}
-	{% endwith %}
-
-</body>
-
-</html>
+	});
+</script>
+{% endblock %}

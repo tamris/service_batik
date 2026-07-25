@@ -1,218 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/video.css') }}">
-    <title>Tambah Video - Admin Sibatikgal</title>
-</head>
+{% block title %}Tambah Video - Admin Sibatikgal{% endblock %}
 
-<body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/video.css') }}">
+{% endblock %}
 
-    <section id="sidebar">
-        <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
-                        class="text">Dashboard</span></a></li>
-            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog
-                        Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
-                        Artikel</span></a></li>
-            <li><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
-                        class="text">Event</span></a></li>
-            <li class="active"><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span
-                        class="text">Video</span></a></li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta
-                        Lokasi</span></a></li>
-            {% if session.get('role') == 'superadmin' %}
-            <li>
-                <a href="{{ url_for('user_manager.index') }}">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Manajemen User</span>
-                </a>
-            </li>
-            {% endif %}
+{% block menu_video %}active{% endblock %}
 
+{% block page_name %}Data Video{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Tambah Video Baru</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a href="{{ url_for('video.index') }}">Video</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Tambah Video</a></li>
         </ul>
-        <ul class="side-menu">
+    </div>
+</div>
 
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
-                        class="text">Logout</span></a>
-            </li>
-        </ul>
-    </section>
+<div class="table-data">
+    <div class="order video-form-container">
+        <form action="{{ url_for('video.create') }}" method="POST">
 
-    <section id="content">
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Data Video</a>
-            <div class="spacer" style="flex-grow: 1;"></div>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <!-- Foto langsung membaca database secara global, otomatis update di semua halaman -->
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-                    onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
-
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Tambah Video Baru</h1>
+            <div class="video-grid title-category-grid">
+                <div class="video-group">
+                    <label for="youtube_url" class="video-label">URL YouTube</label>
+                    <div class="input-with-clear">
+                        <input type="url" name="youtube_url" id="youtube_url" class="video-input"
+                            placeholder="Contoh: https://www.youtube.com/watch?v=..." required>
+                        <button type="button" id="clear-youtube" class="clear-input-btn"
+                            aria-label="Hapus URL YouTube" title="Hapus URL YouTube">&times;</button>
+                    </div>
+                    <small class="input-hint">Masukkan link penuh dari YouTube agar sistem dapat mendeteksi detail video otomatis.</small>
+                </div>
+                <div class="video-group">
+                    <label class="video-label">Kategori</label>
+                    <select name="category" class="video-input" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="Sejarah">Sejarah</option>
+                        <option value="Edukasi">Edukasi</option>
+                        <option value="Dokumenter">Dokumenter</option>
+                        <option value="Event">Event</option>
+                        <option value="Inspirasi">Inspirasi</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="table-data">
-                <div class="order video-form-container">
-                    <form action="{{ url_for('video.create') }}" method="POST">
-
-                        <div class="video-grid title-category-grid">
-                            <div class="video-group">
-                                <label for="youtube_url" class="video-label">URL YouTube</label>
-                                <div class="input-with-clear">
-                                    <input type="url" name="youtube_url" id="youtube_url" class="video-input"
-                                        placeholder="Contoh: https://www.youtube.com/watch?v=..." required>
-                                    <button type="button" id="clear-youtube" class="clear-input-btn"
-                                        aria-label="Hapus URL YouTube" title="Hapus URL YouTube">&times;</button>
-                                </div>
-                                <small class="input-hint">Masukkan link penuh dari YouTube agar sistem dapat mendeteksi
-                                    detail video otomatis.</small>
-                            </div>
-                            <div class="video-group">
-                                <label class="video-label">Kategori</label>
-                                <select name="category" class="video-input" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
-                                    <option value="Sejarah">Sejarah</option>
-                                    <option value="Edukasi">Edukasi</option>
-                                    <option value="Dokumenter">Dokumenter</option>
-                                    <option value="Event">Event</option>
-                                    <option value="Inspirasi">Inspirasi</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="yt-preview" class="video-preview-wrapper" style="display:none;">
-                            <label class="video-label">Live Preview Konten</label>
-                            <div class="video-preview-card">
-                                <div class="preview-thumb-box">
-                                    <img id="yt-thumb" src="" alt="Thumbnail Video">
-                                    <span class="play-badge"><i class='bx bx-play'></i></span>
-                                </div>
-                                <div class="preview-info-box">
-                                    <h3 id="yt-title">Memuat Judul Video...</h3>
-                                    <p id="yt-channel"><i class='bx bx-user-circle'></i> Nama Channel</p>
-                                    <span class="status-badge"><i class='bx bx-check-circle'></i> Link Valid</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="video-actions">
-                            <a href="{{ url_for('video.index') }}" class="btn-cancel">Batal</a>
-                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Video</button>
-                        </div>
-                    </form>
+            <div id="yt-preview" class="video-preview-wrapper" style="display:none;">
+                <label class="video-label">Live Preview Konten</label>
+                <div class="video-preview-card">
+                    <div class="preview-thumb-box">
+                        <img id="yt-thumb" src="" alt="Thumbnail Video">
+                        <span class="play-badge"><i class='bx bx-play'></i></span>
+                    </div>
+                    <div class="preview-info-box">
+                        <h3 id="yt-title">Memuat Judul Video...</h3>
+                        <p id="yt-channel"><i class='bx bx-user-circle'></i> Nama Channel</p>
+                        <span class="status-badge"><i class='bx bx-check-circle'></i> Link Valid</span>
+                    </div>
                 </div>
             </div>
-        </main>
-    </section>
 
-    <script>
-        const switchMode = document.getElementById('switch-mode');
-        if (localStorage.getItem('theme') === 'dark') {
-            switchMode.checked = true;
-        }
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    </script>
+            <div class="video-actions">
+                <a href="{{ url_for('video.index') }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Simpan Video</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
 
-    <script>
-        document.getElementById('youtube_url').addEventListener('input', function () {
-            const url = this.value;
-            // Regex support: normal URL, share URL (youtu.be), dan Shorts
-            const match = url.match(/(?:v=|youtu\.be\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+{% block extra_js %}
+<script>
+    document.getElementById('youtube_url').addEventListener('input', function () {
+        const url = this.value;
+        const match = url.match(/(?:v=|youtu\.be\/|shorts\/)([a-zA-Z0-9_-]{11})/);
 
-            const previewWrapper = document.getElementById('yt-preview');
-            const thumb = document.getElementById('yt-thumb');
-            const title = document.getElementById('yt-title');
-            const channel = document.getElementById('yt-channel');
-            const clearButton = document.getElementById('clear-youtube');
+        const previewWrapper = document.getElementById('yt-preview');
+        const thumb = document.getElementById('yt-thumb');
+        const title = document.getElementById('yt-title');
+        const channel = document.getElementById('yt-channel');
+        const clearButton = document.getElementById('clear-youtube');
 
-            clearButton.style.display = url.trim() ? 'flex' : 'none';
+        clearButton.style.display = url.trim() ? 'flex' : 'none';
 
-            if (match) {
-                const videoId = match[1];
+        if (match) {
+            const videoId = match[1];
 
-                // Set thumbnail fallback dulu biar cepat muncul
-                thumb.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                title.innerText = "Mengambil data video...";
-                channel.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Menghubungkan...`;
-                previewWrapper.style.display = 'block';
+            thumb.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            title.innerText = "Mengambil data video...";
+            channel.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Menghubungkan...`;
+            previewWrapper.style.display = 'block';
 
-                // Fetch data asli (Judul & Creator) lewat oEmbed API YouTube secara asynchronous
-                fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Video tidak ditemukan atau privat');
-                        return response.json();
-                    })
-                    .then(data => {
-                        title.innerText = data.title;
-                        channel.innerHTML = `<i class='bx bx-user-circle'></i> ${data.author_name}`;
-                    })
-                    .catch(err => {
-                        title.innerText = "Video Terdeteksi (Gagal memuat judul otomatis)";
-                        channel.innerHTML = `<i class='bx bx-error-circle' style='color: #fd7238'></i> Detail tidak dapat dijangkau`;
-                    });
+            fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Video tidak ditemukan atau privat');
+                    return response.json();
+                })
+                .then(data => {
+                    title.innerText = data.title;
+                    channel.innerHTML = `<i class='bx bx-user-circle'></i> ${data.author_name}`;
+                })
+                .catch(err => {
+                    title.innerText = "Video Terdeteksi (Gagal memuat judul otomatis)";
+                    channel.innerHTML = `<i class='bx bx-error-circle' style='color: #fd7238'></i> Detail tidak dapat dijangkau`;
+                });
 
-            } else {
-                previewWrapper.style.display = 'none';
-            }
-        });
-
-        document.getElementById('clear-youtube').addEventListener('click', function () {
-            const youtubeInput = document.getElementById('youtube_url');
-            const previewWrapper = document.getElementById('yt-preview');
-            const thumb = document.getElementById('yt-thumb');
-            const title = document.getElementById('yt-title');
-            const channel = document.getElementById('yt-channel');
-            const clearButton = document.getElementById('clear-youtube');
-
-            youtubeInput.value = '';
-            youtubeInput.focus();
+        } else {
             previewWrapper.style.display = 'none';
-            thumb.src = '';
-            title.innerText = 'Memuat Judul Video...';
-            channel.innerHTML = `<i class='bx bx-user-circle'></i> Nama Channel`;
-            clearButton.style.display = 'none';
-        });
-    </script>
-</body>
+        }
+    });
 
-</html>
+    document.getElementById('clear-youtube').addEventListener('click', function () {
+        const youtubeInput = document.getElementById('youtube_url');
+        const previewWrapper = document.getElementById('yt-preview');
+        const thumb = document.getElementById('yt-thumb');
+        const title = document.getElementById('yt-title');
+        const channel = document.getElementById('yt-channel');
+        const clearButton = document.getElementById('clear-youtube');
+
+        youtubeInput.value = '';
+        youtubeInput.focus();
+        previewWrapper.style.display = 'none';
+        thumb.src = '';
+        title.innerText = 'Memuat Judul Video...';
+        channel.innerHTML = `<i class='bx bx-user-circle'></i> Nama Channel`;
+        clearButton.style.display = 'none';
+    });
+</script>
+{% endblock %}

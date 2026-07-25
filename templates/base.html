@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	
+	<!-- CSS Bawaan -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	{% block extra_css %}{% endblock %}
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<title>{% block title %}Admin Sibatikgal{% endblock %}</title>
+
+	<!-- Style Fix Khusus Dropdown & Divider -->
+	<style>
+		#sidebar .side-menu li.dropdown-menu-item {
+			height: auto !important;
+			border-radius: 0 !important;
+			background: transparent !important;
+		}
+		#sidebar .side-menu li.dropdown-menu-item::before,
+		#sidebar .side-menu li.dropdown-menu-item::after {
+			display: none !important;
+		}
+		#sidebar .side-menu li.dropdown-menu-item > a {
+			height: 48px;
+			border-radius: 48px;
+		}
+
+		.menu-divider {
+			display: flex;
+			align-items: center;
+			margin: 20px 18px 8px 18px !important;
+			padding: 0 !important;
+			height: auto !important;
+			background: transparent !important;
+		}
+		.menu-divider span {
+			font-size: 10px;
+			font-weight: 700;
+			color: #8a92a6;
+			text-transform: uppercase;
+			letter-spacing: 1.2px;
+			white-space: nowrap;
+		}
+		.menu-divider::after {
+			content: '';
+			flex-grow: 1;
+			height: 1px;
+			background: #e0e0e0;
+			margin-left: 10px;
+		}
+		body.dark .menu-divider span { color: #6c757d; }
+		body.dark .menu-divider::after { background: rgba(255, 255, 255, 0.1); }
+		#sidebar.hide .menu-divider { display: none !important; }
+
+		.dropdown-toggle {
+			display: flex !important;
+			justify-content: space-between !important;
+			align-items: center !important;
+			cursor: pointer;
+		}
+		.dropdown-toggle .arrow-icon {
+			margin-right: 18px;
+			font-size: 18px;
+			transition: transform 0.3s ease;
+		}
+		.dropdown-menu-item.open .arrow-icon {
+			transform: rotate(180deg);
+		}
+
+		.sub-menu {
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.3s ease-in-out;
+			margin: 4px 0 4px 24px !important;
+			padding-left: 8px !important;
+			border-left: 2px solid #e0e0e0;
+		}
+		body.dark .sub-menu {
+			border-left-color: rgba(255, 255, 255, 0.1);
+		}
+		.sub-menu li {
+			height: 38px !important;
+			margin-left: 0 !important;
+			padding: 0 !important;
+			border-radius: 8px !important;
+			background: transparent !important;
+		}
+		.sub-menu li::before, .sub-menu li::after {
+			display: none !important;
+		}
+		.sub-menu li a {
+			padding-left: 12px !important;
+			font-size: 13.5px !important;
+			border-radius: 8px !important;
+			background: transparent !important;
+			color: var(--dark);
+			opacity: 0.8;
+		}
+		.sub-menu li a:hover {
+			opacity: 1;
+			color: var(--blue) !important;
+		}
+		.sub-menu li a i {
+			font-size: 8px !important;
+			min-width: 20px !important;
+		}
+		#sidebar.hide .sub-menu { display: none !important; }
+	</style>
+</head>
+
+<body>
+	<script>
+		const theme = localStorage.getItem('theme');
+		if (theme === 'dark') {
+			document.body.classList.add('dark');
+		}
+	</script>
+
+	<!-- SIDEBAR MASTER -->
+	<section id="sidebar">
+		<a href="#" class="brand" style="padding-left: 18px;">
+			<svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
+				<g fill="currentColor">
+					<ellipse cx="50" cy="30" rx="9" ry="14" />
+					<ellipse cx="50" cy="70" rx="9" ry="14" />
+					<ellipse cx="30" cy="50" rx="14" ry="9" />
+					<ellipse cx="70" cy="50" rx="14" ry="9" />
+				</g>
+				<circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
+			</svg>
+			<span class="text">Admin Sibatikgal</span>
+		</a>
+		
+		<ul class="side-menu top">
+			<!-- Dashboard -->
+			<li class="{% block menu_dashboard %}{% endblock %}">
+				<a href="{{ url_for('web_dashboard.index') }}">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+
+			{% if session.get('role') == 'superadmin' %}
+			<!-- Divider Data Master -->
+			<li class="menu-divider">
+				<span>Data Master</span>
+			</li>
+			
+			<!-- Accordion Dropdown Kelola Master Data -->
+			<li class="dropdown-menu-item {% block menu_master_parent %}{% endblock %}">
+				<a href="javascript:void(0)" class="dropdown-toggle">
+					<div style="display: flex; align-items: center;">
+						<i class='bx bxs-folder-open'></i>
+						<span class="text">Kelola Master Data</span>
+					</div>
+					<i class='bx bx-chevron-down arrow-icon'></i>
+				</a>
+				
+				<ul class="sub-menu">
+					<li class="{% block menu_master_batik %}{% endblock %}">
+						<a href="#">
+							<i class='bx bxs-circle'></i>
+							<span class="text">Master Batik</span>
+						</a>
+					</li>
+					<li class="{% block menu_master_artikel %}{% endblock %}">
+						<a href="#">
+							<i class='bx bxs-circle'></i>
+							<span class="text">Master Artikel</span>
+						</a>
+					</li>
+					<li class="{% block menu_master_event %}{% endblock %}">
+						<a href="#">
+							<i class='bx bxs-circle'></i>
+							<span class="text">Master Event & Video</span>
+						</a>
+					</li>
+					<li class="{% block menu_master_lokasi %}{% endblock %}">
+						<a href="#">
+							<i class='bx bxs-circle'></i>
+							<span class="text">Master Lokasi</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+
+			<!-- Manajemen User -->
+			<li class="{% block menu_user %}{% endblock %}">
+				<a href="{{ url_for('user_manager.index') }}">
+					<i class='bx bxs-user-detail'></i>
+					<span class="text">Manajemen User</span>
+				</a>
+			</li>
+			{% endif %}
+
+			<!-- Divider Kelola Konten -->
+			<li class="menu-divider">
+				<span>Kelola Konten</span>
+			</li>
+
+			<li class="{% block menu_katalog %}{% endblock %}">
+				<a href="{{ url_for('galeri.index') }}">
+					<i class='bx bxs-palette'></i>
+					<span class="text">Katalog Batik</span>
+				</a>
+			</li>
+			<li class="{% block menu_artikel %}{% endblock %}">
+				<a href="{{ url_for('informasi.index') }}">
+					<i class='bx bxs-news'></i>
+					<span class="text">Konten Artikel</span>
+				</a>
+			</li>
+			<li class="{% block menu_event %}{% endblock %}">
+				<a href="{{ url_for('event.index') }}">
+					<i class='bx bxs-calendar-event'></i>
+					<span class="text">Event</span>
+				</a>
+			</li>
+			<li class="{% block menu_video %}{% endblock %}">
+				<a href="{{ url_for('video.index') }}">
+					<i class='bx bxs-video-plus'></i>
+					<span class="text">Video</span>
+				</a>
+			</li>
+			<li class="{% block menu_peta %}{% endblock %}">
+				<a href="{{ url_for('mapping.index') }}">
+					<i class='bx bxs-map-pin'></i>
+					<span class="text">Peta Lokasi</span>
+				</a>
+			</li>
+		</ul>
+
+		<ul class="side-menu">
+			<li>
+				<a href="{{ url_for('auth.logout') }}" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR MASTER -->
+
+	<!-- CONTENT CONTAINER -->
+	<section id="content">
+		<!-- NAVBAR MASTER -->
+		<nav>
+			<i class='bx bx-menu'></i>
+			<a href="#" class="nav-link">{% block page_name %}Dashboard{% endblock %}</a>
+
+			<div class="spacer" style="flex-grow: 1;"></div>
+
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+
+			<a href="{{ url_for('web_dashboard.profile') }}" class="profile">
+				<img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
+					onerror="this.src='/static/img/avatar.png';">
+			</a>
+		</nav>
+		<!-- NAVBAR MASTER -->
+
+		<!-- MAIN CONTENT DYNAMIC -->
+		<main>
+			{% block content %}{% endblock %}
+		</main>
+	</section>
+
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+	<!-- Script Accordion Dropdown -->
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const dropdownToggle = document.querySelector('.dropdown-toggle');
+			const dropdownItem = document.querySelector('.dropdown-menu-item');
+			const subMenu = document.querySelector('.sub-menu');
+
+			if (dropdownToggle && subMenu) {
+				// Otomatis buka jika ada sub-item yang aktif
+				if (dropdownItem.classList.contains('open') || subMenu.querySelector('.active')) {
+					dropdownItem.classList.add('open');
+					subMenu.style.maxHeight = subMenu.scrollHeight + "px";
+				}
+
+				dropdownToggle.addEventListener('click', (e) => {
+					e.preventDefault();
+					dropdownItem.classList.toggle('open');
+					if (subMenu.style.maxHeight && subMenu.style.maxHeight !== "0px") {
+						subMenu.style.maxHeight = "0px";
+					} else {
+						subMenu.style.maxHeight = subMenu.scrollHeight + "px";
+					}
+				});
+			}
+		});
+	</script>
+
+	{% block extra_js %}{% endblock %}
+
+	<!-- Flash Message Alert -->
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	<script>
+		const flashMessages = {{ messages | tojson | safe }};
+		flashMessages.forEach(msgItem => {
+			let category = 'info';
+			let message = '';
+
+			if (Array.isArray(msgItem) && msgItem.length === 2) {
+				category = msgItem[0];
+				message = msgItem[1];
+			} else {
+				message = msgItem;
+			}
+
+			if (typeof message === 'object' && message !== null) {
+				const data = message[' t'] || message['t'];
+				if (data && Array.isArray(data)) {
+					category = data[0];
+					message = data[1];
+				}
+			}
+
+			const validIcons = ['success', 'error', 'warning', 'info'];
+			Swal.fire({
+				title: 'Informasi',
+				text: message,
+				icon: validIcons.includes(category) ? category : 'info',
+				timer: 2500,
+				showConfirmButton: false,
+				background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
+				color: document.body.classList.contains('dark') ? '#fff' : '#000'
+			});
+		});
+	</script>
+	{% endif %}
+	{% endwith %}
+</body>
+
+</html>

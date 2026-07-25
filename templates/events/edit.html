@@ -1,285 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
-    <title>Edit Event - Admin Sibatikgal</title>
-</head>
+{% block title %}Edit Event - Admin Sibatikgal{% endblock %}
 
-<body>
-    <script>
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') { document.body.classList.add('dark'); }
-    </script>
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
+{% endblock %}
 
-    <section id="sidebar">
-        <a href="#" class="brand" style="padding-left: 18px;">
-            <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="2" opacity="0.15" />
-                <g fill="currentColor">
-                    <ellipse cx="50" cy="30" rx="9" ry="14" />
-                    <ellipse cx="50" cy="70" rx="9" ry="14" />
-                    <ellipse cx="30" cy="50" rx="14" ry="9" />
-                    <ellipse cx="70" cy="50" rx="14" ry="9" />
-                </g>
-                <circle cx="50" cy="50" r="7" fill="none" stroke="currentColor" stroke-width="2.5" />
-            </svg>
-            <span class="text">Admin Sibatikgal</span>
-        </a>
-        <ul class="side-menu top">
-            <li><a href="{{ url_for('web_dashboard.index') }}"><i class='bx bxs-dashboard'></i><span
-                        class="text">Dashboard</span></a></li>
-            <li><a href="{{ url_for('galeri.index') }}"><i class='bx bxs-collection'></i><span class="text">Katalog
-                        Batik</span></a></li>
-            <li><a href="{{ url_for('informasi.index') }}"><i class='bx bxs-info-circle'></i><span class="text">Konten
-                        Artikel</span></a></li>
-            <li class="active"><a href="{{ url_for('event.index') }}"><i class='bx bxs-calendar'></i><span
-                        class="text">Event</span></a></li>
-            <li><a href="{{ url_for('video.index') }}"><i class='bx bxs-video'></i><span class="text">Video</span></a>
-            </li>
-            <li><a href="{{ url_for('mapping.index') }}"><i class='bx bxs-map'></i><span class="text">Peta
-                        Lokasi</span></a></li>
-            {% if session.get('role') == 'superadmin' %}
-            <li>
-                <a href="{{ url_for('user_manager.index') }}">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Manajemen User</span>
-                </a>
-            </li>
-            {% endif %}
+{% block menu_event %}active{% endblock %}
+
+{% block page_name %}Edit Data Event{% endblock %}
+
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Edit Event: {{ event.title }}</h1>
+        <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a href="{{ url_for('event.index') }}">Event</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Edit Event</a></li>
         </ul>
-        <ul class="side-menu">
-            <li><a href="{{ url_for('auth.logout') }}" class="logout"><i class='bx bxs-log-out-circle'></i><span
-                        class="text">Logout</span></a>
-            </li>
-        </ul>
-    </section>
+    </div>
+</div>
 
-    <section id="content">
-        <nav>
-            <i class='bx bx-menu'></i>
-            <a href="#" class="nav-link">Edit Data Event</a>
-            <div class="spacer" style="flex-grow: 1;"></div>
-            <input type="checkbox" id="switch-mode" hidden>
-            <label for="switch-mode" class="switch-mode"></label>
-            <a href="{{ url_for('web_dashboard.profile') }}" class="profile">
-                <img src="{{ url_for('static', filename='img/avatars/' + current_user_profile.profile_picture) if current_user_profile and current_user_profile.profile_picture else url_for('static', filename='img/avatar.png') }}"
-                    onerror="this.src='/static/img/avatar.png';">
-            </a>
-        </nav>
+<div class="table-data">
+    <div class="order event-form-container">
+        <form action="{{ url_for('event.edit', event_id=event._id) }}" method="POST" enctype="multipart/form-data">
 
-        <main>
-            <div class="head-title">
-                <div class="left">
-                    <h1>Edit Event: {{ event.title }}</h1>
+            <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
+
+            <div class="event-grid title-category-grid">
+                <div class="event-group">
+                    <label class="event-label">Nama Event</label>
+                    <input type="text" name="title" class="event-input" value="{{ event.title }}" required>
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Kategori</label>
+                    <select name="category" class="event-input" required>
+                        <option value="" disabled>Pilih Kategori...</option>
+                        <option value="Workshop" {% if event.category=='Workshop' %}selected{% endif %}>Workshop</option>
+                        <option value="Festival" {% if event.category=='Festival' %}selected{% endif %}>Festival</option>
+                        <option value="Webinar" {% if event.category=='Webinar' %}selected{% endif %}>Webinar</option>
+                        <option value="Pameran" {% if event.category=='Pameran' %}selected{% endif %}>Pameran</option>
+                        <option value="Lomba" {% if event.category=='Lomba' %}selected{% endif %}>Lomba</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="table-data">
-                <div class="order event-form-container">
-                    <form action="{{ url_for('event.edit', event_id=event._id) }}" method="POST"
-                        enctype="multipart/form-data">
+            <div class="event-group">
+                <label class="event-label">Lokasi Event (Geser Marker untuk mengubah)</label>
+                <div id="map" class="event-map"></div>
+            </div>
 
-                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
-
-                        <div class="event-grid title-category-grid">
-                            <div class="event-group">
-                                <label class="event-label">Nama Event</label>
-                                <input type="text" name="title" class="event-input" value="{{ event.title }}" required>
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Kategori</label>
-                                <select name="category" class="event-input" required>
-                                    <option value="" disabled>Pilih Kategori...</option>
-                                    <option value="Workshop" {% if event.category=='Workshop' %}selected{% endif %}>
-                                        Workshop</option>
-                                    <option value="Festival" {% if event.category=='Festival' %}selected{% endif %}>
-                                        Festival</option>
-                                    <option value="Webinar" {% if event.category=='Webinar' %}selected{% endif %}>
-                                        Webinar</option>
-                                    <option value="Pameran" {% if event.category=='Pameran' %}selected{% endif %}>
-                                        Pameran</option>
-                                    <option value="Lomba" {% if event.category=='Lomba' %}selected{% endif %}>Lomba
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Lokasi Event (Geser Marker untuk mengubah)</label>
-                            <div id="map" class="event-map"></div>
-                        </div>
-
-                        <div class="event-grid col-2-grid">
-                            <div class="event-group">
-                                <label class="event-label">Latitude</label>
-                                <input type="text" name="latitude" id="latInput" class="event-input readonly-input"
-                                    value="{{ event.latitude }}" readonly required>
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Longitude</label>
-                                <input type="text" name="longitude" id="lngInput" class="event-input readonly-input"
-                                    value="{{ event.longitude }}" readonly required>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label d-flex-align">
-                                Alamat Lengkap <span id="loadingAddr" class="loading-text"><i
-                                        class='bx bx-loader-alt bx-spin'></i> Menarik alamat...</span>
-                            </label>
-                            <textarea name="address" id="addressInput" class="event-input" rows="3"
-                                required>{{ event.address.full }}</textarea>
-                        </div>
-
-                        <div class="event-grid col-2-grid">
-                            <div class="event-group">
-                                <label class="event-label">Tanggal & Waktu</label>
-                                <input type="datetime-local" name="event_date" class="event-input"
-                                    value="{{ event.event_date }}" required>
-                            </div>
-                            <div class="event-group">
-                                <label class="event-label">Ganti Banner (Opsional)</label>
-                                <input type="file" name="banner" class="event-input file-input" accept="image/*">
-                                <small style="display: block; margin-top: 5px; color: #888;">File saat ini: {{
-                                    event.banner_image_url }}</small>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Biaya Masuk (Tiket)</label>
-                            <div class="price-card {{ 'is-disabled' if event.is_free }}" id="priceCard">
-                                <label class="free-option">
-                                    <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()"
-                                        {{ 'checked' if event.is_free }}>
-                                    <span class="checkbox-custom"></span>
-                                    <span>Gratis</span>
-                                </label>
-                                <div class="divider"></div>
-                                <div class="price-input-group">
-                                    <span class="currency-label">Rp</span>
-                                    <input type="number" name="price" id="priceInput" class="price-input"
-                                        value="{{ event.price }}" {{ 'disabled' if event.is_free }}>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Link Pendaftaran</label>
-                            <input type="url" name="registration_url" class="event-input"
-                                placeholder="https://contoh.com/pendaftaran (opsional)"
-                                value="{{ event.registration_url }}">
-                        </div>
-
-                        <div class="event-group">
-                            <label class="event-label">Deskripsi Detail</label>
-                            <textarea name="description" class="event-input" rows="6"
-                                required>{{ event.description }}</textarea>
-                        </div>
-
-                        <!-- FOOTER ACTIONS MURNI DENGAN ARSITEKTUR CLASS BAWAN TANPA TAG CSS INLINE -->
-                        <div class="event-actions">
-
-                            <div class="creator-info">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
-                                    <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ event.creator_data.username if event.creator_data else 'System' }}</strong>
-                                    {% if event.created_at %} • {{ event.created_at | date_format }}{% endif %}</span>
-                                </div>
-                            </div>
-
-                            {% if event.updated_by %}
-                            <div class="editor-info">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
-                                    <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ event.editor_data.username if event.editor_data else 'System' }}</strong>
-                                    {% if event.updated_at %} • {{ event.updated_at | date_format }}{% endif %}</span>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            <a href="{{ url_for('event.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
-                            <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Event</button>
-                        </div>
-                    </form>
+            <div class="event-grid col-2-grid">
+                <div class="event-group">
+                    <label class="event-label">Latitude</label>
+                    <input type="text" name="latitude" id="latInput" class="event-input readonly-input"
+                        value="{{ event.latitude }}" readonly required>
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Longitude</label>
+                    <input type="text" name="longitude" id="lngInput" class="event-input readonly-input"
+                        value="{{ event.longitude }}" readonly required>
                 </div>
             </div>
-        </main>
-    </section>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Logika Dark Mode Switcher
-        const switchMode = document.getElementById('switch-mode');
-        if (localStorage.getItem('theme') === 'dark') {
-            switchMode.checked = true;
+            <div class="event-group">
+                <label class="event-label d-flex-align">
+                    Alamat Lengkap <span id="loadingAddr" class="loading-text"><i
+                            class='bx bx-loader-alt bx-spin'></i> Menarik alamat...</span>
+                </label>
+                <textarea name="address" id="addressInput" class="event-input" rows="3"
+                    required>{{ event.address.full }}</textarea>
+            </div>
+
+            <div class="event-grid col-2-grid">
+                <div class="event-group">
+                    <label class="event-label">Tanggal & Waktu</label>
+                    <input type="datetime-local" name="event_date" class="event-input"
+                        value="{{ event.event_date }}" required>
+                </div>
+                <div class="event-group">
+                    <label class="event-label">Ganti Banner (Opsional)</label>
+                    <input type="file" name="banner" class="event-input file-input" accept="image/*">
+                    <small style="display: block; margin-top: 5px; color: #888;">File saat ini: {{ event.banner_image_url }}</small>
+                </div>
+            </div>
+
+            <div class="event-group">
+                <label class="event-label">Biaya Masuk (Tiket)</label>
+                <div class="price-card {{ 'is-disabled' if event.is_free }}" id="priceCard">
+                    <label class="free-option">
+                        <input type="checkbox" name="is_free" id="isFree" onchange="togglePrice()"
+                            {{ 'checked' if event.is_free }}>
+                        <span class="checkbox-custom"></span>
+                        <span>Gratis</span>
+                    </label>
+                    <div class="divider"></div>
+                    <div class="price-input-group">
+                        <span class="currency-label">Rp</span>
+                        <input type="number" name="price" id="priceInput" class="price-input"
+                            value="{{ event.price }}" {{ 'disabled' if event.is_free }}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-group">
+                <label class="event-label">Link Pendaftaran</label>
+                <input type="url" name="registration_url" class="event-input"
+                    placeholder="https://contoh.com/pendaftaran (opsional)"
+                    value="{{ event.registration_url }}">
+            </div>
+
+            <div class="event-group">
+                <label class="event-label">Deskripsi Detail</label>
+                <textarea name="description" class="event-input" rows="6"
+                    required>{{ event.description }}</textarea>
+            </div>
+
+            <div class="event-actions">
+                <div class="creator-info">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <i class='bx bxs-info-circle' style="font-size: 16px; color: #3C91E6;"></i>
+                        <span>Data diinput oleh: <strong style="color: var(--dark);">@{{ event.creator_data.username if event.creator_data else 'System' }}</strong>
+                        {% if event.created_at %} • {{ event.created_at | date_format }}{% endif %}</span>
+                    </div>
+                </div>
+
+                {% if event.updated_by %}
+                <div class="editor-info">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <i class='bx bxs-edit-alt' style="font-size: 16px; color: #FD7238;"></i>
+                        <span>Diedit terakhir oleh: <strong style="color: var(--dark);">@{{ event.editor_data.username if event.editor_data else 'System' }}</strong>
+                        {% if event.updated_at %} • {{ event.updated_at | date_format }}{% endif %}</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <a href="{{ url_for('event.index') }}?page={{ request.args.get('page', 1) }}" class="btn-cancel">Batal</a>
+                <button type="submit" class="btn-save"><i class='bx bx-save'></i> Update Event</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Ambil kordinat dari database Flask
+    var initialLat = parseFloat("{{ event.latitude }}") || -6.867;
+    var initialLng = parseFloat("{{ event.longitude }}") || 109.137;
+
+    var map = L.map('map').setView([initialLat, initialLng], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    var marker = L.marker([initialLat, initialLng]).addTo(map);
+
+    setTimeout(function () { map.invalidateSize(); }, 100);
+
+    async function updateAddress(lat, lng) {
+        const addr = document.getElementById('addressInput');
+        const loader = document.getElementById('loadingAddr');
+        loader.style.display = "inline-flex";
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+            const data = await res.json();
+            addr.value = data.display_name || "";
+        } catch (e) {
+            addr.value = "Gagal mengambil alamat otomatis.";
         }
-        switchMode.addEventListener('change', function () {
-            if (this.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Ambil kordinat dari database Flask, jika kosong gunakan default
-        var initialLat = parseFloat("{{ event.latitude }}") || -6.867;
-        var initialLng = parseFloat("{{ event.longitude }}") || 109.137;
-
-        // Inisialisasi Map tepat di lokasi event sebelumnya
-        var map = L.map('map').setView([initialLat, initialLng], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        var marker = L.marker([initialLat, initialLng]).addTo(map);
-
-        // Fix tampilan Leaflet di dalam grid
-        setTimeout(function () { map.invalidateSize(); }, 100);
-
-        async function updateAddress(lat, lng) {
-            const addr = document.getElementById('addressInput');
-            const loader = document.getElementById('loadingAddr');
-            loader.style.display = "inline-flex";
-            try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
-                const data = await res.json();
-                addr.value = data.display_name || "";
-            } catch (e) {
-                addr.value = "Gagal mengambil alamat otomatis.";
-            }
-            finally {
-                loader.style.display = "none";
-            }
+        finally {
+            loader.style.display = "none";
         }
+    }
 
-        map.on('click', function (e) {
-            marker.setLatLng(e.latlng);
-            document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
-            document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
-            updateAddress(e.latlng.lat, e.latlng.lng);
-        });
+    map.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
+        document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
+        updateAddress(e.latlng.lat, e.latlng.lng);
+    });
 
-        function togglePrice() {
-            const isFree = document.getElementById('isFree').checked;
-            const input = document.getElementById('priceInput');
-            const card = document.getElementById('priceCard');
-            if (isFree) {
-                input.value = "0";
-                input.disabled = true;
-                card.classList.add('is-disabled');
-            } else {
-                input.value = "";
-                input.disabled = false;
-                card.classList.remove('is-disabled');
-                input.focus();
-            }
+    function togglePrice() {
+        const isFree = document.getElementById('isFree').checked;
+        const input = document.getElementById('priceInput');
+        const card = document.getElementById('priceCard');
+        if (isFree) {
+            input.value = "0";
+            input.disabled = true;
+            card.classList.add('is-disabled');
+        } else {
+            input.value = "";
+            input.disabled = false;
+            card.classList.remove('is-disabled');
+            input.focus();
         }
-    </script>
-</body>
-
-</html>
+    }
+</script>
+{% endblock %}
