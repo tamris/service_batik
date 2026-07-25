@@ -140,3 +140,24 @@ function videoDelete(id) {
     })
 }
 
+function masterDelete(id, name) {
+    Swal.fire({
+        title: 'Hapus Data?',
+        text: `Data "${name}" akan dihapus permanen!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        background: document.body.classList.contains('dark') ? '#0C0C1E' : '#fff',
+        color: document.body.classList.contains('dark') ? '#fff' : '#000'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "/master/hapus/" + id;
+        }
+    })
+
+    return false;
+}
+

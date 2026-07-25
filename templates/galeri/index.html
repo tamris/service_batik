@@ -28,20 +28,29 @@
 
 <div class="table-data">
 	<div class="order">
-		<div class="head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+		<div class="head"
+			style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
 			<h3>List Motif Batik</h3>
 
 			<form class="search-box" onsubmit="return false;">
 				<select name="c" id="categoryFilter" onchange="this.form.submit()"
 					style="padding: 10px 16px; border-radius: 36px; border: 1px solid #ccc; background: var(--light); color: var(--dark); font-size: 14px; outline: none; cursor: pointer;">
 					<option value="">Semua Kategori</option>
+					{% for kat in kategori_list %}
+					<option value="{{ kat.name | upper }}" {% if selected_category==kat.name | upper %}selected{% endif
+						%}>{{ kat.name }}</option>
+					{% else %}
 					<option value="KLASIK" {% if selected_category=='KLASIK' %}selected{% endif %}>Klasik</option>
-					<option value="KONTEMPORER" {% if selected_category=='KONTEMPORER' %}selected{% endif %}>Kontemporer</option>
+					<option value="KONTEMPORER" {% if selected_category=='KONTEMPORER' %}selected{% endif %}>Kontemporer
+					</option>
 					<option value="BAHARI" {% if selected_category=='BAHARI' %}selected{% endif %}>Bahari</option>
-					<option value="FLORA & FAUNA" {% if selected_category=='FLORAL & FAUNA' %}selected{% endif %}>Flora & Fauna</option>
+					<option value="FLORA & FAUNA" {% if selected_category=='FLORA & FAUNA' %}selected{% endif %}>Flora &
+						Fauna</option>
+					{% endfor %}
 				</select>
 				<div class="form-input">
-					<input type="search" id="searchInput" placeholder="Cari motif batik..." autocomplete="off" data-url="{{ url_for('galeri.index') }}">
+					<input type="search" id="searchInput" placeholder="Cari motif batik..." autocomplete="off"
+						data-url="{{ url_for('galeri.index') }}">
 					<button type="button" class="search-btn"><i class='bx bx-search'></i></button>
 				</div>
 			</form>
@@ -61,17 +70,20 @@
 				<tbody id="tableBody">
 					{% if batiks %}
 					{% for b in batiks %}
-					<tr style="border-bottom: 1px solid #eee; {% if b.is_deleted %} opacity: 0.5; background-color: rgba(0,0,0,0.03); {% endif %}">
+					<tr
+						style="border-bottom: 1px solid #eee; {% if b.is_deleted %} opacity: 0.5; background-color: rgba(0,0,0,0.03); {% endif %}">
 						<td style="vertical-align: middle; padding: 12px 0;">
 							<div class="batik-thumb">
-								<img src="{{ url_for('static', filename='img/galeri/' + b.image_url) }}" alt="{{ b.name }}" onerror="this.src='/static/img/default.webp';">
+								<img src="{{ url_for('static', filename='img/galeri/' + b.image_url) }}"
+									alt="{{ b.name }}" onerror="this.src='/static/img/default.webp';">
 							</div>
 						</td>
 
 						<td style="vertical-align: middle; padding: 12px 10px 12px 0;">
 							<span class="batik-title">{{ b.name }}</span>
 							{% if b.is_deleted %}
-							<span style="font-size: 10px; background: #e74c3c; color: white; padding: 1px 5px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px;">Nonaktif</span>
+							<span
+								style="font-size: 10px; background: #e74c3c; color: white; padding: 1px 5px; border-radius: 4px; font-weight: bold; display: inline-block; margin-top: 4px;">Nonaktif</span>
 							{% endif %}
 						</td>
 
@@ -101,11 +113,14 @@
 						<td style="vertical-align: middle; padding: 12px 0;">
 							<div class="action-btn">
 								{% if b.is_deleted %}
-								<a href="#" onclick="confirmRestore('{{ b._id|string }}', '{{ b.name }}')" class="btn-icon" title="Aktifkan Kembali" style="background: #28a745; color: white; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+								<a href="#" onclick="confirmRestore('{{ b._id|string }}', '{{ b.name }}')"
+									class="btn-icon" title="Aktifkan Kembali"
+									style="background: #28a745; color: white; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
 									<i class='bx bx-refresh' style="font-size: 20px;"></i>
 								</a>
 								{% else %}
-								<a href="{{ url_for('galeri.edit', batik_id=b._id) }}?page={{ page }}" class="btn-icon btn-edit" title="Edit">
+								<a href="{{ url_for('galeri.edit', batik_id=b._id) }}?page={{ page }}"
+									class="btn-icon btn-edit" title="Edit">
 									<i class='bx bxs-edit'></i>
 								</a>
 								{% endif %}
@@ -115,10 +130,14 @@
 					{% endfor %}
 					{% else %}
 					<tr style="position: relative; height: 200px;">
-						<td colspan="5" style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important;">
-							<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
-								<i class='bx bxs-collection' style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
-								<span style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum ada data batik.</span>
+						<td colspan="5"
+							style="position: absolute; left: 0; right: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 0; border: none !important;">
+							<div
+								style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; width: 100%; text-align: center;">
+								<i class='bx bxs-collection'
+									style="font-size: 52px; color: #FD7238; opacity: 0.85;"></i>
+								<span style="font-weight: 600; color: var(--dark); font-size: 16px; margin: 0;">Belum
+									ada data batik.</span>
 							</div>
 						</td>
 						<td style="display: none;"></td>
@@ -138,24 +157,27 @@
 
 			<div class="pagi-buttons">
 				{% if page > 1 %}
-				<a href="{{ url_for('galeri.index', page=page-1, q=search_query, c=selected_category) }}" class="pagi-btn prev">
+				<a href="{{ url_for('galeri.index', page=page-1, q=search_query, c=selected_category) }}"
+					class="pagi-btn prev">
 					<i class='bx bx-chevron-left'></i> Prev
 				</a>
 				{% endif %}
 
 				<div class="pagi-numbers">
 					{% for p in range(1, total_pages + 1) %}
-					<a href="{{ url_for('galeri.index', page=p, q=search_query, c=selected_category) }}" class="pagi-btn number {{ 'active' if p == page else '' }}">
+					<a href="{{ url_for('galeri.index', page=p, q=search_query, c=selected_category) }}"
+						class="pagi-btn number {{ 'active' if p == page else '' }}">
 						{{ p }}
 					</a>
 					{% endfor %}
 				</div>
 
-				{% if page < total_pages %}
-				<a href="{{ url_for('galeri.index', page=page+1, q=search_query, c=selected_category) }}" class="pagi-btn next">
+				{% if page < total_pages %} <a
+					href="{{ url_for('galeri.index', page=page+1, q=search_query, c=selected_category) }}"
+					class="pagi-btn next">
 					Next <i class='bx bx-chevron-right'></i>
-				</a>
-				{% endif %}
+					</a>
+					{% endif %}
 			</div>
 		</div>
 	</div>

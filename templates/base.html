@@ -31,6 +31,12 @@
 			border-radius: 48px;
 		}
 
+		/* Warna Judul Parent Dropdown Saat Sub-menu Aktif */
+		#sidebar .side-menu li.dropdown-menu-item.open > a,
+		#sidebar .side-menu li.dropdown-menu-item.active > a {
+			color: var(--blue) !important;
+		}
+
 		.menu-divider {
 			display: flex;
 			align-items: center;
@@ -101,11 +107,23 @@
 			background: transparent !important;
 			color: var(--dark);
 			opacity: 0.8;
+			display: flex;
+			align-items: center;
 		}
-		.sub-menu li a:hover {
-			opacity: 1;
+		
+		/* STYLING ACTIVE & HOVER UNTUK SUB-MENU (MEMPERBAIKI WARNA NYALA) */
+		.sub-menu li a:hover,
+		.sub-menu li.active a,
+		.sub-menu li a.active {
+			opacity: 1 !important;
+			color: var(--blue) !important;
+			font-weight: 600 !important;
+		}
+		.sub-menu li.active a i,
+		.sub-menu li a.active i {
 			color: var(--blue) !important;
 		}
+
 		.sub-menu li a i {
 			font-size: 8px !important;
 			min-width: 20px !important;
@@ -165,7 +183,7 @@
 				
 				<ul class="sub-menu">
 					<li class="{% block menu_master_batik %}{% endblock %}">
-						<a href="#">
+						<a href="{{ url_for('master.batik') }}">
 							<i class='bx bxs-circle'></i>
 							<span class="text">Master Batik</span>
 						</a>
@@ -246,11 +264,9 @@
 			</li>
 		</ul>
 	</section>
-	<!-- SIDEBAR MASTER -->
 
 	<!-- CONTENT CONTAINER -->
 	<section id="content">
-		<!-- NAVBAR MASTER -->
 		<nav>
 			<i class='bx bx-menu'></i>
 			<a href="#" class="nav-link">{% block page_name %}Dashboard{% endblock %}</a>
@@ -265,9 +281,7 @@
 					onerror="this.src='/static/img/avatar.png';">
 			</a>
 		</nav>
-		<!-- NAVBAR MASTER -->
 
-		<!-- MAIN CONTENT DYNAMIC -->
 		<main>
 			{% block content %}{% endblock %}
 		</main>
@@ -276,7 +290,7 @@
 	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
-	<!-- Script Accordion Dropdown -->
+	<!-- Script Accordion Dropdown Pintar -->
 	<script>
 		document.addEventListener('DOMContentLoaded', () => {
 			const dropdownToggle = document.querySelector('.dropdown-toggle');
@@ -284,8 +298,8 @@
 			const subMenu = document.querySelector('.sub-menu');
 
 			if (dropdownToggle && subMenu) {
-				// Otomatis buka jika ada sub-item yang aktif
-				if (dropdownItem.classList.contains('open') || subMenu.querySelector('.active')) {
+				// OTOMATIS BUKA jika ada sub-item di dalamnya yang berstatus active!
+				if (dropdownItem.classList.contains('active') || subMenu.querySelector('.active')) {
 					dropdownItem.classList.add('open');
 					subMenu.style.maxHeight = subMenu.scrollHeight + "px";
 				}
@@ -305,7 +319,6 @@
 
 	{% block extra_js %}{% endblock %}
 
-	<!-- Flash Message Alert -->
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}
 	<script>
@@ -329,7 +342,7 @@
 				}
 			}
 
-			const validIcons = ['success', 'error', 'warning', 'info'];
+			const validIcons = ['success', 'error', 'warning', 'info', 'danger', 'question'];
 			Swal.fire({
 				title: 'Informasi',
 				text: message,

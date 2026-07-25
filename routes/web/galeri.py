@@ -8,14 +8,19 @@ from bson.objectid import ObjectId
 from routes.web.auth import login_required
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+
 from models.batik_model import BatikModel
+# 💡 IMPORT MASTER DATA MODEL
+from models.master_model import MasterDataModel
 
 galeri_bp = Blueprint('galeri', __name__)
 batik_model = BatikModel()
+# 💡 INSTANSIASI MASTER MODEL
+master_model = MasterDataModel()
 
 UPLOAD_FOLDER = 'static/img/galeri'
 
-# 🛠️ FUNGSI FILTER OPENCV PREMIUM TRANSPARAN (FIXED PATH & UNIQUE NAME)
+# 🛠️ FUNGSI FILTER OPENCV PREMIUM TRANSPARAN (TETAP SAMA 100%)
 def generate_premium_sketch(input_path, output_filename):
     img = cv2.imread(input_path)
     if img is None:
@@ -26,7 +31,6 @@ def generate_premium_sketch(input_path, output_filename):
     blurred = cv2.GaussianBlur(inverted, (21, 21), 0)
     sketch = cv2.divide(gray, 255 - blurred, scale=256)
     
-    # Mengubah background menjadi transparan (PNG 4-Channel)
     rgba = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
     rgba[:, :, 3] = np.where(sketch > 240, 0, 255)
     
@@ -48,10 +52,9 @@ def generate_premium_sketch(input_path, output_filename):
 def index():
     page = request.args.get('page', 1, type=int)
     search_query = request.args.get('q', '')
-    selected_category = request.args.get('c', '') # Ambil dari dropdown filter
+    selected_category = request.args.get('c', '') 
     per_page = 10
     
-    # Memanggil fungsi get_all dengan parameter category baru yang sudah ditambahkan di model
     all_data = batik_model.get_all(search_query=search_query, category=selected_category, include_deleted=True)
 
     total_items = len(all_data)
@@ -64,6 +67,9 @@ def index():
     start_index = start + 1 if total_items > 0 else 0
     end_index = min(end, total_items)
 
+    # 💡 AMBIL DAFTAR KATEGORI UNTUK DROPDOWN FILTER SISI ATAS
+    kategori_list = master_model.get_by_type('kategori_batik')
+
     return render_template('galeri/index.html', 
                            batiks=data_tampil, 
                            page=page, 
@@ -72,7 +78,8 @@ def index():
                            start_index=start_index,
                            end_index=end_index,
                            search_query=search_query,
-                           selected_category=selected_category) # Jangan lupa lempar ke template
+                           selected_category=selected_category,
+                           kategori_list=kategori_list) # <-- LEMPAR KATEGORI MASTER
 
 
 @galeri_bp.route('/data-batik/tambah', methods=['GET', 'POST'])
@@ -97,8 +104,6 @@ def create():
 
             if is_sketch_requested:
                 name_part, ext_part = os.path.splitext(filename)
-                
-                # 💡 SEED UNIK 1: Tambahkan format waktu unik saat data batik dibuat baru
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                 sketch_filename = f"{name_part}_sketch_{timestamp}.png"
 
@@ -135,7 +140,13 @@ def create():
         flash('Data batik berhasil ditambahkan!', 'success')
         return redirect(url_for('galeri.index'))
 
-    return render_template('galeri/create.html')
+    # 💡 AMBIL DATA MASTER KATEGORI & TEKNIK DARI MONGODB
+    kategori_list = master_model.get_by_type('kategori_batik')
+    teknik_list = master_model.get_by_type('teknik_batik')
+
+    return render_template('galeri/create.html', 
+                           kategori_list=kategori_list, 
+                           teknik_list=teknik_list)
 
 
 @galeri_bp.route('/data-batik/edit/<string:batik_id>', methods=['GET', 'POST'])
@@ -185,8 +196,6 @@ def edit(batik_id):
             
             if is_sketch_requested:
                 name_part, ext_part = os.path.splitext(filename)
-                
-                # 💡 SEED UNIK 2: Tambahkan waktu unik saat admin mengedit & mengganti file gambar baru
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                 sketch_filename = f"{name_part}_sketch_{timestamp}.png"
                 
@@ -204,8 +213,6 @@ def edit(batik_id):
                     full_input_path = os.path.join(UPLOAD_FOLDER, current_image)
                     
                     name_part, ext_part = os.path.splitext(current_image)
-                    
-                    # 💡 SEED UNIK 3: Tambahkan waktu unik saat admin hanya mengaktifkan checkbox sketsa (tanpa ganti gambar)
                     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                     sketch_filename = f"{name_part}_sketch_{timestamp}.png"
                     
@@ -221,7 +228,14 @@ def edit(batik_id):
         flash('Data batik berhasil diperbarui!', 'success')
         return redirect(url_for('galeri.index', page=page))
 
-    return render_template('galeri/edit.html', batik=batik_terpilih)
+    # 💡 AMBIL DATA MASTER UNTUK HALAMAN EDIT
+    kategori_list = master_model.get_by_type('kategori_batik')
+    teknik_list = master_model.get_by_type('teknik_batik')
+
+    return render_template('galeri/edit.html', 
+                           batik=batik_terpilih, 
+                           kategori_list=kategori_list, 
+                           teknik_list=teknik_list)
 
 
 @galeri_bp.route('/data-batik/hapus/<string:batik_id>')

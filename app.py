@@ -22,6 +22,8 @@ from routes.api.studio_api import studio_api_bp
 from routes.api.user_api import user_api_bp
 from routes.api.search_api import search_api
 from routes.api.batik_interaction import interaction_bp
+
+from routes.web.master import master_bp
 from utils.rag_utils import initialize_rag
 
 app = Flask(__name__)
@@ -59,6 +61,7 @@ app.register_blueprint(video_bp)
 app.register_blueprint(event_bp)    
 app.register_blueprint(mapping_bp) 
 app.register_blueprint(user_bp)
+app.register_blueprint(master_bp)
 
 # 3. Register API Blueprint
 app.register_blueprint(galeri_api_bp, url_prefix='/api')

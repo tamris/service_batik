@@ -32,28 +32,40 @@
             <div class="form-grid-upper">
                 <div class="batik-group">
                     <label class="batik-label">Nama Motif Batik</label>
-                    <input type="text" name="name" class="batik-input"
-                        placeholder="Contoh: Batik Mega Mendung" required>
+                    <input type="text" name="name" class="batik-input" placeholder="Contoh: Batik Mega Mendung"
+                        required>
                 </div>
 
+                <!-- KATEGORI MOTIF (DINAMIS DARI MASTER DATA) -->
                 <div class="batik-group">
                     <label class="batik-label">Kategori Motif</label>
                     <select name="category" class="batik-input" required>
                         <option value="" disabled selected>Pilih Kategori...</option>
+                        {% for kat in kategori_list %}
+                        <option value="{{ kat.name }}">{{ kat.name }}</option>
+                        {% else %}
+                        <!-- Fallback jika belum ada master data -->
                         <option value="Klasik">Klasik</option>
                         <option value="Kontemporer">Kontemporer</option>
                         <option value="Bahari">Bahari</option>
                         <option value="Flora & Fauna">Flora & Fauna</option>
+                        {% endfor %}
                     </select>
                 </div>
 
+                <!-- TEKNIK PEMBUATAN (DINAMIS DARI MASTER DATA) -->
                 <div class="batik-group">
                     <label class="batik-label">Teknik Pembuatan</label>
                     <select name="technique" class="batik-input" required>
                         <option value="" disabled selected>Pilih Teknik Pembuatan...</option>
+                        {% for tek in teknik_list %}
+                        <option value="{{ tek.name }}">{{ tek.name }}</option>
+                        {% else %}
+                        <!-- Fallback jika belum ada master data -->
                         <option value="Batik Tulis">Batik Tulis</option>
                         <option value="Batik Cap">Batik Cap</option>
                         <option value="Batik Kombinasi">Batik Kombinasi</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -77,8 +89,7 @@
                     </div>
                 </div>
 
-                <div class="preview-container" id="previewContainer"
-                    style="display: none; margin-bottom: 24px;">
+                <div class="preview-container" id="previewContainer" style="display: none; margin-bottom: 24px;">
                     <label class="batik-label">Preview Motif Batik: <span
                             style="font-size: 12px; font-weight: normal; color: #3C91E6;">(Klik pada gambar
                             untuk menggunakan pipet warna)</span></label>
@@ -95,8 +106,8 @@
                             warna pada gambar preview di atas</label>
                         <div id="container-warna-visual"
                             style="display: flex; gap: 12px; margin-top: 10px; min-height: 45px; align-items: center; flex-wrap: wrap;">
-                            <span id="placeholder-text"
-                                style="color: #888; font-size: 14px; font-style: italic;">Belum ada warna
+                            <span id="placeholder-text" style="color: #888; font-size: 14px; font-style: italic;">Belum
+                                ada warna
                                 terpilih. Silakan upload dan klik gambar preview di atas.</span>
                         </div>
                     </div>

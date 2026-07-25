@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Master Data Batik - Admin Sibatikgal{% endblock %}
+
+{% block menu_master_batik %}active{% endblock %}
+
+{% block content %}
+<!-- PANGGIL CSS STANDALONE KHUSUS MASTER DATA -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
+
+<div class="master-container">
+    
+    <!-- HEADER HALAMAN -->
+    <div class="master-header">
+        <h1>Master Data Batik</h1>
+        <ul class="master-breadcrumb">
+            <li>Data Master</li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Master Batik</a></li>
+        </ul>
+    </div>
+
+    <!-- TAB SWITCHER NAVIGASI -->
+    <div class="master-tabs">
+        <button class="master-tab-btn active" onclick="switchMasterTab('kategori', this)">
+            <i class='bx bx-purchase-tag-alt'></i> Kategori Motif
+        </button>
+        <button class="master-tab-btn" onclick="switchMasterTab('teknik', this)">
+            <i class='bx bx-wrench'></i> Teknik Pembuatan
+        </button>
+    </div>
+
+    <!-- ================= TAB 1: KATEGORI MOTIF ================= -->
+    <div id="panel-kategori" class="tab-panel active">
+        <div class="master-grid">
+            
+            <!-- FORM KIRI: TAMBAH KATEGORI -->
+            <div class="master-card">
+                <h3 class="master-card-title">Tambah Kategori Batik</h3>
+                <form action="{{ url_for('master.tambah_kategori') }}" method="POST">
+                    <div class="master-form-group">
+                        <label class="master-label">Nama Kategori</label>
+                        <input type="text" name="nama_kategori" class="master-input" placeholder="Contoh: Klasik, Pesisiran..." required>
+                    </div>
+                    <div class="master-form-group">
+                        <label class="master-label">Keterangan / Deskripsi</label>
+                        <textarea name="deskripsi" class="master-input" rows="4" placeholder="Deskripsi singkat kategori..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-master-save">
+                        <i class='bx bx-plus'></i> Simpan Kategori
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL KANAN: DAFTAR KATEGORI (RASIO COMPACT) -->
+            <div class="master-card">
+                <h3 class="master-card-title">Daftar Kategori Motif Batik</h3>
+                <div class="master-table-wrapper">
+                    <table class="master-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 6%; text-align: center;">No</th>
+                                <th style="width: 24%;">Nama Kategori</th>
+                                <th style="width: 60%;">Keterangan</th>
+                                <th style="width: 10%; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for kat in kategori_list %}
+                            <tr>
+                                <td style="font-weight: 600; text-align: center;">{{ loop.index }}</td>
+                                <td><span class="badge-master kat">{{ kat.name | upper }}</span></td>
+                                <td style="color: #64748b;">{{ kat.description or '-' }}</td>
+                                <td style="text-align: center;">
+                                    <a href="{{ url_for('master.hapus_master', master_id=kat._id) }}" 
+                                       class="btn-master-delete" 
+                                       title="Hapus Kategori"
+                                       onclick="return masterDelete('{{ kat._id }}', '{{ kat.name }}')">
+                                        <i class='bx bxs-trash'></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 24px;">Belum ada data kategori batik.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= TAB 2: TEKNIK PEMBUATAN ================= -->
+    <div id="panel-teknik" class="tab-panel">
+        <div class="master-grid">
+            
+            <!-- FORM KIRI: TAMBAH TEKNIK -->
+            <div class="master-card">
+                <h3 class="master-card-title">Tambah Teknik Pembuatan</h3>
+                <form action="{{ url_for('master.tambah_teknik') }}" method="POST">
+                    <div class="master-form-group">
+                        <label class="master-label">Nama Teknik</label>
+                        <input type="text" name="nama_teknik" class="master-input" placeholder="Contoh: Tulis, Cap, Printing..." required>
+                    </div>
+                    <div class="master-form-group">
+                        <label class="master-label">Keterangan Teknik</label>
+                        <textarea name="deskripsi_teknik" class="master-input" rows="4" placeholder="Penjelasan cara pembuatan..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-master-save">
+                        <i class='bx bx-plus'></i> Simpan Teknik
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABEL KANAN: DAFTAR TEKNIK (RASIO COMPACT) -->
+            <div class="master-card">
+                <h3 class="master-card-title">Daftar Teknik Pembuatan Batik</h3>
+                <div class="master-table-wrapper">
+                    <table class="master-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 6%; text-align: center;">No</th>
+                                <th style="width: 24%;">Nama Teknik</th>
+                                <th style="width: 60%;">Keterangan</th>
+                                <th style="width: 10%; text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tek in teknik_list %}
+                            <tr>
+                                <td style="font-weight: 600; text-align: center;">{{ loop.index }}</td>
+                                <td><span class="badge-master tek">{{ tek.name }}</span></td>
+                                <td style="color: #64748b;">{{ tek.description or '-' }}</td>
+                                <td style="text-align: center;">
+                                    <a href="{{ url_for('master.hapus_master', master_id=tek._id) }}" 
+                                       class="btn-master-delete" 
+                                       title="Hapus Teknik"
+                                       onclick="return masterDelete('{{ tek._id }}', '{{ tek.name }}')">
+                                        <i class='bx bxs-trash'></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #94a3b8; padding: 24px;">Belum ada data teknik pembuatan.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPT TAB SWITCHER -->
+<script>
+    function switchMasterTab(tabName, btn) {
+        document.querySelectorAll('.master-tab-btn').forEach(b => btn !== b && b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + tabName).classList.add('active');
+    }
+</script>
+{% endblock %}
